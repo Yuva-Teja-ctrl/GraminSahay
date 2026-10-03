@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: graminsahay
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/graminsahay
+    username: ${DB_USERNAME:graminsahay}
+    password: ${DB_PASSWORD:graminsahay}
+
+  ai:
+    openai:
+      # Works with OpenAI directly, OR with Groq by overriding base-url.
+      # For Groq (Llama 3.3 70B) — the stack from your ResuMate project:
+      #   base-url: https://api.groq.com/openai
+      #   chat.options.model: llama-3.3-70b-versatile
+      # NOTE: Groq does not serve embeddings. For embeddings use OpenAI,
+      #       or swap in a local transformers embedding model (see README).
+      api-key: ${OPENAI_API_KEY:changeme}
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com}
+      chat:
+        options:
+          model: ${CHAT_MODEL:gpt-4o-mini}
+          temperature: 0.1   # low temperature: we want faithful, grounded answers
+      embedding:
+        options:
+          model: ${EMBEDDING_MODEL:text-embedding-3-small}
+
+    vectorstore:
+      pgvector:
+        initialize-schema: true          # auto-creates the vector_store table + extension
+        index-type: HNSW                 # approximate nearest neighbour index
+        distance-type: COSINE_DISTANCE   # cosine similarity for semantic search
+        dimensions: 1536                 # matches text-embedding-3-small
+
+# App-specific knobs for the RAG pipeline
+graminsahay:
+  rag:
+    top-k: 6                 # number of scheme chunks to retrieve per query
+    similarity-threshold: 0.5
+  ingest:
+    # Where the scheme knowledge base lives (classpath by default).
+    schemes-location: classpath:schemes/telangana-schemes.json
+
+server:
+  port: 8080
+
+logging:
+  level:
+    in.graminsahay: INFO

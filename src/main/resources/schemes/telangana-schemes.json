@@ -1,0 +1,204 @@
+[
+  {
+    "id": "ts-rythu-bharosa",
+    "name": "Rythu Bharosa",
+    "category": "agriculture",
+    "state": "Telangana",
+    "description": "Investment support scheme for Telangana farmers who own cultivable agricultural land. Provides direct cash support per acre to help with seeds, fertilisers and other crop investments, paid through Direct Benefit Transfer.",
+    "benefits": "Rs 12,000 per acre of cultivable land per year, paid directly to the farmer's bank account.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "Pattadar passbook / land ownership record",
+      "Bank account passbook linked to Aadhaar"
+    ],
+    "applicationSteps": [
+      "Ensure your land is recorded in the Dharani land records portal",
+      "Verify your Pattadar passbook details at the local Agriculture Extension Office (AEO)",
+      "Confirm your bank account is seeded with Aadhaar for Direct Benefit Transfer"
+    ],
+    "officialUrl": "https://rythubharosa.telangana.gov.in/",
+    "rules": [
+      { "field": "OCCUPATION", "operator": "EQUALS", "value": "farmer", "humanText": "Applicant must be a farmer" },
+      { "field": "LAND_HOLDING_ACRES", "operator": "GREATER_THAN_OR_EQUAL", "value": "0.01", "humanText": "Applicant must own cultivable agricultural land" }
+    ],
+    "conflictsWith": ["ts-indiramma-atmeeya-bharosa"]
+  },
+  {
+    "id": "ts-indiramma-atmeeya-bharosa",
+    "name": "Indiramma Atmeeya Bharosa",
+    "category": "agriculture",
+    "state": "Telangana",
+    "description": "Financial assistance for landless agricultural labourer families in Telangana who do not own cultivable land but depend on farm work for their livelihood.",
+    "benefits": "Rs 12,000 per year per landless agricultural labourer family.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "Ration card / proof of being a landless labourer family",
+      "Bank account passbook linked to Aadhaar"
+    ],
+    "applicationSteps": [
+      "Register as a landless agricultural labourer family at the local Gram Panchayat",
+      "Submit Aadhaar and family details for verification",
+      "Link your bank account with Aadhaar for Direct Benefit Transfer"
+    ],
+    "officialUrl": "https://telangana.gov.in/",
+    "rules": [
+      { "field": "OCCUPATION", "operator": "IN", "value": "farmer,agricultural_labourer,labourer", "humanText": "Applicant must be an agricultural labourer" },
+      { "field": "LAND_HOLDING_ACRES", "operator": "LESS_THAN_OR_EQUAL", "value": "0", "humanText": "Applicant must be landless (own no cultivable agricultural land)" }
+    ],
+    "conflictsWith": ["ts-rythu-bharosa"]
+  },
+  {
+    "id": "ts-aasara-oldage-pension",
+    "name": "Aasara Old Age Pension",
+    "category": "pension",
+    "state": "Telangana",
+    "description": "Monthly social security pension for elderly citizens in Telangana from poor families, to provide income support in old age.",
+    "benefits": "Rs 2,016 per month paid directly to the beneficiary's bank account.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "Age proof",
+      "White ration card / proof of low income",
+      "Bank account passbook"
+    ],
+    "applicationSteps": [
+      "Apply through your nearest MeeSeva centre or Gram Panchayat",
+      "Submit Aadhaar, age proof and ration card",
+      "Await field verification by the local welfare officer"
+    ],
+    "officialUrl": "https://aasara.telangana.gov.in/",
+    "rules": [
+      { "field": "AGE", "operator": "GREATER_THAN_OR_EQUAL", "value": "57", "humanText": "Applicant must be 57 years or older" },
+      { "field": "IS_BPL", "operator": "IS_TRUE", "value": "true", "humanText": "Applicant must belong to a Below Poverty Line (white ration card) family" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-aasara-widow-pension",
+    "name": "Aasara Widow Pension",
+    "category": "pension",
+    "state": "Telangana",
+    "description": "Monthly pension support for widowed women in Telangana from poor families, to provide financial security.",
+    "benefits": "Rs 2,016 per month paid directly to the beneficiary's bank account.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "Husband's death certificate",
+      "White ration card / proof of low income",
+      "Bank account passbook"
+    ],
+    "applicationSteps": [
+      "Apply through your nearest MeeSeva centre or Gram Panchayat",
+      "Submit Aadhaar, death certificate and ration card",
+      "Await field verification by the local welfare officer"
+    ],
+    "officialUrl": "https://aasara.telangana.gov.in/",
+    "rules": [
+      { "field": "GENDER", "operator": "EQUALS", "value": "female", "humanText": "Applicant must be a woman (widow)" },
+      { "field": "AGE", "operator": "GREATER_THAN_OR_EQUAL", "value": "18", "humanText": "Applicant must be 18 years or older" },
+      { "field": "IS_BPL", "operator": "IS_TRUE", "value": "true", "humanText": "Applicant must belong to a Below Poverty Line (white ration card) family" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-kalyana-lakshmi",
+    "name": "Kalyana Lakshmi / Shaadi Mubarak",
+    "category": "education",
+    "state": "Telangana",
+    "description": "One-time financial assistance for the marriage of unmarried women from economically weaker families in Telangana, to reduce the financial burden of marriage. Kalyana Lakshmi is for SC/ST/other eligible categories and Shaadi Mubarak for minority communities.",
+    "benefits": "One-time financial assistance of Rs 1,00,116 to the bride's family.",
+    "requiredDocuments": [
+      "Aadhaar card of the bride",
+      "Age proof showing bride is 18 or older",
+      "Income certificate",
+      "Caste certificate (if applicable)",
+      "Bank account details"
+    ],
+    "applicationSteps": [
+      "Apply online on the Kalyana Lakshmi / Shaadi Mubarak portal",
+      "Upload Aadhaar, income and age proof documents",
+      "Submit through the Tahsildar for verification"
+    ],
+    "officialUrl": "https://telanganaepass.cgg.gov.in/",
+    "rules": [
+      { "field": "GENDER", "operator": "EQUALS", "value": "female", "humanText": "Applicant (bride) must be a woman" },
+      { "field": "AGE", "operator": "GREATER_THAN_OR_EQUAL", "value": "18", "humanText": "Bride must be at least 18 years old at the time of marriage" },
+      { "field": "ANNUAL_INCOME", "operator": "LESS_THAN_OR_EQUAL", "value": "200000", "humanText": "Family annual income must be Rs 2,00,000 or less" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-epass-post-matric",
+    "name": "ePASS Post-Matric Scholarship",
+    "category": "education",
+    "state": "Telangana",
+    "description": "Post-matriculation scholarship and tuition fee reimbursement for students from SC, ST, BC, EBC, minority and disabled categories in Telangana pursuing higher education after Class 10.",
+    "benefits": "Tuition fee reimbursement plus maintenance allowance for eligible students.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "Income certificate",
+      "Caste certificate",
+      "Previous year marks memo",
+      "Bank account linked to Aadhaar"
+    ],
+    "applicationSteps": [
+      "Register on the Telangana ePASS portal",
+      "Fill the scholarship application with course and college details",
+      "Upload income and caste certificates",
+      "Submit for college and department verification"
+    ],
+    "officialUrl": "https://telanganaepass.cgg.gov.in/",
+    "rules": [
+      { "field": "OCCUPATION", "operator": "EQUALS", "value": "student", "humanText": "Applicant must be a student in higher education" },
+      { "field": "CATEGORY", "operator": "IN", "value": "sc,st,obc,bc,ebc,minority", "humanText": "Applicant must belong to SC/ST/BC/EBC/Minority category" },
+      { "field": "ANNUAL_INCOME", "operator": "LESS_THAN_OR_EQUAL", "value": "200000", "humanText": "Family annual income must be within the prescribed limit (around Rs 2,00,000)" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-rajiv-aarogyasri",
+    "name": "Rajiv Aarogyasri Health Scheme",
+    "category": "healthcare",
+    "state": "Telangana",
+    "description": "Cashless health insurance scheme for Below Poverty Line families in Telangana, covering treatment and surgeries for serious illnesses at empanelled hospitals.",
+    "benefits": "Cashless treatment coverage up to Rs 5,00,000 per family per year for listed procedures at empanelled hospitals.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "White ration card (Aarogyasri card)",
+      "Referral from a Primary Health Centre or empanelled hospital"
+    ],
+    "applicationSteps": [
+      "Visit an empanelled hospital with your Aarogyasri / white ration card",
+      "Get the Aarogyasri Mitra to register your case",
+      "Treatment is approved and provided cashless for listed procedures"
+    ],
+    "officialUrl": "https://www.aarogyasri.telangana.gov.in/",
+    "rules": [
+      { "field": "IS_BPL", "operator": "IS_TRUE", "value": "true", "humanText": "Family must hold a white ration card (Below Poverty Line)" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-indiramma-housing",
+    "name": "Indiramma Indlu (Housing)",
+    "category": "housing",
+    "state": "Telangana",
+    "description": "Housing assistance scheme providing financial support to eligible poor families in Telangana who do not own a pucca house, to build their own home.",
+    "benefits": "Financial assistance of up to Rs 5,00,000 to construct a house for eligible beneficiaries.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "White ration card / proof of low income",
+      "Proof that the family does not own a pucca house",
+      "Site / plot ownership document (if available)"
+    ],
+    "applicationSteps": [
+      "Apply through the Gram Panchayat or designated housing portal",
+      "Submit Aadhaar and ration card for verification",
+      "Await beneficiary selection and sanction order"
+    ],
+    "officialUrl": "https://telangana.gov.in/",
+    "rules": [
+      { "field": "IS_BPL", "operator": "IS_TRUE", "value": "true", "humanText": "Family must be Below Poverty Line (white ration card)" },
+      { "field": "ANNUAL_INCOME", "operator": "LESS_THAN_OR_EQUAL", "value": "200000", "humanText": "Family annual income must be within the prescribed limit" }
+    ],
+    "conflictsWith": []
+  }
+]
