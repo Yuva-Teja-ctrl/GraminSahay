@@ -79,6 +79,7 @@ the missing detail instead of silently assuming and producing a wrong answer.
 | AI / RAG | **Spring AI** (chat + embeddings + vector store) |
 | Vector store | **PostgreSQL + pgvector** (HNSW, cosine distance) |
 | LLM | OpenAI `gpt-4o-mini` *or* Groq `llama-3.3-70b-versatile` |
+| Frontend | Plain HTML + CSS + JavaScript (served by Spring Boot) |
 | Build | Maven |
 | Infra | Docker Compose |
 
@@ -129,6 +130,12 @@ curl -s -X POST http://localhost:8080/api/navigate \
 You will get back the schemes the citizen is eligible / possibly eligible for, any
 conflicts between them, and (if `withExplanations: true`) a grounded, cited explanation
 for each.
+
+### Or just use the web UI
+Once the app is running, open **http://localhost:8080/** in your browser. A simple web
+interface (served from `src/main/resources/static/`) lets you type a situation, fill in any
+details you know, and see the matching schemes, conflicts and explanations — no `curl`
+needed. This is the quickest way to demo the project.
 
 ### Run the tests (no DB or API key needed for the core logic)
 ```bash

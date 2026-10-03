@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>GraminSahay — Rural Welfare Navigator</title>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="site-header">
+    <div class="brand">
+        <span class="logo">🌾</span>
+        <div>
+            <h1>GraminSahay</h1>
+            <p class="tagline">Discover the government welfare schemes you are entitled to — without knowing their names.</p>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="card form-card">
+        <h2>Describe your situation</h2>
+        <p class="hint">Tell us about yourself in your own words, and fill in whatever details you know.
+            Leaving a field blank is fine — the system will tell you if it needs more information.</p>
+
+        <form id="navigate-form">
+            <label class="field">
+                <span>Your situation <em>*</em></span>
+                <textarea id="situation" rows="3" required
+                          placeholder="e.g. I am a small farmer in Warangal and I own two acres of land"></textarea>
+            </label>
+
+            <div class="grid">
+                <label class="field">
+                    <span>Occupation</span>
+                    <select id="occupation">
+                        <option value="">— not sure —</option>
+                        <option value="farmer">Farmer</option>
+                        <option value="agricultural_labourer">Agricultural labourer</option>
+                        <option value="student">Student</option>
+                        <option value="labourer">Labourer</option>
+                        <option value="other">Other</option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Age</span>
+                    <input id="age" type="number" min="0" max="120" placeholder="e.g. 45"/>
+                </label>
+
+                <label class="field">
+                    <span>Gender</span>
+                    <select id="gender">
+                        <option value="">— not sure —</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Land owned (acres)</span>
+                    <input id="landHoldingAcres" type="number" step="0.1" min="0" placeholder="e.g. 2"/>
+                </label>
+
+                <label class="field">
+                    <span>Annual household income (₹)</span>
+                    <input id="annualIncome" type="number" min="0" placeholder="e.g. 90000"/>
+                </label>
+
+                <label class="field">
+                    <span>District</span>
+                    <input id="district" type="text" placeholder="e.g. Warangal"/>
+                </label>
+
+                <label class="field">
+                    <span>Social category</span>
+                    <select id="category">
+                        <option value="">— not sure —</option>
+                        <option value="general">General</option>
+                        <option value="obc">OBC / BC</option>
+                        <option value="sc">SC</option>
+                        <option value="st">ST</option>
+                        <option value="minority">Minority</option>
+                    </select>
+                </label>
+
+                <label class="field">
+                    <span>Below Poverty Line (white ration card)?</span>
+                    <select id="isBpl">
+                        <option value="">— not sure —</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </label>
+            </div>
+
+            <label class="checkbox">
+                <input id="withExplanations" type="checkbox" checked/>
+                <span>Generate plain-language explanations (uses the AI model)</span>
+            </label>
+
+            <button type="submit" id="submit-btn">Find my schemes</button>
+        </form>
+    </section>
+
+    <section id="status" class="status" hidden></section>
+
+    <section id="conflicts" class="card conflict-card" hidden>
+        <h2>⚠️ Important: schemes you cannot combine</h2>
+        <ul id="conflicts-list"></ul>
+    </section>
+
+    <section id="results" class="results"></section>
+</main>
+
+<footer class="site-footer">
+    <p>GraminSahay · LLM-powered RAG welfare navigator · Scheme details are for demonstration — always verify on the official portal.</p>
+</footer>
+
+<!-- Template for a single scheme result card -->
+<template id="scheme-template">
+    <article class="card scheme-card">
+        <div class="scheme-head">
+            <h3 class="scheme-name"></h3>
+            <span class="badge"></span>
+        </div>
+        <p class="scheme-category"></p>
+        <p class="scheme-explanation"></p>
+
+        <details class="scheme-details">
+            <summary>Details &amp; how to apply</summary>
+            <div class="detail-block satisfied"><h4>✅ Conditions you meet</h4><ul></ul></div>
+            <div class="detail-block unmet"><h4>❌ Conditions not met</h4><ul></ul></div>
+            <div class="detail-block missing"><h4>❓ Information still needed</h4><ul></ul></div>
+            <div class="detail-block documents"><h4>📄 Required documents</h4><ul></ul></div>
+            <div class="detail-block steps"><h4>🧭 How to apply</h4><ol></ol></div>
+            <a class="official-link" target="_blank" rel="noopener">Official source ↗</a>
+        </details>
+    </article>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>

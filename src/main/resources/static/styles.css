@@ -1,0 +1,113 @@
+:root {
+    --green: #2e7d32;
+    --green-dark: #1b5e20;
+    --amber: #f59e0b;
+    --red: #dc2626;
+    --slate: #334155;
+    --muted: #64748b;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 8px 24px rgba(0, 0, 0, .05);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--slate);
+    background: var(--bg);
+    line-height: 1.5;
+}
+
+/* Header */
+.site-header {
+    background: linear-gradient(135deg, var(--green-dark), var(--green));
+    color: #fff;
+    padding: 28px 20px;
+}
+.brand { display: flex; gap: 16px; align-items: center; max-width: 960px; margin: 0 auto; }
+.logo { font-size: 44px; }
+.site-header h1 { margin: 0; font-size: 28px; letter-spacing: .5px; }
+.tagline { margin: 4px 0 0; opacity: .92; font-size: 15px; }
+
+/* Layout */
+.container { max-width: 960px; margin: 24px auto; padding: 0 20px; display: grid; gap: 20px; }
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+}
+.card h2 { margin-top: 0; }
+.hint { color: var(--muted); font-size: 14px; margin-top: -6px; }
+
+/* Form */
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
+.field em { color: var(--red); font-style: normal; }
+.field textarea, .field input, .field select {
+    font: inherit;
+    font-weight: 400;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+}
+.field textarea { resize: vertical; }
+.field :focus { outline: 2px solid var(--green); outline-offset: 1px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 16px 0; }
+
+.checkbox { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 16px; }
+
+button {
+    font: inherit; font-weight: 700;
+    background: var(--green); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 12px 22px; cursor: pointer;
+    transition: background .15s;
+}
+button:hover { background: var(--green-dark); }
+button:disabled { background: var(--muted); cursor: not-allowed; }
+
+/* Status banner */
+.status { padding: 14px 18px; border-radius: var(--radius); font-weight: 600; }
+.status.loading { background: #e0f2fe; color: #075985; }
+.status.error { background: #fee2e2; color: #991b1b; }
+.status.empty { background: #fef9c3; color: #854d0e; }
+
+/* Conflicts */
+.conflict-card { border-left: 5px solid var(--amber); }
+.conflict-card ul { margin: 0; padding-left: 20px; }
+.conflict-card li { margin: 6px 0; }
+
+/* Results */
+.results { display: grid; gap: 16px; }
+.scheme-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.scheme-name { margin: 0; font-size: 19px; }
+.scheme-category { margin: 2px 0 10px; color: var(--muted); font-size: 13px; text-transform: capitalize; }
+.scheme-explanation { margin: 0 0 10px; white-space: pre-wrap; }
+
+/* Status badges */
+.badge { font-size: 12px; font-weight: 800; padding: 5px 12px; border-radius: 999px; white-space: nowrap; }
+.badge.ELIGIBLE { background: #dcfce7; color: var(--green-dark); }
+.badge.POSSIBLY_ELIGIBLE { background: #fef9c3; color: #854d0e; }
+.badge.MISSING_INFORMATION { background: #e0e7ff; color: #3730a3; }
+.badge.NOT_ELIGIBLE { background: #fee2e2; color: #991b1b; }
+
+/* Details */
+.scheme-details { margin-top: 8px; }
+.scheme-details summary { cursor: pointer; font-weight: 600; color: var(--green-dark); }
+.detail-block { margin: 12px 0; }
+.detail-block h4 { margin: 0 0 4px; font-size: 14px; }
+.detail-block ul, .detail-block ol { margin: 0; padding-left: 20px; font-size: 14px; }
+.detail-block:empty, .detail-block.hidden { display: none; }
+.official-link { display: inline-block; margin-top: 8px; color: var(--green); font-weight: 700; text-decoration: none; }
+.official-link:hover { text-decoration: underline; }
+
+/* Footer */
+.site-footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 20px; }
