@@ -1,7 +1,23 @@
+# ---- Python (primary project) ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Environment
+.env
+
+# ---- Java (java-springboot/) ----
 target/
 *.class
-.env
-.idea/
 *.iml
+
+# Editor
+.idea/
 .vscode/
 .DS_Store

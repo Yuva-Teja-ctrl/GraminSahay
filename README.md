@@ -1,13 +1,16 @@
-# GraminSahay 🌾
+# GraminSahay 🌾 (Python / FastAPI)
 
 **An LLM-Powered, RAG-Based Rural Welfare & Government Services Navigator**
 
-GraminSahay helps rural citizens discover the government welfare schemes they are
-entitled to — **without needing to know the scheme's name**. A citizen describes their
-situation ("I am a small farmer in Warangal with a daughter starting college"), and the
-system retrieves relevant Telangana welfare schemes, determines eligibility with clear
-explanations, warns about schemes that cannot be claimed together, and guides them
-through applying.
+> This is the primary **Python + FastAPI** implementation. An earlier **Java / Spring Boot**
+> version of the same project lives in [`java-springboot/`](java-springboot/) for reference.
+
+GraminSahay helps rural citizens discover the government welfare schemes they are entitled
+to — **without needing to know the scheme's name**. A citizen describes their situation
+("I am a small farmer in Warangal with a daughter starting college"), and the system
+retrieves relevant Telangana welfare schemes, determines eligibility with clear
+explanations, warns about schemes that cannot be claimed together, and guides them through
+applying.
 
 > Supports **SDG 1 (No Poverty)** and **SDG 10 (Reduced Inequalities)** · Built for **SIH 2026 (SIH26088)**.
 
@@ -15,16 +18,13 @@ through applying.
 
 ## Why this design is different
 
-The headline idea is not "a chatbot over scheme PDFs." The core engineering decision is:
-
 > **The LLM handles _language_ (retrieval + explanation). Deterministic rules make the
 > _eligibility decision_.**
 
-Eligibility for a welfare scheme is **safety-critical** — telling a poor citizen "you are
-eligible" when they are not wastes a trip to the office and erodes trust, while a false
-"not eligible" denies them a benefit they deserve. LLMs hallucinate; transparent rules do
-not. So eligibility is decided by an auditable rule engine, and the LLM only phrases the
-already-decided verdict and cites the official source.
+Eligibility for a welfare scheme is **safety-critical** — a hallucinated "you are eligible"
+could send a poor citizen on a wasted trip and erode trust. LLMs hallucinate; transparent
+rules do not. So eligibility is decided by an auditable rule engine, and the LLM only phrases
+the already-decided verdict and cites the official source.
 
 ---
 
@@ -34,20 +34,20 @@ already-decided verdict and cites the official source.
 Citizen situation + profile
         │
         ▼
-┌───────────────────┐   semantic search    ┌──────────────────────┐
-│  SchemeRetriever  │ ───────────────────► │  pgvector (Postgres) │
-│   (RAG retrieval) │ ◄─────────────────── │   scheme embeddings  │
-└───────────────────┘   candidate schemes  └──────────────────────┘
+┌───────────────────┐   local embedding + search   ┌──────────────────────┐
+│  VectorStore      │ ───────────────────────────► │  pgvector (Postgres) │
+│  (RAG retrieval)  │ ◄─────────────────────────── │   scheme embeddings  │
+└───────────────────┘      candidate scheme ids     └──────────────────────┘
         │
         ▼
 ┌─────────────────────┐   deterministic, auditable
-│  EligibilityEngine  │   ELIGIBLE / POSSIBLY / NOT / MISSING_INFO
+│  eligibility.evaluate│   ELIGIBLE / POSSIBLY / NOT / MISSING_INFO
 └─────────────────────┘
         │
         ▼
-┌─────────────────────┐   graph of mutually-exclusive schemes
-│  ConflictDetector   │   "you can't claim both A and B"
-└─────────────────────┘
+┌───────────────────────┐   graph of mutually-exclusive schemes
+│  detect_conflicts     │   "you can't claim both A and B"
+└───────────────────────┘
         │
         ▼
 ┌─────────────────────┐   grounded, cited, plain-language
@@ -55,7 +55,7 @@ Citizen situation + profile
 └─────────────────────┘
         │
         ▼
-   JSON response  →  (Next.js frontend / mobile app)
+   JSON response  →  web UI (served at /)
 ```
 
 ### Eligibility classification logic
@@ -66,55 +66,83 @@ Citizen situation + profile
 | Nothing fails, but a required field is unknown (some rules already passed) | `POSSIBLY_ELIGIBLE` |
 | Nothing fails, nothing passes yet, a required field is unknown | `MISSING_INFORMATION` |
 
-The `MISSING_INFORMATION` vs `NOT_ELIGIBLE` distinction is deliberate: the system asks for
-the missing detail instead of silently assuming and producing a wrong answer.
-
 ---
 
 ## Tech stack
 
 | Layer | Technology |
 |---|---|
-| Language / Framework | **Java 21 · Spring Boot 3.3** |
-| AI / RAG | **Spring AI** (chat + embeddings + vector store) |
-| Vector store | **PostgreSQL + pgvector** (HNSW, cosine distance) |
-| LLM | OpenAI `gpt-4o-mini` *or* Groq `llama-3.3-70b-versatile` |
-| Frontend | Plain HTML + CSS + JavaScript (served by Spring Boot) |
-| Build | Maven |
+| Language / Framework | **Python 3.11 · FastAPI** |
+| Embeddings | **sentence-transformers** `all-MiniLM-L6-v2` — **runs locally, no API key** |
+| Vector store | **PostgreSQL + pgvector** (cosine distance) via SQLAlchemy |
+| LLM | OpenAI `gpt-4o-mini` *or* Groq `llama-3.3-70b-versatile` (chat only) |
+| Validation | **Pydantic v2** |
+| Frontend | Plain HTML + CSS + JavaScript (served by FastAPI) |
 | Infra | Docker Compose |
+
+> 💡 Because embeddings are **local**, you only need an LLM key for the explanation step.
+> Retrieval + eligibility + conflict detection all work with no external API at all.
+
+---
+
+## Project layout
+```
+app/
+  main.py          # FastAPI app, startup wiring, /api/navigate endpoint
+  config.py        # settings from env / .env (pydantic-settings)
+  domain.py        # Pydantic models + enums (the data shapes)
+  eligibility.py   # deterministic eligibility engine + conflict detection  ← core logic
+  knowledge.py     # loads the scheme JSON
+  vectorstore.py   # local embeddings + pgvector storage/search
+  generator.py     # grounded LLM explanation
+  navigator.py     # orchestrates the whole pipeline
+  data/telangana_schemes.json
+  static/          # web UI (index.html, styles.css, app.js)
+tests/
+  test_eligibility.py   # pure-logic tests (no DB / LLM needed)
+```
 
 ---
 
 ## Running locally
 
 ### Prerequisites
-- Java 21+ and Maven (or the included `mvnw`)
+- Python 3.11+
 - Docker (for PostgreSQL + pgvector)
-- An LLM API key (OpenAI, or Groq + an embedding provider — see `.env.example`)
+- An LLM API key (OpenAI, or Groq — see `.env.example`)
 
 ### 1. Start the database
 ```bash
 docker compose up -d
 ```
 
-### 2. Configure credentials
+### 2. Install dependencies
+Using `uv` (fast) — or plain `pip`:
+```bash
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+```
+
+### 3. Configure credentials
 ```bash
 cp .env.example .env
 # edit .env and set OPENAI_API_KEY (and base-url/model if using Groq)
-export $(grep -v '^#' .env | xargs)
 ```
 
-### 3. Run the app
+### 4. Run the app
 ```bash
-mvn spring-boot:run
+uvicorn app.main:app --reload
 ```
-On first startup the app loads the Telangana scheme knowledge base
-(`src/main/resources/schemes/telangana-schemes.json`), embeds each scheme into pgvector,
-and is then ready to serve requests.
+On first startup the app downloads the embedding model (once), creates the pgvector table,
+embeds the Telangana schemes, and is then ready.
 
-### 4. Ask it something
+### 5. Use it
+- **Web UI:** open **http://localhost:8000/**
+- **Interactive API docs** (FastAPI gives these free): **http://localhost:8000/docs**
+- **Or curl:**
 ```bash
-curl -s -X POST http://localhost:8080/api/navigate \
+curl -s -X POST http://localhost:8000/api/navigate \
   -H 'Content-Type: application/json' \
   -d '{
         "situation": "I am a small farmer in Warangal and I own two acres of land",
@@ -124,25 +152,14 @@ curl -s -X POST http://localhost:8080/api/navigate \
         "district": "Warangal",
         "isBpl": true,
         "withExplanations": true
-      }' | jq
+      }'
 ```
 
-You will get back the schemes the citizen is eligible / possibly eligible for, any
-conflicts between them, and (if `withExplanations: true`) a grounded, cited explanation
-for each.
-
-### Or just use the web UI
-Once the app is running, open **http://localhost:8080/** in your browser. A simple web
-interface (served from `src/main/resources/static/`) lets you type a situation, fill in any
-details you know, and see the matching schemes, conflicts and explanations — no `curl`
-needed. This is the quickest way to demo the project.
-
-### Run the tests (no DB or API key needed for the core logic)
+### Run the tests (no DB or API key needed)
 ```bash
-mvn test
+pytest
 ```
-`EligibilityEngineTest` and `ConflictDetectorTest` cover the safety-critical decision logic
-in isolation — no database, no LLM.
+`tests/test_eligibility.py` covers the safety-critical decision logic in isolation.
 
 ---
 
@@ -151,8 +168,8 @@ Agriculture (Rythu Bharosa, Indiramma Atmeeya Bharosa), Pension (Aasara Old-Age,
 Widow), Education (Kalyana Lakshmi/Shaadi Mubarak, ePASS Post-Matric Scholarship),
 Healthcare (Rajiv Aarogyasri), Housing (Indiramma Indlu).
 
-> Scheme details are approximate and for demonstration; always verify on the official
-> portal linked in each result before applying.
+> Scheme details are approximate and for demonstration; always verify on the official portal
+> linked in each result before applying.
 
 ---
 
@@ -160,40 +177,7 @@ Healthcare (Rajiv Aarogyasri), Housing (Indiramma Indlu).
 - [ ] LLM extraction: turn free-text/voice situation into the structured profile automatically
 - [ ] Faithfulness / grounding check on generated answers (RAGAs-style evaluation)
 - [ ] Multilingual support (Telugu + Hindi) with Indic STT/TTS for voice-first access
-- [ ] Next.js web frontend + Flutter mobile app
 - [ ] Expand the knowledge base and add citation highlighting
 
----
-
-## ⚠️ Spring AI version note
-This project pins **Spring AI `1.0.0-M3`** (a milestone). The vector-search API changed
-between milestones and the GA release:
-- **M3 (this project):** `SearchRequest.query("...").withTopK(k).withSimilarityThreshold(t)`
-- **1.0.0 GA and later:** `SearchRequest.builder().query("...").topK(k).similarityThreshold(t).build()`
-
-If you upgrade `spring-ai.version` in `pom.xml`, update the two calls in
-`SchemeRetriever` and `SchemeIngestionService` to the builder form, and confirm the
-starter artifact ids (the `-spring-boot-starter` suffix also changed in GA). The milestone
-repo is already configured in `pom.xml`.
-
----
-
-## API reference
-
-### `POST /api/navigate`
-**Request body**
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| `situation` | string | ✅ | Free-text description of the citizen's situation |
-| `occupation` | string | | e.g. `farmer`, `student`, `labourer` |
-| `annualIncome` | int | | Household annual income (INR) |
-| `landHoldingAcres` | number | | Agricultural land owned |
-| `age` | int | | |
-| `gender` | string | | `male` / `female` / `other` |
-| `district` | string | | |
-| `isBpl` | boolean | | Below Poverty Line (white ration card) |
-| `category` | string | | `general` / `obc` / `sc` / `st` / `minority` |
-| `withExplanations` | boolean | | Generate LLM explanations (one API call per scheme) |
-
-Omitting a profile field is meaningful: it makes the engine return
-`MISSING_INFORMATION` / `POSSIBLY_ELIGIBLE` rather than guessing.
+New to Python? See **[LEARNING.md](LEARNING.md)** — a guide to the Python/FastAPI concepts
+used, mapped to each file in this project.

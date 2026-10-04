@@ -1,0 +1,21 @@
+services:
+  # PostgreSQL with the pgvector extension — the vector store for RAG retrieval.
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: graminsahay-postgres
+    environment:
+      POSTGRES_DB: graminsahay
+      POSTGRES_USER: graminsahay
+      POSTGRES_PASSWORD: graminsahay
+    ports:
+      - "5432:5432"
+    volumes:
+      - graminsahay-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U graminsahay -d graminsahay"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  graminsahay-pgdata:

@@ -1,0 +1,35 @@
+[project]
+name = "graminsahay"
+version = "0.1.0"
+description = "LLM-Powered RAG-Based Rural Welfare and Government Services Navigator (FastAPI)"
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    # Web framework + ASGI server
+    "fastapi>=0.115,<1.0",
+    "uvicorn[standard]>=0.30",
+    # Request/response models and settings
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    # Vector store: PostgreSQL + pgvector via SQLAlchemy
+    "sqlalchemy>=2.0",
+    "pgvector>=0.3",
+    "psycopg[binary]>=3.2",
+    # Local embeddings (no API needed) — the model family you used in ResuMate
+    "sentence-transformers>=3.0",
+    # LLM chat client (OpenAI-compatible; also works with Groq via base_url)
+    "openai>=1.40",
+    # Load .env files
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",   # for FastAPI TestClient
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

@@ -1,304 +1,235 @@
-# Learning GraminSahay (Spring Boot for Java developers)
+# Learning GraminSahay (Python + FastAPI, for Java developers)
 
-This guide teaches you the Spring Boot concepts used in **this project**, assuming you
-already know Java but are new to Spring Boot. Every concept is tied to a real file in the
-repo, so reading this *is* studying your own project. By the end you'll be able to explain
-GraminSahay confidently in an interview.
-
-Read it top to bottom once, then keep it open while you read the actual code.
+You know Java. This guide teaches the Python and FastAPI concepts used in **this project** by
+mapping them to the Java/Spring Boot ideas you already met in the original version. Read it
+once top-to-bottom, then keep it open beside the code.
 
 ---
 
-## 0. The one-sentence mental model
+## 0. The big-picture translation table
 
-> **Spring Boot is just Java + a helper that creates and connects your objects for you,
-> and turns some of your classes into a running web server.**
-
-You still write plain Java classes. Spring Boot's job is to:
-1. **Create objects for you** (so you don't write `new SomeService(...)` everywhere), and
-2. **Wire them together** (hand each object the other objects it needs), and
-3. **Run a web server** that maps HTTP requests to your methods.
-
-That's genuinely most of it. The rest is details.
-
----
-
-## 1. Beans and the "application context"
-
-A **bean** = an object that Spring creates and manages for you.
-
-When the app starts, Spring builds a big registry of beans called the **application
-context**. Your job is to *mark* which classes should become beans; Spring does the rest.
-
-You mark a class as a bean with a **stereotype annotation**:
-
-| Annotation | Means "this is a..." | In this project |
+| Java / Spring Boot | Python / FastAPI | Where in this project |
 |---|---|---|
-| `@RestController` | web endpoint handler | `NavigatorController` |
-| `@Service` | business-logic class | `NavigatorService`, `SchemeRetriever`, `AnswerGenerator`, `SchemeIngestionService` |
-| `@Component` | generic managed object | `EligibilityEngine`, `ConflictDetector` |
-| `@Repository` | data-access class | `SchemeRepository` |
+| `record` / POJO | Pydantic `BaseModel` | `app/domain.py` |
+| `enum` | `class X(str, Enum)` | `EligibilityStatus`, `Operator` |
+| Jackson (JSON ↔ object) | Pydantic (built in) | everywhere |
+| Bean Validation `@NotBlank` | Pydantic `Field(min_length=1)` | `NavigateRequest` in `app/main.py` |
+| `application.yml` + `@Value` | pydantic-settings `BaseSettings` | `app/config.py` |
+| `@RestController` + `@PostMapping` | `@app.post(...)` | `app/main.py` |
+| `@Service` / `@Component` bean | a plain class you instantiate at startup | `app/navigator.py`, etc. |
+| Dependency injection (Spring wires beans) | you wire objects yourself in `lifespan()` | `app/main.py` |
+| `ApplicationRunner` (startup task) | `lifespan()` async context manager | `app/main.py` |
+| Maven `pom.xml` | `pyproject.toml` | project root |
+| JUnit | pytest | `tests/` |
 
-> 💡 **Interview-ready fact:** `@Service`, `@Component`, and `@Repository` are *functionally
-> almost identical* — they all make the class a bean. The different names are just for
-> readability (they document the class's **role**). `@Repository` additionally translates
-> some database exceptions.
-
-**Look at:** the top of `EligibilityEngine.java` — the single line `@Component` is what
-tells Spring "create one of these and keep it ready for anyone who needs it."
-
----
-
-## 2. Dependency Injection (DI) — the most important concept
-
-This is the heart of Spring. It sounds fancy; it's simple.
-
-**Without Spring**, if `NavigatorService` needs an `EligibilityEngine`, you'd write:
-```java
-EligibilityEngine engine = new EligibilityEngine(); // you create it yourself
-```
-
-**With Spring**, you just *ask* for it in the constructor, and Spring hands it to you:
-```java
-public NavigatorService(EligibilityEngine eligibilityEngine, ...) {
-    this.eligibilityEngine = eligibilityEngine; // Spring passed it in
-}
-```
-
-This is called **constructor injection**. Spring sees that `NavigatorService` needs an
-`EligibilityEngine`, finds the `EligibilityEngine` bean it already created, and passes it in
-automatically. You never call `new` for your beans.
-
-**Why it matters (say this in interviews):**
-- Classes don't create their own dependencies → they're **loosely coupled**.
-- You can swap a dependency for a fake one in **tests** (see §8).
-- Spring manages object lifecycle, so you focus on logic.
-
-**Look at:** the constructor of `NavigatorService.java` — it asks for four beans
-(`SchemeRetriever`, `EligibilityEngine`, `ConflictDetector`, `AnswerGenerator`). Spring
-injects all four. That constructor *is* dependency injection.
-
-> 💡 Note: when a class has exactly **one** constructor, Spring injects into it
-> automatically — you don't even need an `@Autowired` annotation. That's why you won't see
-> `@Autowired` anywhere in this project; the modern style omits it.
+Keep this table handy — it's the Rosetta Stone for the whole project.
 
 ---
 
-## 3. The entry point: `@SpringBootApplication`
+## 1. Python basics you'll see (quick Java→Python)
 
-**Look at:** `GraminSahayApplication.java`
+| Java | Python |
+|---|---|
+| `String name;` | `name: str` (type hints are optional but we use them) |
+| `Integer age;` (nullable) | `age: int | None` |
+| `List<String>` | `list[str]` |
+| `Map<String,Scheme>` | `dict[str, Scheme]` |
+| `null` | `None` |
+| `this.x` | `self.x` |
+| `boolean b = true;` | `b = True` |
+| `if (x) {...}` | `if x:` (indentation, not braces) |
+| `//` comment | `#` comment |
 
-```java
-@SpringBootApplication
-public class GraminSahayApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(GraminSahayApplication.class, args);
-    }
-}
-```
-
-- `@SpringBootApplication` is three annotations in one. The important effect:
-  **"component scan"** — Spring scans this package (`in.graminsahay`) and every sub-package,
-  finds all your `@Service`/`@Component`/`@RestController`/`@Repository` classes, and turns
-  them into beans automatically.
-- `SpringApplication.run(...)` boots everything: starts the embedded web server (Tomcat),
-  builds the application context, and wires all beans.
-
-That's why you don't configure a server anywhere — Spring Boot ships one inside the app.
+Python uses **indentation** instead of `{ }` to define blocks. That's the biggest visual
+difference. No semicolons.
 
 ---
 
-## 4. Making a web API: `@RestController`
+## 2. Pydantic models = your records + Jackson + validation (`app/domain.py`)
 
-**Look at:** `web/NavigatorController.java`
+In Java a `Scheme` was a `record` and Jackson turned JSON into it. In Python, one Pydantic
+`BaseModel` does both — it defines the shape **and** parses/validates JSON:
 
-```java
-@RestController
-@RequestMapping("/api")
-public class NavigatorController {
-
-    @PostMapping("/navigate")
-    public NavigationResponse navigate(@Valid @RequestBody NavigateRequest request) { ... }
-}
+```python
+class Scheme(BaseModel):
+    id: str
+    name: str
+    required_documents: list[str] = Field(default_factory=list, alias="requiredDocuments")
 ```
 
-Line by line:
-- `@RestController` — this class handles HTTP requests and returns data (not web pages).
-  Spring automatically converts your returned Java object to **JSON**.
-- `@RequestMapping("/api")` — base path for every method in the class.
-- `@PostMapping("/navigate")` — this method handles `POST /api/navigate`.
-- `@RequestBody NavigateRequest request` — Spring reads the JSON in the request body and
-  converts it into a `NavigateRequest` object for you (the reverse of returning JSON).
-- `@Valid` — before your method runs, Spring checks the validation rules on
-  `NavigateRequest` (see §5). If they fail, it returns a 400 error automatically.
+- Each line is a field with a **type hint** (`id: str`).
+- `Field(alias="requiredDocuments")` means: in the JSON the key is camelCase
+  (`requiredDocuments`), but in Python we use the snake_case name (`required_documents`).
+  This is how we read the SAME scheme JSON the Java app used.
+- `Scheme.model_validate(dict)` builds and validates a Scheme from a parsed JSON object
+  (see `app/knowledge.py`).
 
-**The flow:** HTTP JSON in → `NavigateRequest` object → your method → `NavigationResponse`
-object → HTTP JSON out. You only write the middle part.
+**Enums**: `class EligibilityStatus(str, Enum)` — subclassing `str` makes it serialize to a
+plain string like `"ELIGIBLE"`, exactly like the Java enum.
 
 ---
 
-## 5. Request objects and validation (DTOs)
+## 3. Configuration (`app/config.py`)
 
-**Look at:** `web/NavigateRequest.java`
+Spring read `application.yml` and injected values with `@Value`. Here, a `BaseSettings` class
+does it:
 
-A **DTO** (Data Transfer Object) is just a simple class that models the shape of a request
-or response. This project uses Java **records** for them (concise, immutable).
-
-```java
-public record NavigateRequest(
-        @NotBlank(message = "situation is required") String situation,
-        String occupation,
-        ...
-) { }
+```python
+class Settings(BaseSettings):
+    openai_api_key: str = "changeme"
+    rag_top_k: int = 6
+    model_config = SettingsConfigDict(env_file=".env")
 ```
 
-- `@NotBlank` is a **Bean Validation** rule — combined with `@Valid` in the controller, it
-  rejects requests where `situation` is empty, automatically, before your code runs.
-- The `toProfile()` method converts the incoming request into a domain object
-  (`CitizenProfile`) — keeping web concerns (the request shape) separate from domain logic.
-
-> 💡 **Design point for interviews:** notice the project separates **web DTOs**
-> (`NavigateRequest`) from **domain models** (`CitizenProfile`, `Scheme`). This is good
-> layering: the API shape can change without touching core logic.
+- Each attribute is auto-filled from an environment variable of the same name in UPPER case
+  (`openai_api_key` ← `OPENAI_API_KEY`), or the default if unset.
+- `get_settings()` is wrapped in `@lru_cache`, so it's built once and reused — a singleton,
+  just like a Spring config bean.
 
 ---
 
-## 6. Configuration: `application.yml` and `@Value`
+## 4. The FastAPI app and the endpoint (`app/main.py`)
 
-**Look at:** `src/main/resources/application.yml` and the fields in `SchemeRetriever.java`
-
-Instead of hard-coding settings, Spring Boot reads them from `application.yml` at startup.
-
-```yaml
-graminsahay:
-  rag:
-    top-k: 6
+### The request model (your DTO + @Valid)
+```python
+class NavigateRequest(BaseModel):
+    situation: str = Field(min_length=1)         # like @NotBlank
+    land_holding_acres: float | None = Field(default=None, alias="landHoldingAcres")
+    with_explanations: bool = Field(default=False, alias="withExplanations")
 ```
+FastAPI automatically parses the request body JSON into this object and validates it. If
+`situation` is empty, FastAPI returns a 422 error on its own — you write no validation code.
 
-Then any bean can inject that value:
-```java
-@Value("${graminsahay.rag.top-k:6}")
-private int topK;   // becomes 6
+### The endpoint (your @RestController)
+```python
+@app.post("/api/navigate", response_model=NavigationResponse)
+def navigate(request: NavigateRequest) -> NavigationResponse:
+    return state["navigator"].navigate(...)
 ```
-- `${...}` reads a property from `application.yml` (or an environment variable).
-- The `:6` after the key is a **default** used if the property is missing.
+- `@app.post("/api/navigate")` = `@PostMapping("/api/navigate")`.
+- The `request: NavigateRequest` parameter = `@RequestBody NavigateRequest request`.
+- Returning a Pydantic model → FastAPI serializes it to JSON automatically.
 
-Environment variables also flow in: `${OPENAI_API_KEY:changeme}` means "use the
-`OPENAI_API_KEY` env var, or `changeme` if it's not set." That's how your API key stays out
-of the code.
+> 💡 **Free bonus:** FastAPI auto-generates interactive API docs at `/docs`. Open
+> `http://localhost:8000/docs` and you can call your endpoint from the browser. Spring has
+> nothing built in like this.
 
 ---
 
-## 7. Auto-configuration & starters (the "magic", explained)
+## 5. No automatic dependency injection — you wire it yourself (`lifespan` in `app/main.py`)
 
-**Look at:** `pom.xml`
+This is the biggest conceptual difference from Spring. Spring scanned for `@Service` beans and
+injected them automatically. FastAPI does **not** do that. Instead, we build the objects
+ourselves, once, at startup, inside a `lifespan` function:
 
-You added dependencies like:
-```xml
-<artifactId>spring-ai-pgvector-store-spring-boot-starter</artifactId>
+```python
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    settings = get_settings()
+    repository = SchemeRepository(settings.schemes_path)
+    vector_store = VectorStore(...)
+    vector_store.ensure_schema()
+    vector_store.ingest(repository.all())      # same job as Spring's ApplicationRunner
+    generator = AnswerGenerator(...)
+    state["navigator"] = NavigatorService(repository, vector_store, generator, ...)
+    yield                                       # app runs here
+    state.clear()                               # cleanup on shutdown
 ```
 
-A **"starter"** is a bundle of related libraries plus **auto-configuration**:
-- Because the pgvector starter is on the classpath *and* you set `spring.ai.vectorstore...`
-  properties in `application.yml`, Spring Boot **automatically creates a `VectorStore` bean**
-  for you — connected to your Postgres, with the right table and index.
-- Same for the OpenAI starter: it creates a `ChatClient.Builder` and an embedding client
-  from your `spring.ai.openai...` properties.
+- Everything **before** `yield` runs at startup (wiring + ingestion).
+- Everything **after** `yield` runs at shutdown.
+- We stash the finished `NavigatorService` in a `state` dict so the endpoint can reach it.
 
-That's why in `AnswerGenerator.java` you can just ask for a `ChatClient.Builder` in the
-constructor — you never created it; the starter's auto-configuration did.
-
-> 💡 **Interview soundbite:** "Spring Boot starters give me a working `VectorStore` and
-> `ChatClient` from configuration alone — auto-configuration wires the AI infrastructure so
-> I focus on the retrieval and reasoning logic."
+This explicit wiring is actually *good for learning* — you can see exactly how objects connect,
+with no "magic".
 
 ---
 
-## 8. Tests without the whole app
+## 6. The core logic is plain functions (`app/eligibility.py`)
 
-**Look at:** `src/test/java/.../EligibilityEngineTest.java`
+In Java the engine was a `@Component` class. In Python it's just a **module of functions** —
+no class needed, because there's no state to hold:
 
-```java
-class EligibilityEngineTest {
-    private final EligibilityEngine engine = new EligibilityEngine(); // plain new!
+```python
+def evaluate(scheme: Scheme, profile: CitizenProfile) -> EligibilityResult:
     ...
-}
+def detect_conflicts(results: list[EligibilityResult]) -> list[Conflict]:
+    ...
 ```
 
-Notice: in the test we DO call `new EligibilityEngine()` ourselves. Because the engine has
-**no dependencies** (pure logic), we can test it as a plain Java object — no Spring, no
-database, no API key. This is a direct payoff of good design: the safety-critical decision
-logic is isolated and fast to test.
-
-> 💡 This is the single best thing to show an interviewer: "My eligibility logic is pure and
-> unit-tested in isolation, because deciding a citizen's benefit is safety-critical and must
-> be verifiable."
+Because these functions have no dependencies (pure logic), you can import and test them with
+no database and no LLM — which is exactly what `tests/test_eligibility.py` does. This is the
+single best thing to show an interviewer: **the safety-critical decision logic is pure and
+unit-tested in isolation.**
 
 ---
 
-## 9. How a single request flows through the whole app
+## 7. Local embeddings (`app/vectorstore.py`) — the Python advantage
 
-Trace this path in the code (it's the best way to understand the project):
-
-```
-1. HTTP POST /api/navigate            → NavigatorController.navigate(...)
-2. JSON → NavigateRequest (+ @Valid)  → web/NavigateRequest.java
-3. request.toProfile()                → domain/CitizenProfile.java
-4. navigatorService.navigate(...)     → service/NavigatorService.java   (orchestrator)
-      ├─ retriever.retrieve(situation)      → rag/SchemeRetriever.java    (semantic search in pgvector)
-      ├─ eligibilityEngine.evaluate(...)    → eligibility/EligibilityEngine.java  (deterministic rules)
-      ├─ conflictDetector.detect(...)       → eligibility/ConflictDetector.java   (graph of exclusions)
-      └─ answerGenerator.explain(...)       → rag/AnswerGenerator.java    (grounded LLM explanation)
-5. NavigationResponse → JSON          → back to the citizen
+```python
+self._model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+vector = self._model.encode(text, normalize_embeddings=True)
 ```
 
-If you can walk an interviewer through those 5 steps, you understand the project.
+- This loads a small model **onto your own machine** and turns text into a 384-number vector.
+- No API, no key, no cost for retrieval. (The Java version had to call a paid embedding API.)
+- The vectors go into Postgres via `pgvector`; `cosine_distance` finds the nearest schemes.
+
+This is why Python is the AI default — libraries like sentence-transformers are first-class.
 
 ---
 
-## 10. The architecture philosophy (your headline talking point)
+## 8. How one request flows through the app (trace this!)
 
-The most important *idea* in GraminSahay is not a Spring feature — it's a design decision:
+```
+POST /api/navigate                 → app/main.py        navigate(request)
+request.to_profile()               → app/domain.py      CitizenProfile
+navigator.navigate(...)            → app/navigator.py   orchestrator
+   ├─ vector_store.search(...)         → app/vectorstore.py  (local embed + pgvector search)
+   ├─ eligibility.evaluate(...)        → app/eligibility.py  (deterministic rules)
+   ├─ eligibility.detect_conflicts(...)→ app/eligibility.py  (conflict graph)
+   └─ generator.explain(...)           → app/generator.py    (grounded LLM explanation)
+NavigationResponse → JSON          → back to the browser / web UI
+```
 
-> **The LLM handles language. Deterministic rules make the decision.**
-
-- `EligibilityEngine` (rules) decides ELIGIBLE / POSSIBLY / NOT / MISSING_INFO.
-- `AnswerGenerator` (LLM) only *explains* that decision and cites the source — it is
-  explicitly instructed it "cannot change the decision."
-
-Why: a hallucinated "you are eligible" could send a poor citizen on a wasted trip and erode
-trust. Rules are auditable; LLMs are not. This is your anti-hallucination story and the
-thing that makes the project sound senior.
-
----
-
-## 11. Suggested study order
-
-1. `GraminSahayApplication.java` — the entry point (§3)
-2. `domain/` package — the data shapes (records; plain Java, easy warm-up)
-3. `eligibility/EligibilityEngine.java` — the core logic (pure Java, no Spring)
-4. `src/test/.../EligibilityEngineTest.java` — see the logic proven (§8)
-5. `rag/SchemeRetriever.java` + `rag/AnswerGenerator.java` — the RAG halves (§7)
-6. `service/NavigatorService.java` — how it all connects (§9)
-7. `web/NavigatorController.java` + `NavigateRequest.java` — the API edge (§4, §5)
-8. `application.yml` + `pom.xml` — configuration & starters (§6, §7)
+If you can walk an interviewer through these steps, you understand the project.
 
 ---
 
-## 12. A 10-term Spring Boot glossary
+## 9. Suggested study order
+1. `app/domain.py` — the data shapes (easy Python warm-up)
+2. `app/eligibility.py` — the core logic (pure functions)
+3. `tests/test_eligibility.py` — see the logic proven
+4. `app/vectorstore.py` + `app/generator.py` — the RAG halves
+5. `app/navigator.py` — how it all connects
+6. `app/main.py` — the FastAPI edge + startup wiring
+7. `app/config.py` + `pyproject.toml` — configuration & dependencies
+
+---
+
+## 10. Running it (recap)
+```bash
+docker compose up -d                 # Postgres + pgvector
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+cp .env.example .env                 # add your OPENAI_API_KEY
+uvicorn app.main:app --reload        # http://localhost:8000  (UI)  + /docs (API docs)
+pytest                               # core logic tests, no DB/key needed
+```
+
+---
+
+## 11. Mini glossary
 
 | Term | Plain meaning |
 |---|---|
-| Bean | An object Spring creates and manages |
-| Application context | Spring's registry of all beans |
-| Dependency Injection | Spring passes a bean the other beans it needs |
-| Component scan | Spring auto-finding your annotated classes |
-| Stereotype annotation | `@Service`/`@Component`/`@Repository`/`@RestController` |
-| Starter | A dependency bundle with auto-configuration |
-| Auto-configuration | Spring creating beans for you based on classpath + properties |
-| DTO | A simple object modelling a request/response |
-| `@Value` | Inject a config value from `application.yml`/env |
-| Embedded server | The web server (Tomcat) that ships inside the app |
-
-Keep this table handy — these ten terms cover ~90% of what you'll be asked about Spring
-Boot basics.
+| Pydantic `BaseModel` | A class that defines a data shape and validates/serializes JSON |
+| Type hint | `x: int` — documents (and lets tools check) a variable's type |
+| `None` | Python's `null` |
+| ASGI / Uvicorn | The server that runs a FastAPI app (like embedded Tomcat for Spring) |
+| `lifespan` | Startup/shutdown hook where we build and wire objects |
+| decorator (`@app.post`) | A `@`-annotation that adds behaviour to a function |
+| `uv` / `pip` | Package managers (install dependencies, like Maven does) |
+| venv | An isolated Python environment for this project's dependencies |
+| `pyproject.toml` | Project + dependency definition (like `pom.xml`) |
+| embedding | A list of numbers representing text meaning, used for semantic search |
