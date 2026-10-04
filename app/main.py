@@ -7,7 +7,7 @@ Combines what Spring split across GraminSahayApplication (startup), NavigatorCon
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -18,14 +18,16 @@ from app.extractor import ProfileExtractor
 from app.generator import AnswerGenerator
 from app.knowledge import SchemeRepository
 from app.navigator import NavigationResponse, NavigatorService
+from app.transcription import Transcriber
 from app.translation import Translator
 from app.vectorstore import VectorStore
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("graminsahay")
 
-# Holds the wired-up service once startup completes (set in the lifespan handler below).
-state: dict[str, NavigatorService] = {}
+# Holds the wired-up components once startup completes (set in the lifespan handler below):
+# "navigator" -> NavigatorService, "transcriber" -> Transcriber.
+state: dict[str, object] = {}
 
 
 @asynccontextmanager
@@ -60,6 +62,11 @@ async def lifespan(app: FastAPI):
         api_key=settings.openai_api_key,
         base_url=settings.openai_base_url,
         model=settings.chat_model,
+    )
+    state["transcriber"] = Transcriber(
+        api_key=settings.openai_api_key,
+        base_url=settings.openai_base_url,
+        model=settings.transcribe_model,
     )
 
     state["navigator"] = NavigatorService(
@@ -130,7 +137,7 @@ class NavigateRequest(BaseModel):
 @app.post("/api/navigate", response_model=NavigationResponse, response_model_by_alias=True)
 def navigate(request: NavigateRequest) -> NavigationResponse:
     """Find welfare schemes for a citizen's situation + profile."""
-    navigator = state["navigator"]
+    navigator: NavigatorService = state["navigator"]  # type: ignore[assignment]
     return navigator.navigate(
         situation=request.situation,
         profile=request.to_profile(),
@@ -138,6 +145,38 @@ def navigate(request: NavigateRequest) -> NavigationResponse:
         auto_extract=request.auto_extract,
         language=request.language,
     )
+
+
+class TranscribeResponse(BaseModel):
+    """Result of transcribing a voice recording."""
+
+    text: str
+
+
+@app.post("/api/transcribe", response_model=TranscribeResponse)
+async def transcribe(
+    audio: UploadFile = File(...),
+    language: str = Form("auto"),
+) -> TranscribeResponse:
+    """Voice input: accept an audio recording and return the transcribed text.
+
+    The frontend records the citizen's microphone and posts the audio here. We return the
+    text, which the UI drops into the situation box so the citizen can review it before
+    searching. ``language`` is an optional hint ("en"/"te"/"hi"/"auto").
+    """
+    transcriber: Transcriber = state["transcriber"]  # type: ignore[assignment]
+    audio_bytes = await audio.read()
+    if not audio_bytes:
+        raise HTTPException(status_code=400, detail="No audio received.")
+    try:
+        text = transcriber.transcribe(
+            audio_bytes=audio_bytes,
+            filename=audio.filename or "recording.webm",
+            language=language,
+        )
+    except RuntimeError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
+    return TranscribeResponse(text=text)
 
 
 # Serve the web UI (index.html / styles.css / app.js) from app/static at the root path.

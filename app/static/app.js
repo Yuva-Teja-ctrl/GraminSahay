@@ -157,10 +157,17 @@ function buildCard(scheme) {
     badge.classList.add(scheme.status);
 
     const explanation = node.querySelector(".scheme-explanation");
+    const speakBtn = node.querySelector(".speak-btn");
     if (scheme.explanation) {
         explanation.textContent = scheme.explanation;
+        // Wire the "read aloud" button (browser text-to-speech, free, offline).
+        if ("speechSynthesis" in window) {
+            speakBtn.hidden = false;
+            speakBtn.addEventListener("click", () => speak(scheme.explanation, currentLanguage()));
+        }
     } else {
         explanation.remove();
+        speakBtn.remove();
     }
 
     fillList(node.querySelector(".satisfied ul"), scheme.satisfiedConditions, node.querySelector(".satisfied"));
@@ -207,4 +214,100 @@ function clearResults() {
     resultsEl.innerHTML = "";
     conflictsEl.hidden = true;
     conflictsList.innerHTML = "";
+}
+
+/* =========================================================================
+   Voice input (speech-to-text) and output (text-to-speech)
+   ========================================================================= */
+
+const micBtn = document.getElementById("mic-btn");
+const micLabel = document.getElementById("mic-label");
+const micStatus = document.getElementById("mic-status");
+
+let mediaRecorder = null;
+let recordedChunks = [];
+let isRecording = false;
+
+function currentLanguage() {
+    return document.getElementById("language").value || "en";
+}
+
+// Map our language codes to BrowserSpeechSynthesis locale codes.
+const TTS_LOCALE = { en: "en-IN", te: "te-IN", hi: "hi-IN" };
+
+// --- Text-to-speech: read an explanation aloud ---
+function speak(text, lang) {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel(); // stop anything already speaking
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = TTS_LOCALE[lang] || "en-IN";
+    window.speechSynthesis.speak(utterance);
+}
+
+// --- Speech-to-text: record mic, send to /api/transcribe, fill the situation box ---
+if (micBtn) {
+    // Hide the mic entirely if the browser can't record audio.
+    if (!navigator.mediaDevices || !window.MediaRecorder) {
+        micBtn.hidden = true;
+    } else {
+        micBtn.addEventListener("click", toggleRecording);
+    }
+}
+
+async function toggleRecording() {
+    if (isRecording) {
+        stopRecording();
+        return;
+    }
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) recordedChunks.push(e.data);
+        };
+        mediaRecorder.onstop = () => {
+            stream.getTracks().forEach((t) => t.stop()); // release the mic
+            sendForTranscription();
+        };
+        mediaRecorder.start();
+        isRecording = true;
+        micBtn.classList.add("recording");
+        micLabel.textContent = "Stop";
+        micStatus.textContent = "🔴 Recording… click Stop when done.";
+    } catch (err) {
+        micStatus.textContent = "Microphone permission denied. You can type instead.";
+    }
+}
+
+function stopRecording() {
+    if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+        micBtn.classList.remove("recording");
+        micLabel.textContent = "Speak";
+        micStatus.textContent = "⏳ Transcribing…";
+    }
+}
+
+async function sendForTranscription() {
+    const blob = new Blob(recordedChunks, { type: "audio/webm" });
+    const formData = new FormData();
+    formData.append("audio", blob, "recording.webm");
+    formData.append("language", currentLanguage());
+
+    try {
+        const response = await fetch("/api/transcribe", { method: "POST", body: formData });
+        if (!response.ok) {
+            const detail = await response.text();
+            throw new Error(detail);
+        }
+        const data = await response.json();
+        const box = document.getElementById("situation");
+        // Append to whatever is already there, so a second recording adds on.
+        box.value = box.value ? `${box.value} ${data.text}` : data.text;
+        micStatus.textContent = data.text ? "✅ Added. Review it, then search." : "Nothing was heard — please try again.";
+    } catch (err) {
+        micStatus.textContent = `Could not transcribe: ${err.message}`;
+    }
 }

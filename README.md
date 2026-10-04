@@ -174,7 +174,7 @@ Healthcare (Rajiv Aarogyasri), Housing (Indiramma Indlu).
 - [x] RAG retrieval, deterministic eligibility, conflict detection, grounded explanations
 - [x] LLM extraction: turn a free-text situation into the structured profile automatically
 - [x] Multilingual support (Telugu + Hindi) — input translated for processing, answers returned in the chosen language
-- [ ] Voice-first access with Indic speech-to-text / text-to-speech
+- [x] Voice-first access — speech-to-text (Whisper) for input, browser text-to-speech to read answers aloud
 - [ ] Faithfulness / grounding check on generated answers (RAGAs-style evaluation)
 - [ ] Expand the knowledge base and add citation highlighting
 

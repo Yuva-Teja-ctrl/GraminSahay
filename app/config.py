@@ -33,6 +33,11 @@ class Settings(BaseSettings):
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dim: int = 384
 
+    # ---- Speech-to-text (voice input) ----
+    # Groq serves Whisper for transcription. whisper-large-v3-turbo is fast and multilingual
+    # (handles English, Telugu and Hindi speech). Uses the same key/base_url as chat.
+    transcribe_model: str = "whisper-large-v3-turbo"
+
     # ---- RAG retrieval knobs ----
     rag_top_k: int = 6
     rag_similarity_threshold: float = 0.3

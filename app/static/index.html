@@ -37,6 +37,12 @@
                 <span>Your situation <em>*</em></span>
                 <textarea id="situation" rows="3" required
                           placeholder="e.g. I am a small farmer in Warangal and I own two acres of land"></textarea>
+                <div class="voice-row">
+                    <button type="button" id="mic-btn" class="mic-btn" title="Speak your situation">
+                        🎤 <span id="mic-label">Speak</span>
+                    </button>
+                    <span id="mic-status" class="mic-status"></span>
+                </div>
             </label>
 
             <div class="grid">
@@ -141,7 +147,10 @@
             <span class="badge"></span>
         </div>
         <p class="scheme-category"></p>
-        <p class="scheme-explanation"></p>
+        <div class="explanation-row">
+            <p class="scheme-explanation"></p>
+            <button type="button" class="speak-btn" title="Read aloud" hidden>🔊</button>
+        </div>
 
         <details class="scheme-details">
             <summary>Details &amp; how to apply</summary>
