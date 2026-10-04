@@ -72,6 +72,7 @@ function collectRequest() {
         category: value("category"),
         isBpl: bool("isBpl"),
         withExplanations: document.getElementById("withExplanations").checked,
+        language: document.getElementById("language").value,
     };
 }
 

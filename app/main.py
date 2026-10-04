@@ -18,6 +18,7 @@ from app.extractor import ProfileExtractor
 from app.generator import AnswerGenerator
 from app.knowledge import SchemeRepository
 from app.navigator import NavigationResponse, NavigatorService
+from app.translation import Translator
 from app.vectorstore import VectorStore
 
 logging.basicConfig(level=logging.INFO)
@@ -55,12 +56,18 @@ async def lifespan(app: FastAPI):
         base_url=settings.openai_base_url,
         model=settings.chat_model,
     )
+    translator = Translator(
+        api_key=settings.openai_api_key,
+        base_url=settings.openai_base_url,
+        model=settings.chat_model,
+    )
 
     state["navigator"] = NavigatorService(
         repository=repository,
         vector_store=vector_store,
         generator=generator,
         extractor=extractor,
+        translator=translator,
         top_k=settings.rag_top_k,
         similarity_threshold=settings.rag_similarity_threshold,
     )
@@ -101,6 +108,9 @@ class NavigateRequest(BaseModel):
     # When true (default), extract a structured profile from `situation` via the LLM and merge
     # it with any fields supplied above. Set false to use only the explicit fields.
     auto_extract: bool = Field(default=True, alias="autoExtract")
+    # Citizen's language: "en" (default), "te" (Telugu) or "hi" (Hindi). Input is translated
+    # to English for processing and explanations are translated back into this language.
+    language: str = "en"
 
     model_config = {"populate_by_name": True}
 
@@ -126,6 +136,7 @@ def navigate(request: NavigateRequest) -> NavigationResponse:
         profile=request.to_profile(),
         with_explanations=request.with_explanations,
         auto_extract=request.auto_extract,
+        language=request.language,
     )
 
 

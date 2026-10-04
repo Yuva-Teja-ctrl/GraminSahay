@@ -17,6 +17,7 @@ from app.domain import STATUS_ORDER, CitizenProfile, Conflict
 from app.extractor import ProfileExtractor
 from app.generator import AnswerGenerator
 from app.knowledge import SchemeRepository
+from app.translation import Translator
 from app.vectorstore import VectorStore
 
 
@@ -66,6 +67,7 @@ class NavigatorService:
         vector_store: VectorStore,
         generator: AnswerGenerator,
         extractor: ProfileExtractor,
+        translator: Translator,
         top_k: int,
         similarity_threshold: float,
     ) -> None:
@@ -73,6 +75,7 @@ class NavigatorService:
         self._vector_store = vector_store
         self._generator = generator
         self._extractor = extractor
+        self._translator = translator
         self._top_k = top_k
         self._similarity_threshold = similarity_threshold
 
@@ -82,19 +85,25 @@ class NavigatorService:
         profile: CitizenProfile,
         with_explanations: bool,
         auto_extract: bool = True,
+        language: str = "en",
     ) -> NavigationResponse:
-        # (0) If enabled, extract a structured profile from the free-text situation, then
+        # (0a) Translate the citizen's situation into English. The whole core pipeline
+        # (embeddings, extraction, eligibility, scheme text) is tuned for English, so we
+        # process in English and translate the answers back at the end. No-op if already English.
+        situation_en = self._translator.to_english(situation, language)
+
+        # (0b) If enabled, extract a structured profile from the (English) situation, then
         # merge it with any fields the citizen filled in explicitly (explicit values win).
         # This is what lets a citizen "just describe their life" without filling a form.
         effective_profile = profile
         extracted_profile: CitizenProfile | None = None
         if auto_extract:
-            extracted_profile = self._extractor.extract(situation)
+            extracted_profile = self._extractor.extract(situation_en)
             effective_profile = ProfileExtractor.merge(extracted_profile, profile)
 
-        # (1) Retrieve candidate schemes semantically.
+        # (1) Retrieve candidate schemes semantically (in English).
         scheme_ids = self._vector_store.search(
-            situation, self._top_k, self._similarity_threshold
+            situation_en, self._top_k, self._similarity_threshold
         )
         candidates = [s for sid in scheme_ids if (s := self._repository.by_id(sid))]
 
@@ -108,9 +117,14 @@ class NavigatorService:
         conflicts = eligibility.detect_conflicts(results)
 
         # (4) Generate grounded explanations (optional — skip to save LLM calls/cost).
+        # Explanations are produced in English, then translated into the citizen's language.
         advice: list[SchemeAdvice] = []
         for r in results:
-            explanation = self._generator.explain(r) if with_explanations else None
+            explanation = None
+            if with_explanations:
+                explanation_en = self._generator.explain(r)
+                if explanation_en:
+                    explanation = self._translator.from_english(explanation_en, language)
             advice.append(
                 SchemeAdvice(
                     scheme_id=r.scheme.id,

@@ -2,9 +2,6 @@
 
 **An LLM-Powered, RAG-Based Rural Welfare & Government Services Navigator**
 
-> This is the primary **Python + FastAPI** implementation. An earlier **Java / Spring Boot**
-> version of the same project lives in [`java-springboot/`](java-springboot/) for reference.
-
 GraminSahay helps rural citizens discover the government welfare schemes they are entitled
 to — **without needing to know the scheme's name**. A citizen describes their situation
 ("I am a small farmer in Warangal with a daughter starting college"), and the system
@@ -173,10 +170,12 @@ Healthcare (Rajiv Aarogyasri), Housing (Indiramma Indlu).
 
 ---
 
-## Roadmap (next phases)
-- [ ] LLM extraction: turn free-text/voice situation into the structured profile automatically
+## Roadmap
+- [x] RAG retrieval, deterministic eligibility, conflict detection, grounded explanations
+- [x] LLM extraction: turn a free-text situation into the structured profile automatically
+- [x] Multilingual support (Telugu + Hindi) — input translated for processing, answers returned in the chosen language
+- [ ] Voice-first access with Indic speech-to-text / text-to-speech
 - [ ] Faithfulness / grounding check on generated answers (RAGAs-style evaluation)
-- [ ] Multilingual support (Telugu + Hindi) with Indic STT/TTS for voice-first access
 - [ ] Expand the knowledge base and add citation highlighting
 
 New to Python? See **[LEARNING.md](LEARNING.md)** — a guide to the Python/FastAPI concepts
