@@ -14,6 +14,7 @@ from pydantic.alias_generators import to_camel
 
 from app import eligibility
 from app.domain import STATUS_ORDER, CitizenProfile, Conflict
+from app.extractor import ProfileExtractor
 from app.generator import AnswerGenerator
 from app.knowledge import SchemeRepository
 from app.vectorstore import VectorStore
@@ -48,10 +49,14 @@ class SchemeAdvice(CamelModel):
 
 
 class NavigationResponse(CamelModel):
-    """Full result for the citizen: ranked schemes + any conflicts."""
+    """Full result for the citizen: what we understood + ranked schemes + any conflicts."""
 
     schemes: list[SchemeAdvice]
     conflicts: list[Conflict]
+    # The profile the system extracted from the free-text situation (null fields = not stated).
+    # Lets the UI show "Here's what we understood — correct us if wrong." None when extraction
+    # was turned off.
+    understood_profile: CitizenProfile | None = None
 
 
 class NavigatorService:
@@ -60,26 +65,41 @@ class NavigatorService:
         repository: SchemeRepository,
         vector_store: VectorStore,
         generator: AnswerGenerator,
+        extractor: ProfileExtractor,
         top_k: int,
         similarity_threshold: float,
     ) -> None:
         self._repository = repository
         self._vector_store = vector_store
         self._generator = generator
+        self._extractor = extractor
         self._top_k = top_k
         self._similarity_threshold = similarity_threshold
 
     def navigate(
-        self, situation: str, profile: CitizenProfile, with_explanations: bool
+        self,
+        situation: str,
+        profile: CitizenProfile,
+        with_explanations: bool,
+        auto_extract: bool = True,
     ) -> NavigationResponse:
+        # (0) If enabled, extract a structured profile from the free-text situation, then
+        # merge it with any fields the citizen filled in explicitly (explicit values win).
+        # This is what lets a citizen "just describe their life" without filling a form.
+        effective_profile = profile
+        extracted_profile: CitizenProfile | None = None
+        if auto_extract:
+            extracted_profile = self._extractor.extract(situation)
+            effective_profile = ProfileExtractor.merge(extracted_profile, profile)
+
         # (1) Retrieve candidate schemes semantically.
         scheme_ids = self._vector_store.search(
             situation, self._top_k, self._similarity_threshold
         )
         candidates = [s for sid in scheme_ids if (s := self._repository.by_id(sid))]
 
-        # (2) Evaluate eligibility deterministically.
-        results = [eligibility.evaluate(scheme, profile) for scheme in candidates]
+        # (2) Evaluate eligibility deterministically against the effective (merged) profile.
+        results = [eligibility.evaluate(scheme, effective_profile) for scheme in candidates]
 
         # Order so the citizen sees ELIGIBLE first, then POSSIBLY, MISSING, NOT.
         results.sort(key=lambda r: STATUS_ORDER[r.status])
@@ -107,4 +127,8 @@ class NavigatorService:
                 )
             )
 
-        return NavigationResponse(schemes=advice, conflicts=conflicts)
+        return NavigationResponse(
+            schemes=advice,
+            conflicts=conflicts,
+            understood_profile=effective_profile if auto_extract else None,
+        )

@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 
 from app.config import get_settings
 from app.domain import CitizenProfile
+from app.extractor import ProfileExtractor
 from app.generator import AnswerGenerator
 from app.knowledge import SchemeRepository
 from app.navigator import NavigationResponse, NavigatorService
@@ -49,11 +50,17 @@ async def lifespan(app: FastAPI):
         base_url=settings.openai_base_url,
         model=settings.chat_model,
     )
+    extractor = ProfileExtractor(
+        api_key=settings.openai_api_key,
+        base_url=settings.openai_base_url,
+        model=settings.chat_model,
+    )
 
     state["navigator"] = NavigatorService(
         repository=repository,
         vector_store=vector_store,
         generator=generator,
+        extractor=extractor,
         top_k=settings.rag_top_k,
         similarity_threshold=settings.rag_similarity_threshold,
     )
@@ -91,6 +98,9 @@ class NavigateRequest(BaseModel):
     is_bpl: bool | None = Field(default=None, alias="isBpl")
     category: str | None = None
     with_explanations: bool = Field(default=False, alias="withExplanations")
+    # When true (default), extract a structured profile from `situation` via the LLM and merge
+    # it with any fields supplied above. Set false to use only the explicit fields.
+    auto_extract: bool = Field(default=True, alias="autoExtract")
 
     model_config = {"populate_by_name": True}
 
@@ -115,6 +125,7 @@ def navigate(request: NavigateRequest) -> NavigationResponse:
         situation=request.situation,
         profile=request.to_profile(),
         with_explanations=request.with_explanations,
+        auto_extract=request.auto_extract,
     )
 
 

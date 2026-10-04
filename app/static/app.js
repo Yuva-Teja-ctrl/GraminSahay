@@ -79,6 +79,7 @@ function render(data) {
     const schemes = data.schemes || [];
     const conflicts = data.conflicts || [];
 
+    renderUnderstood(data.understoodProfile);
     renderConflicts(conflicts);
 
     if (schemes.length === 0) {
@@ -106,6 +107,41 @@ function renderConflicts(conflicts) {
         conflictsList.appendChild(li);
     });
     conflictsEl.hidden = false;
+}
+
+// Show the profile the system understood from the free-text situation.
+const UNDERSTOOD_LABELS = {
+    occupation: "Occupation",
+    annual_income: "Annual income (₹)",
+    land_holding_acres: "Land owned (acres)",
+    age: "Age",
+    gender: "Gender",
+    district: "District",
+    is_bpl: "Below Poverty Line",
+    category: "Social category",
+};
+
+function renderUnderstood(profile) {
+    const panel = document.getElementById("understood");
+    const list = document.getElementById("understood-list");
+    list.innerHTML = "";
+    if (!profile) {
+        panel.hidden = true;
+        return;
+    }
+    const entries = Object.entries(UNDERSTOOD_LABELS)
+        .filter(([key]) => profile[key] !== null && profile[key] !== undefined)
+        .map(([key, label]) => {
+            let value = profile[key];
+            if (key === "is_bpl") value = value ? "Yes" : "No";
+            return `<li><strong>${label}:</strong> ${value}</li>`;
+        });
+    if (entries.length === 0) {
+        panel.hidden = true;
+        return;
+    }
+    list.innerHTML = entries.join("");
+    panel.hidden = false;
 }
 
 function buildCard(scheme) {

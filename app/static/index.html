@@ -20,8 +20,8 @@
 <main class="container">
     <section class="card form-card">
         <h2>Describe your situation</h2>
-        <p class="hint">Tell us about yourself in your own words, and fill in whatever details you know.
-            Leaving a field blank is fine — the system will tell you if it needs more information.</p>
+        <p class="hint">Just tell us about yourself in your own words — the system will understand the details automatically.
+            The fields below are optional; use them only to correct or add anything.</p>
 
         <form id="navigate-form">
             <label class="field">
@@ -105,6 +105,12 @@
     </section>
 
     <section id="status" class="status" hidden></section>
+
+    <section id="understood" class="card understood-card" hidden>
+        <h2>📝 Here's what we understood</h2>
+        <p class="hint">We read this from your description. If anything is wrong or missing, fill in the fields above and search again.</p>
+        <ul id="understood-list"></ul>
+    </section>
 
     <section id="conflicts" class="card conflict-card" hidden>
         <h2>⚠️ Important: schemes you cannot combine</h2>
