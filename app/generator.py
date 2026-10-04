@@ -41,7 +41,15 @@ class AnswerGenerator:
         self._client = OpenAI(api_key=api_key, base_url=base_url)
         self._model = model
 
-    def explain(self, result: EligibilityResult) -> str:
+    def explain(self, result: EligibilityResult) -> str | None:
+        """Generate a grounded explanation, or return None if the LLM is unavailable.
+
+        FAIL-SAFE DESIGN: the explanation is a nice-to-have on top of the deterministic
+        eligibility decision. If the LLM call fails (no credits, bad key, network, rate
+        limit), we must NOT fail the whole request — the citizen should still receive their
+        eligibility results and the structured conditions/documents/steps. So we log the
+        error and return None; the frontend simply shows the result without an AI blurb.
+        """
         context = self._build_context(result)
         user_prompt = (
             f"CONTEXT:\n{context}\n\n"
@@ -49,15 +57,19 @@ class AnswerGenerator:
             f'is "{result.status.value}". Mention benefits, what to do next, and cite the '
             f"official link."
         )
-        response = self._client.chat.completions.create(
-            model=self._model,
-            temperature=0.1,  # low temperature -> faithful, grounded answers
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_prompt},
-            ],
-        )
-        return response.choices[0].message.content or ""
+        try:
+            response = self._client.chat.completions.create(
+                model=self._model,
+                temperature=0.1,  # low temperature -> faithful, grounded answers
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_prompt},
+                ],
+            )
+            return response.choices[0].message.content or None
+        except Exception as exc:  # noqa: BLE001 - degrade gracefully on ANY LLM failure
+            log.warning("LLM explanation unavailable (%s): %s", type(exc).__name__, exc)
+            return None
 
     def _build_context(self, r: EligibilityResult) -> str:
         s = r.scheme
