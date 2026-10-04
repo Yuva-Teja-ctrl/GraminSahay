@@ -17,11 +17,16 @@ from sentence_transformers import SentenceTransformer
 from sqlalchemy import Column, Integer, String, Text, create_engine, select, text
 from sqlalchemy.orm import Session, declarative_base
 
+from app.config import get_settings
 from app.domain import Scheme
 
 log = logging.getLogger("graminsahay.vectorstore")
 
 Base = declarative_base()
+
+# Vector dimension is fixed by the embedding model (all-MiniLM-L6-v2 -> 384). We read it from
+# settings once, at import time, so the column has a concrete size when the table is created.
+_EMBEDDING_DIM = get_settings().embedding_dim
 
 
 class SchemeEmbedding(Base):
@@ -34,7 +39,7 @@ class SchemeEmbedding(Base):
     scheme_name = Column(String, nullable=False)
     category = Column(String, nullable=False)
     content = Column(Text, nullable=False)
-    embedding = Column(Vector())  # dimension set at table creation based on the model
+    embedding = Column(Vector(_EMBEDDING_DIM))
 
 
 class VectorStore:
@@ -55,11 +60,11 @@ class VectorStore:
 
     # ---- schema ----
     def ensure_schema(self) -> None:
+        # Enable the pgvector extension, then create the table (column dimension is already
+        # fixed at _EMBEDDING_DIM when the model class was defined).
         with self._engine.connect() as conn:
             conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
             conn.commit()
-        # Set the concrete vector dimension, then create the table.
-        SchemeEmbedding.__table__.columns["embedding"].type = Vector(self._dim)
         Base.metadata.create_all(self._engine)
 
     # ---- embedding helper ----
