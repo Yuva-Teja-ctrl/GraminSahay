@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GraminSahay — IEEE Literature Review Paper</title>
+<style>
+  /* ---------- IEEE two-column layout ---------- */
+  @page { size: A4; margin: 19mm 15mm; }
+  html { background:#e9e9e9; }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 9.6pt;
+    line-height: 1.18;
+    color: #000;
+    margin: 0;
+    text-align: justify;
+  }
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 10mm auto;
+    padding: 18mm 14mm;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,.25);
+    box-sizing: border-box;
+  }
+  h1.title {
+    font-size: 18pt; font-weight: bold; text-align: center;
+    margin: 0 0 14pt; line-height: 1.15; font-family:"Times New Roman",serif;
+  }
+  .authors {
+    display: flex; justify-content: center; gap: 26pt; flex-wrap: wrap;
+    text-align: center; margin-bottom: 16pt;
+  }
+  .authors .a { font-size: 9pt; width: 150px; }
+  .authors .a .name { font-weight: bold; font-size: 10.5pt; }
+  .authors .a .ph { color:#888; font-style:italic; }
+  .cols { column-count: 2; column-gap: 7mm; }
+  .onecol { column-span: all; }
+  p { margin: 0 0 6pt; text-indent: 10pt; }
+  p.noind { text-indent: 0; }
+  .abs { font-style: italic; font-weight: bold; }
+  .sec {
+    text-align: center; font-weight: bold; font-variant: small-caps;
+    font-size: 10pt; margin: 11pt 0 5pt; text-indent:0;
+  }
+  .subsec { font-weight: bold; font-style: italic; margin: 7pt 0 3pt; text-indent:0; }
+  .ph { color:#b00; font-style:italic; }   /* placeholder marker */
+  table.lit {
+    width: 100%; border-collapse: collapse; font-size: 7.6pt; margin: 4pt 0 8pt;
+    text-align: left; line-height:1.1;
+  }
+  table.lit th, table.lit td { border: 0.6pt solid #000; padding: 2.5pt 3pt; vertical-align: top; }
+  table.lit th { background:#d9d9d9; text-align:center; font-size:7.6pt; }
+  .figwrap { text-align:center; margin: 6pt 0; }
+  .figwrap svg { width: 100%; height: auto; max-width: 460px; }
+  .figwrap.chart svg { max-width: 300px; }
+  .figcap { font-size: 8pt; text-align: center; margin-top: 3pt; }
+  .refs { font-size: 8.3pt; }
+  .refs p { text-indent: -14pt; padding-left: 14pt; margin-bottom: 3pt; }
+  .note { background:#fffbe6; border:1px solid #e0c200; padding:6pt 9pt; font-family:Arial,sans-serif; font-size:8.5pt; margin:10mm auto; width:200mm; text-align:left; }
+  @media print { html{background:#fff;} .page{box-shadow:none;margin:0;} .note{display:none;} }
+</style>
+</head>
+<body>
+
+<div class="note">
+<b>How to use this file:</b> Open in a browser and choose <b>Print → Save as PDF</b> (A4) to get the finished two-column IEEE paper, or copy the text into Word.
+Everything marked in <span class="ph">red italics</span> is a placeholder — replace it before submission. This yellow box does not print.
+</div>
+
+<div class="page">
+
+  <!-- ================= HEADER ================= -->
+  <h1 class="title">GraminSahay: An LLM-Powered RAG-Based Rural Welfare and Government Services Navigator</h1>
+
+  <div class="authors">
+    <div class="a"><div class="name">Adigarla Yuva Teja</div>Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India<br>yuvateja976@gmail.com</div>
+    <div class="a"><div class="name">Akhil Vankudoth</div>Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India<br>akhilvankudoth58@gmail.com</div>
+    <div class="a"><div class="name">Adiserla Praneel</div>Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India<br>praneeladiserla@gmail.com</div>
+    <div class="a"><div class="name">Mr. S. Lingaiah (Guide)</div>Assistant Professor, Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India<br><span class="ph">email@________</span></div>
+  </div>
+
+  <!-- ================= ABSTRACT / KEYWORDS ================= -->
+  <div class="cols">
+    <p class="noind"><span class="abs">Abstract—</span><span class="abs">A large number of government welfare schemes exist for rural communities across agriculture, education, healthcare, housing, pensions, and employment, yet many eligible citizens never receive these benefits. The barrier is not a shortage of schemes but a lack of awareness: citizens frequently do not know which schemes they qualify for, what documents are required, how to apply, or why an earlier application was rejected, and existing government portals assume the citizen already knows a scheme&rsquo;s name before they can search. This paper reviews the body of work most relevant to building a situation-aware welfare advisory system and presents GraminSahay, a multilingual, voice-first assistant that lets a citizen describe their life situation in natural language and identifies every scheme they may be eligible for. The system combines Retrieval-Augmented Generation (RAG) over official scheme and policy documents with an eligibility-reasoning layer that classifies each scheme as eligible, possibly eligible, not eligible, or missing information, a scheme-conflict-detection stage that warns when mutually exclusive benefits are selected, and step-by-step application guidance. The literature survey covers RAG and knowledge-intensive question answering, faithfulness and automated evaluation of RAG, retrieval-augmented reasoning, multilingual and cross-lingual retrieval, domain adaptation, and the use of large language models for interpretive support in digital-government services. From this review we derive the research gaps that motivate an explainable rural welfare navigator and describe the proposed system architecture and methodology.</span></p>
+
+    <p class="noind"><span class="abs">Keywords—</span><span class="abs">Retrieval-Augmented Generation, Large Language Models, Multilingual Voice AI, Eligibility Reasoning, Scheme Conflict Detection, Rural Welfare, Public Policy Technology, Indic Speech Processing, Explainable AI.</span></p>
+
+    <!-- ================= I. INTRODUCTION ================= -->
+    <p class="sec">I.&nbsp;&nbsp;Introduction</p>
+    <p>Rural communities in India have access to a broad range of government welfare schemes spanning agriculture, education, healthcare, housing, and pensions. Despite this coverage, a large share of eligible citizens do not avail the benefits for which they qualify. The core difficulty is informational rather than administrative: citizens often do not know which schemes exist, cannot easily interpret eligibility criteria, are unsure of the documents and procedures required, and may not understand why a previous application was rejected [1].</p>
+    <p>A key limitation of existing government portals is that they are organized around scheme names. A citizen must effectively already know the name of a scheme before the portal becomes useful, which inverts the real need&mdash;citizens know their own situation, not the catalogue of schemes mapped to it. This gap is compounded by language and accessibility barriers, because most portals are primarily text-based and language-dependent, which disadvantages users who are more comfortable speaking in a regional language than reading official text [1].</p>
+    <p>Recent progress in large language models (LLMs) and Retrieval-Augmented Generation (RAG) offers an opportunity to address this gap. RAG couples a neural retriever with a generative model so that answers are grounded in an external, authoritative document collection rather than only in the parameters of the model [8]. This grounding is particularly valuable in the welfare domain, where correctness, traceability to official sources, and the ability to update the corpus as policies change are essential. When paired with multilingual retrieval and Indic speech-to-text/text-to-speech, such a system can accept a spoken description of a citizen&rsquo;s situation and respond in that citizen&rsquo;s own language.</p>
+    <p>This paper presents GraminSahay, a multilingual, voice-first welfare navigator that lets a citizen describe their life situation&mdash;for example, &ldquo;I am a farmer with a small landholding&rdquo; or &ldquo;my daughter is starting college&rdquo;&mdash;and returns the schemes they may be eligible for, an explanation of the eligibility decision, warnings about schemes that cannot be claimed together, and guidance on how to apply. The focus of this paper is the literature that underpins such a system and the research gaps it must close.</p>
+
+    <!-- ================= II. LITERATURE REVIEW ================= -->
+    <p class="sec">II.&nbsp;&nbsp;Literature Review</p>
+    <p>Research directly relevant to GraminSahay falls into six strands: (A) foundational Retrieval-Augmented Generation, (B) faithfulness and automated evaluation of RAG, (C) retrieval-augmented reasoning, (D) multilingual and cross-lingual retrieval, (E) dense retrieval and domain adaptation, and (F) LLMs for interpretive support in digital government. We review each strand and relate it to the welfare-navigation setting.</p>
+
+    <p class="subsec">A. Foundational Retrieval-Augmented Generation</p>
+    <p>Lewis et al. introduced RAG for knowledge-intensive NLP tasks, combining a pretrained sequence generator with a neural retriever over an external document index [8]. Compared with a purely parametric baseline, RAG produced more specific, diverse, and factual generations and improved open-domain question answering. The central lesson for GraminSahay is that answer quality is bounded by retrieval quality; the original evaluation used a general Wikipedia index, whereas a welfare navigator must retrieve from a curated corpus of official scheme guidelines and eligibility rules.</p>
+
+    <p class="subsec">B. Faithfulness and Automated Evaluation of RAG</p>
+    <p>Because a welfare system must not state eligibility that the retrieved evidence does not support, faithfulness is a first-class concern. Filice et al. proposed Answering with Faithfulness (AwF), which explicitly evaluates whether a generated answer is supported by the retrieved passages and shows that stronger faithfulness evaluation can improve downstream RAG performance and enable systematic fallback strategies [4]. Complementarily, RAGAs introduced reference-free metrics that separately score retrieval relevance, faithfulness, and generation quality, allowing a RAG pipeline to be evaluated without manually created ground-truth answers for every query [7]. Both lines are directly applicable to validating eligibility explanations, though automated metrics may not fully capture the correctness of legal or policy eligibility decisions.</p>
+
+    <p class="subsec">C. Retrieval-Augmented Reasoning</p>
+    <p>Eligibility determination is a multi-step inference task, not simple lookup: a citizen&rsquo;s occupation, family situation, and location must be matched against several conditions. Li et al. survey RAG-reasoning systems that combine retrieval with multi-step reasoning, including reasoning-enhanced RAG and iterative search-and-thought frameworks, and report that coupling external retrieval with reasoning improves knowledge-intensive and complex inference tasks [3]. Self-RAG lets a model decide when to retrieve and then critique both the retrieved evidence and its own output using reflection tokens, improving factuality and citation accuracy [9]. These techniques map naturally onto the eligible / possibly-eligible / not-eligible / missing-information classification, at the cost of additional retrieval and inference complexity.</p>
+
+    <p class="subsec">D. Multilingual and Cross-Lingual Retrieval</p>
+    <p>Because GraminSahay serves citizens in English plus two regional languages, multilingual retrieval is central. Ranaldi et al. compare multilingual RAG strategies&mdash;question-translation RAG versus direct multilingual retrieval&mdash;and find that direct multilingual retrieval can improve coverage and efficiency, while translation-based retrieval may suffer coverage limitations [5]. Qi et al. study the consistency of multilingual context utilization in RAG and show that retrieved content can differ across languages, introducing cross-lingual inconsistencies [2]. For a welfare navigator, where the authoritative corpus may be predominantly in one language while queries arrive in several, these findings motivate careful alignment between the query language, the retrieval language, and the response language.</p>
+
+    <p class="subsec">E. Dense Retrieval and Domain Adaptation</p>
+    <p>The quality of the retriever determines whether the correct scheme document is surfaced. Contriever trains dense retrievers with unsupervised contrastive learning and extends to multilingual retrieval, achieving competitive performance without supervised training and strong cross-lingual capability [10]; however, unsupervised retrieval may underperform on highly specialized government terminology without further tuning. RAFT (Retrieval-Augmented Fine-Tuning) teaches an LLM to focus on useful retrieved documents and ignore distractors in domain-specific RAG, consistently improving in-domain performance [6], at the cost of additional domain-specific training data and compute that may be difficult for a rapidly changing policy corpus.</p>
+
+    <p class="subsec">F. LLMs for Interpretive Support in Digital Government</p>
+    <p>At the application level, a systematic review of LLMs for interpretive support in digital-government service systems analyzes sixty studies and reports a shift from simple question answering toward service navigation and interpretive support, with the strongest evidence for gains in efficiency, responsiveness, and accessibility [1]. Crucially, it notes that realized benefits depend on reliability, legal boundaries, responsibility allocation, privacy and security, and organizational capacity&mdash;non-functional requirements that any deployed welfare navigator must respect. Context-optimized RAG for local-government welfare subsidies further demonstrates the feasibility of grounding welfare answers in local policy documents.</p>
+
+    <p class="subsec">G. Summary of the Literature Survey</p>
+    <p>Table I consolidates the primary studies reviewed, their objectives, outcomes, and limitations, and provides the evidential basis for the research gaps identified in Section III.</p>
+
+    <!-- ===== LITERATURE TABLE (full width) ===== -->
+    <div class="onecol">
+    <p class="noind" style="font-weight:bold;text-align:center;">Table I.&nbsp;&nbsp;Summary of Reviewed Literature</p>
+    <table class="lit">
+      <tr>
+        <th style="width:3%">#</th>
+        <th style="width:24%">Title (Year)</th>
+        <th style="width:25%">Objective / Methods</th>
+        <th style="width:24%">Outcome</th>
+        <th style="width:24%">Limitations</th>
+      </tr>
+      <tr><td>1</td><td>LLMs for Interpretive Support in Digital Government Service Systems: A Systematic Review (2026) [1]</td><td>Reviews 60 studies on LLM use in digital government&mdash;rule explanation, service navigation, issue interpretation, administrative knowledge support.</td><td>Finds a shift from Q&amp;A toward service navigation and interpretive support; stronger evidence for efficiency, responsiveness, accessibility.</td><td>Benefits depend on reliability, legal boundaries, responsibility allocation, privacy/security, and organizational capacity.</td></tr>
+      <tr><td>2</td><td>On the Consistency of Multilingual Context Utilization in RAG (2025) [2]</td><td>Studies how consistently RAG uses retrieved multilingual context across languages.</td><td>Shows multilingual context can be used inconsistently, affecting answer stability.</td><td>Retrieved content may differ across languages, introducing cross-lingual inconsistency.</td></tr>
+      <tr><td>3</td><td>A Survey of RAG-Reasoning Systems in LLMs (2025) [3]</td><td>Surveys reasoning-enhanced RAG and iterative search-and-thought frameworks.</td><td>Combining retrieval with multi-step reasoning improves knowledge-intensive, complex inference.</td><td>More complex; adds retrieval and inference cost.</td></tr>
+      <tr><td>4</td><td>Generate but Verify: Answering with Faithfulness in RAG-based QA (2025) [4]</td><td>Introduces Answering with Faithfulness (AwF) to check if answers are supported by retrieved passages.</td><td>Better faithfulness evaluation improves RAG performance and enables fallback strategies.</td><td>Adds a verification stage; still depends on retrieved-evidence quality.</td></tr>
+      <tr><td>5</td><td>Multilingual RAG for Knowledge-Intensive QA (2026) [5]</td><td>Compares question-translation RAG vs. direct multilingual retrieval.</td><td>Direct multilingual retrieval improves coverage and efficiency.</td><td>Translation-based retrieval may suffer coverage limitations; cross-lingual inconsistency.</td></tr>
+      <tr><td>6</td><td>RAFT: Adapting Language Model to Domain-Specific RAG (2024) [6]</td><td>Retrieval-augmented fine-tuning so the LLM focuses on useful docs and ignores distractors.</td><td>Consistently improved in-domain RAG (PubMed, HotpotQA, Gorilla).</td><td>Needs domain-specific training data and compute; hard for a changing policy corpus.</td></tr>
+      <tr><td>7</td><td>RAGAs: Automated Evaluation of RAG (2024) [7]</td><td>Reference-free metrics for retrieval relevance, faithfulness, generation quality.</td><td>Evaluates RAG without manual ground truth per query.</td><td>Metrics rely on model judgments; may miss correctness of legal/policy decisions.</td></tr>
+      <tr><td>8</td><td>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (2020) [8]</td><td>Combines a pretrained generator with a neural retriever over a document index.</td><td>Improved open-domain QA; more specific, diverse, factual output than parametric-only.</td><td>Retrieval quality bounds answer quality; general Wikipedia source.</td></tr>
+      <tr><td>9</td><td>Self-RAG: Learning to Retrieve, Generate, and Critique via Self-Reflection (2024) [9]</td><td>Model retrieves on demand and critiques evidence/outputs with reflection tokens.</td><td>Improved factuality and citation accuracy across QA, reasoning, fact-verification.</td><td>Needs specialized training; adds reasoning/retrieval complexity.</td></tr>
+      <tr><td>10</td><td>Unsupervised Dense Retrieval with Contrastive Learning &mdash; Contriever (2022) [10]</td><td>Trains dense retrievers via unsupervised contrastive learning; extends to multilingual.</td><td>Competitive retrieval without supervision; strong multilingual/cross-lingual capability.</td><td>May underperform on specialized government terminology without tuning.</td></tr>
+    </table>
+    </div>
+
+    <!-- ================= III. GAPS ================= -->
+    <p class="sec">III.&nbsp;&nbsp;Research Gaps Identified</p>
+    <p><i>Scheme-Discovery Gap:</i> Portals require the citizen to know a scheme&rsquo;s name; situation-first discovery is largely unsupported [1].</p>
+    <p><i>Personalization Gap:</i> Generic scheme information does not account for an individual&rsquo;s occupation, family situation, or location.</p>
+    <p><i>Eligibility-Explanation Gap:</i> Citizens need clear, traceable explanations of why they are (or are not) eligible, not just a yes/no verdict [4], [9].</p>
+    <p><i>Conflict Gap:</i> Multiple schemes may be mutually exclusive, yet existing tools provide no integrated detection of conflicting benefits.</p>
+    <p><i>Accessibility Gap:</i> Primarily text-based, single-language interfaces exclude many rural users who need multilingual, voice-based interaction [2], [5].</p>
+    <p><i>Guidance Gap:</i> Users need concrete support with required documents and application steps after a scheme is identified.</p>
+    <p><i>Domain-Grounding Gap:</i> General-purpose retrievers and models underperform on specialized government terminology and changing policy text without domain adaptation [6], [10].</p>
+
+    <!-- ================= IV. DATASETS / KNOWLEDGE SOURCES ================= -->
+    <p class="sec">IV.&nbsp;&nbsp;Knowledge Sources and Data</p>
+    <p>Unlike benchmark NLP tasks, GraminSahay is grounded in an authoritative, curated corpus rather than a labelled dataset. The planned knowledge sources are:</p>
+    <p class="noind">&bull;&nbsp;<b>Official scheme guidelines</b> for the five pilot categories&mdash;agriculture, education, healthcare, housing, and pensions&mdash;within a single state (Telangana, India).</p>
+    <p class="noind">&bull;&nbsp;<b>Eligibility-rule documents</b> that specify conditions, thresholds, and required documents per scheme.</p>
+    <p class="noind">&bull;&nbsp;<b>Policy / circular documents</b> capturing scheme-conflict rules (which benefits cannot be claimed together).</p>
+    <p class="noind">&bull;&nbsp;<b>Multilingual query data</b> in English plus two regional languages (Telugu and Hindi) for voice and text input.</p>
+    <p>These documents are chunked, embedded, and indexed in a vector database for semantic retrieval. <span class="ph">[Corpus size / number of schemes / document counts to be filled after collection: ________]</span></p>
+
+    <!-- ================= V. PROBLEM STATEMENT ================= -->
+    <p class="sec">V.&nbsp;&nbsp;Problem Statement</p>
+    <p>Although many welfare schemes exist and recent advances in RAG and LLMs enable grounded question answering, rural citizens still cannot reliably discover and act on the benefits they are entitled to. Existing portals are organized around scheme names, provide generic rather than personalized information, offer limited explanation of eligibility, do not detect conflicting schemes, and present significant language and accessibility barriers. There is therefore a need for an explainable, situation-aware, multilingual, voice-first navigator that understands a citizen&rsquo;s situation, retrieves relevant official information, reasons about eligibility, flags scheme conflicts, and guides the citizen through application&mdash;without requiring prior knowledge of a scheme&rsquo;s name.</p>
+
+    <!-- ================= VI. MOTIVATION ================= -->
+    <p class="sec">VI.&nbsp;&nbsp;Motivation</p>
+    <p>The practical problem is that eligible rural citizens miss out on welfare benefits primarily because of an awareness and interpretation barrier, not a lack of schemes. Existing approaches are insufficient: manual portal search assumes prior knowledge, generic information ignores individual circumstances, and text-only single-language interfaces exclude many intended beneficiaries. Advances in RAG provide an opportunity to ground answers in official documents [8]; retrieval-augmented reasoning supports multi-step eligibility inference [3], [9]; faithfulness-aware generation and automated evaluation help keep answers supported by evidence [4], [7]; and multilingual retrieval with Indic speech processing makes the system usable by voice in a citizen&rsquo;s own language [2], [5]. These observations motivate a unified framework that combines situation understanding, RAG retrieval, eligibility reasoning, scheme-conflict detection, and voice-based multilingual delivery into a single explainable welfare navigator aligned with SDG&nbsp;1 (No Poverty) and SDG&nbsp;10 (Reduced Inequalities).</p>
+
+    <!-- ================= VII. OBJECTIVES ================= -->
+    <p class="sec">VII.&nbsp;&nbsp;Research Objectives</p>
+    <p><i>Objective 1:</i> To develop a multilingual, voice-first interface (Indic STT/TTS, English + two regional languages) through which a citizen can describe their situation.</p>
+    <p><i>Objective 2:</i> To extract a structured user profile&mdash;occupation, family situation, location, and other relevant details&mdash;from the citizen&rsquo;s free-form description.</p>
+    <p><i>Objective 3:</i> To build a RAG pipeline over official scheme and policy documents using a vector database for semantic retrieval.</p>
+    <p><i>Objective 4:</i> To design an eligibility-reasoning layer that classifies each scheme as eligible, possibly eligible, not eligible, or missing information, with an explanation.</p>
+    <p><i>Objective 5:</i> To implement scheme-conflict detection that warns when mutually exclusive benefits are selected.</p>
+    <p><i>Objective 6:</i> To generate step-by-step application guidance, including required documents and links to the official portal/office, for the five pilot welfare categories.</p>
+
+    <!-- ================= EXISTING / PROPOSED ================= -->
+    <p class="sec">VIII.&nbsp;&nbsp;Existing System and Proposed System</p>
+    <p class="subsec">A. Existing System</p>
+    <p>In the current approach, citizens manually search government portals and documents, typically needing to know a scheme&rsquo;s name beforehand. Information is spread across multiple sources; eligibility and document requirements require manual interpretation; and personalized guidance is unavailable. The basic flow is shown in Fig. 1. Its principal limitations are manual search, limited personalization, language barriers, and no integrated conflict detection.</p>
+
+    <div class="onecol figwrap">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 190" font-family="'Segoe UI','Trebuchet MS',sans-serif">
+  <defs>
+    <filter id="r1" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="a1" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#444"/></marker>
+  </defs>
+  <style>
+    .b{fill:#f0f0f0;stroke:#888;stroke-width:1.6;rx:8;filter:url(#r1)}
+    .t{font-size:12px;fill:#222}.lim{font-size:11px;fill:#9a3b3b;font-style:italic}
+    .fl{stroke:#444;stroke-width:2.2;fill:none;marker-end:url(#a1)}
+    .lab{font-size:12.5px;font-weight:700;fill:#7a2a2a}
+  </style>
+  <text x="410" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3864">Existing System — Manual Welfare Scheme Lookup</text>
+
+  <rect class="b" x="25"  y="55" width="120" height="48"/>
+  <text class="t" x="85"  y="84" text-anchor="middle">Citizen</text>
+  <rect class="b" x="190" y="55" width="130" height="48"/>
+  <text class="t" x="255" y="78" text-anchor="middle">Search Govt.</text>
+  <text class="t" x="255" y="93" text-anchor="middle">Portal (by name)</text>
+  <rect class="b" x="365" y="55" width="120" height="48"/>
+  <text class="t" x="425" y="84" text-anchor="middle">Find Scheme</text>
+  <rect class="b" x="530" y="55" width="130" height="48"/>
+  <text class="t" x="595" y="78" text-anchor="middle">Check Eligibility</text>
+  <text class="t" x="595" y="93" text-anchor="middle">(manual reading)</text>
+  <rect class="b" x="705" y="55" width="90" height="48"/>
+  <text class="t" x="750" y="84" text-anchor="middle">Apply</text>
+
+  <path class="fl" d="M145,79 L188,79"/>
+  <path class="fl" d="M320,79 L363,79"/>
+  <path class="fl" d="M485,79 L528,79"/>
+  <path class="fl" d="M660,79 L703,79"/>
+
+  <text class="lab" x="25" y="135">Limitations:</text>
+  <text class="lim" x="25"  y="158">• Must know scheme name</text>
+  <text class="lim" x="230" y="158">• No personalization</text>
+  <text class="lim" x="400" y="158">• Language barriers</text>
+  <text class="lim" x="575" y="158">• No conflict detection</text>
+  <text class="lim" x="25"  y="178">• Info scattered across sources</text>
+  <text class="lim" x="400" y="178">• Eligibility needs manual interpretation</text>
+</svg>
+
+      <div class="figcap">Fig. 1.&nbsp;&nbsp;Existing system &mdash; manual welfare scheme lookup.</div>
+    </div>
+
+    <p class="subsec">B. Proposed System</p>
+    <p>GraminSahay replaces name-based search with situation-first discovery, as illustrated in Fig. 2. A citizen&rsquo;s spoken or typed description is converted to a structured profile; a RAG layer retrieves relevant passages from the official-document index; an LLM-based reasoning layer determines and explains eligibility; a conflict-detection layer warns about mutually exclusive benefits; and an application-guidance layer produces next steps. The final response is delivered as multilingual voice output in the citizen&rsquo;s selected language.</p>
+
+    <div class="onecol figwrap">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" font-family="'Segoe UI','Trebuchet MS',sans-serif">
+  <defs>
+    <filter id="r2" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="a2" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#345"/></marker>
+  </defs>
+  <style>
+    .t{font-size:11.5px;fill:#1a1a1a}
+    .fl{stroke:#345;stroke-width:2.2;fill:none;marker-end:url(#a2)}
+    .step{font-size:11px;font-weight:700;fill:#2a4a7a}
+  </style>
+  <text x="410" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3864">Proposed System — GraminSahay Situation-First Flow</text>
+
+  <!-- row 1 -->
+  <g>
+    <rect x="25"  y="50" width="150" height="60" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <text class="step" x="100" y="70" text-anchor="middle">1. Voice / Text Input</text>
+    <text class="t" x="100" y="88" text-anchor="middle">Describe situation</text>
+    <text class="t" x="100" y="103" text-anchor="middle">(Eng+Telugu+Hindi)</text>
+
+    <rect x="215" y="50" width="150" height="60" fill="#D5E8D4" stroke="#82B366" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <text class="step" x="290" y="70" text-anchor="middle">2. Profile Build</text>
+    <text class="t" x="290" y="88" text-anchor="middle">Occupation, family,</text>
+    <text class="t" x="290" y="103" text-anchor="middle">location</text>
+
+    <rect x="405" y="50" width="150" height="60" fill="#FFE6CC" stroke="#D79B00" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <text class="step" x="480" y="70" text-anchor="middle">3. RAG Retrieval</text>
+    <text class="t" x="480" y="88" text-anchor="middle">Vector DB over</text>
+    <text class="t" x="480" y="103" text-anchor="middle">official documents</text>
+
+    <rect x="595" y="50" width="150" height="60" fill="#E1D5E7" stroke="#9673A6" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <text class="step" x="670" y="70" text-anchor="middle">4. Eligibility Reasoning</text>
+    <text class="t" x="670" y="88" text-anchor="middle">LLM classifies +</text>
+    <text class="t" x="670" y="103" text-anchor="middle">explains</text>
+  </g>
+  <path class="fl" d="M175,80 L213,80"/>
+  <path class="fl" d="M365,80 L403,80"/>
+  <path class="fl" d="M555,80 L593,80"/>
+  <!-- down connector -->
+  <path class="fl" d="M670,110 L670,135 L480,135 L480,158"/>
+
+  <!-- row 2 (right to left feel) -->
+  <g>
+    <rect x="405" y="160" width="150" height="60" fill="#F8CECC" stroke="#B85450" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <text class="step" x="480" y="180" text-anchor="middle">5. Conflict Detection</text>
+    <text class="t" x="480" y="198" text-anchor="middle">Warns mutually</text>
+    <text class="t" x="480" y="213" text-anchor="middle">exclusive schemes</text>
+
+    <rect x="215" y="160" width="150" height="60" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <text class="step" x="290" y="180" text-anchor="middle">6. Application Guidance</text>
+    <text class="t" x="290" y="198" text-anchor="middle">Docs + steps +</text>
+    <text class="t" x="290" y="213" text-anchor="middle">portal link</text>
+
+    <rect x="25"  y="160" width="150" height="60" fill="#D5E8D4" stroke="#82B366" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <text class="step" x="100" y="180" text-anchor="middle">7. Voice Output</text>
+    <text class="t" x="100" y="198" text-anchor="middle">Indic TTS in</text>
+    <text class="t" x="100" y="213" text-anchor="middle">selected language</text>
+  </g>
+  <path class="fl" d="M405,190 L367,190"/>
+  <path class="fl" d="M215,190 L177,190"/>
+
+  <!-- outcome -->
+  <rect x="235" y="245" width="350" height="42" fill="#FFF2CC" stroke="#D6B656" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+  <text x="410" y="263" text-anchor="middle" font-size="12" font-weight="700" fill="#7a5c00">Explainable, situation-aware welfare navigation</text>
+  <text x="410" y="279" text-anchor="middle" class="t">— no prior knowledge of scheme name required</text>
+  <path class="fl" d="M100,220 L100,266 L233,266"/>
+</svg>
+
+      <div class="figcap">Fig. 2.&nbsp;&nbsp;Proposed system &mdash; GraminSahay situation-first flow.</div>
+    </div>
+
+    <!-- ================= IX. METHODOLOGY ================= -->
+    <p class="sec">IX.&nbsp;&nbsp;Proposed Methodology</p>
+    <p><b>1) Citizen Interaction:</b> The citizen provides input by voice (Indic STT) or text and selects a language (English + two regional). An example query is &ldquo;I am a farmer with a small landholding.&rdquo;</p>
+    <p><b>2) Profile Understanding:</b> The system extracts a structured profile&mdash;occupation, family situation, location, and other details&mdash;from the free-form description.</p>
+    <p><b>3) RAG Retrieval:</b> The profile and query are embedded and used to retrieve the top-<i>k</i> relevant passages from a vector database built over scheme guidelines, eligibility rules, and policy documents.</p>
+    <p><b>4) Eligibility Reasoning:</b> An LLM analyzes each candidate scheme against the retrieved evidence and classifies it as eligible, possibly eligible, not eligible, or missing information, stating what additional detail is needed where applicable.</p>
+    <p><b>5) Scheme-Conflict Detection:</b> The system checks selected schemes for mutual exclusivity and warns the citizen when benefits cannot legally be claimed together.</p>
+    <p><b>6) Application Guidance:</b> For a chosen scheme, the system explains why it is relevant, lists required documents, outlines the step-by-step application process, and links to the official portal/office.</p>
+    <p><b>7) Multilingual Voice Output:</b> The response is rendered through Indic TTS in the citizen&rsquo;s selected language.</p>
+    <p><b>8) Evaluation:</b> Retrieval relevance, answer faithfulness, and eligibility-classification quality will be assessed using reference-free RAG metrics [7] and faithfulness evaluation [4]. <span class="ph">[Specific metrics / test-set details to be finalized: ________]</span></p>
+
+    <!-- ================= X. ARCHITECTURE / SOLUTION ================= -->
+    <p class="sec">X.&nbsp;&nbsp;Proposed Solution and System Architecture</p>
+    <p>Fig. 3 presents the layered architecture of GraminSahay. Processing flows top-down from citizen interaction through profile understanding, RAG retrieval, eligibility reasoning, conflict detection, and application guidance, culminating in multilingual voice output. The technology-stack band summarizes the implementation: a Flutter / React Native frontend, a FastAPI / Node.js backend, a PostgreSQL store for user and application data, a multilingual LLM with RAG for reasoning and generation, a vector database for document retrieval, and Indic STT/TTS for voice interaction.</p>
+
+    <div class="onecol figwrap">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 1180" font-family="'Segoe UI', 'Comic Sans MS', 'Trebuchet MS', sans-serif">
+  <defs>
+    <!-- subtle hand-drawn jitter filter so boxes don't look machine-perfect -->
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#333"/>
+    </marker>
+    <marker id="arrowP" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#9673A6" stroke-width="1.4"/>
+    </marker>
+  </defs>
+
+  <style>
+    .band  { stroke-width:2; rx:10; filter:url(#rough); }
+    .box   { fill:#ffffff; stroke-width:1.6; rx:9; filter:url(#rough); }
+    .bt    { font-size:13px; font-weight:700; }
+    .lt    { font-size:11px; }
+    .st    { font-size:10px; font-style:italic; }
+    .flow  { stroke:#333; stroke-width:2.2; fill:none; marker-end:url(#arrow); }
+    text   { fill:#1a1a1a; }
+  </style>
+
+  <text x="430" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1F3864">Fig. 1.  GraminSahay — System Flow &amp; Architecture</text>
+
+  <!-- L1 Citizen Interaction -->
+  <rect class="band" x="60" y="48" width="740" height="112" fill="#DAE8FC" stroke="#6C8EBF"/>
+  <text class="bt" x="78" y="68">1 — Citizen Interaction Layer</text>
+  <rect class="box" x="80"  y="80" width="150" height="62" stroke="#6C8EBF"/>
+  <text class="lt" x="155" y="106" text-anchor="middle">🎙 Voice Input</text>
+  <text class="lt" x="155" y="122" text-anchor="middle">(Indic STT)</text>
+  <rect class="box" x="245" y="80" width="150" height="62" stroke="#6C8EBF"/>
+  <text class="lt" x="320" y="115" text-anchor="middle">⌨ Text Input</text>
+  <rect class="box" x="410" y="80" width="170" height="62" stroke="#6C8EBF"/>
+  <text class="lt" x="495" y="106" text-anchor="middle">🌐 Language Select</text>
+  <text class="lt" x="495" y="122" text-anchor="middle">(English + 2 Regional)</text>
+  <rect class="box" x="595" y="80" width="185" height="62" fill="#FFF2CC" stroke="#D6B656"/>
+  <text class="st" x="687" y="106" text-anchor="middle">"I am a farmer with</text>
+  <text class="st" x="687" y="122" text-anchor="middle">a small landholding."</text>
+
+  <!-- L2 Profile -->
+  <rect class="band" x="60" y="185" width="740" height="100" fill="#D5E8D4" stroke="#82B366"/>
+  <text class="bt" x="78" y="205">2 — Profile Understanding Layer</text>
+  <rect class="box" x="80"  y="218" width="160" height="50" stroke="#82B366"/>
+  <text class="lt" x="160" y="248" text-anchor="middle">Occupation</text>
+  <rect class="box" x="255" y="218" width="160" height="50" stroke="#82B366"/>
+  <text class="lt" x="335" y="248" text-anchor="middle">Family Situation</text>
+  <rect class="box" x="430" y="218" width="160" height="50" stroke="#82B366"/>
+  <text class="lt" x="510" y="248" text-anchor="middle">Location</text>
+  <rect class="box" x="605" y="218" width="175" height="50" stroke="#82B366"/>
+  <text class="lt" x="692" y="248" text-anchor="middle">Other Details</text>
+
+  <!-- L3 RAG -->
+  <rect class="band" x="60" y="310" width="740" height="120" fill="#FFE6CC" stroke="#D79B00"/>
+  <text class="bt" x="78" y="330">3 — RAG Retrieval Layer</text>
+  <rect class="box" x="80" y="345" width="180" height="70" stroke="#D79B00"/>
+  <text class="lt" x="170" y="373" text-anchor="middle">📚 Scheme Guidelines</text>
+  <text class="lt" x="170" y="389" text-anchor="middle">&amp; Eligibility Rules</text>
+  <!-- cylinder -->
+  <g filter="url(#rough)">
+    <path d="M290,355 a70,10 0 0 0 140,0 v60 a70,10 0 0 1 -140,0 Z" fill="#ffffff" stroke="#D79B00" stroke-width="1.6"/>
+    <ellipse cx="360" cy="355" rx="70" ry="10" fill="#ffffff" stroke="#D79B00" stroke-width="1.6"/>
+  </g>
+  <text class="lt" x="360" y="382" text-anchor="middle">🗃 Vector DB</text>
+  <text class="lt" x="360" y="398" text-anchor="middle">(semantic search)</text>
+  <rect class="box" x="460" y="345" width="190" height="70" stroke="#D79B00"/>
+  <text class="lt" x="555" y="373" text-anchor="middle">🔍 Embedding +</text>
+  <text class="lt" x="555" y="389" text-anchor="middle">Top-k Retrieval</text>
+
+  <!-- L4 Eligibility Reasoning -->
+  <rect class="band" x="60" y="455" width="740" height="110" fill="#E1D5E7" stroke="#9673A6"/>
+  <text class="bt" x="78" y="475">4 — Eligibility Reasoning Layer  (LLM)</text>
+  <rect class="box" x="80"  y="490" width="160" height="58" fill="#D5E8D4" stroke="#82B366"/>
+  <text class="lt" x="160" y="524" text-anchor="middle">✅ Eligible</text>
+  <rect class="box" x="255" y="490" width="160" height="58" fill="#FFF2CC" stroke="#D6B656"/>
+  <text class="lt" x="335" y="524" text-anchor="middle">❓ Possibly Eligible</text>
+  <rect class="box" x="430" y="490" width="150" height="58" fill="#F8CECC" stroke="#B85450"/>
+  <text class="lt" x="505" y="524" text-anchor="middle">❌ Not Eligible</text>
+  <rect class="box" x="595" y="490" width="185" height="58" fill="#DAE8FC" stroke="#6C8EBF"/>
+  <text class="lt" x="687" y="524" text-anchor="middle">ℹ Missing Information</text>
+
+  <!-- L5 Conflict -->
+  <rect class="band" x="60" y="590" width="740" height="100" fill="#F8CECC" stroke="#B85450"/>
+  <text class="bt" x="78" y="610">5 — Scheme Conflict Detection Layer</text>
+  <rect class="box" x="80"  y="623" width="200" height="52" stroke="#B85450"/>
+  <text class="lt" x="180" y="646" text-anchor="middle">⚠ Identify mutually</text>
+  <text class="lt" x="180" y="662" text-anchor="middle">exclusive schemes</text>
+  <rect class="box" x="300" y="623" width="200" height="52" stroke="#B85450"/>
+  <text class="lt" x="400" y="646" text-anchor="middle">Warn: ineligible</text>
+  <text class="lt" x="400" y="662" text-anchor="middle">benefit combinations</text>
+  <rect class="box" x="520" y="623" width="260" height="52" fill="#FFF2CC" stroke="#D6B656"/>
+  <text class="st" x="650" y="646" text-anchor="middle">"Scheme A &amp; B cannot</text>
+  <text class="st" x="650" y="662" text-anchor="middle">be claimed together."</text>
+
+  <!-- L6 Guidance -->
+  <rect class="band" x="60" y="715" width="740" height="110" fill="#DAE8FC" stroke="#6C8EBF"/>
+  <text class="bt" x="78" y="735">6 — Application Guidance Layer</text>
+  <rect class="box" x="80"  y="750" width="160" height="58" stroke="#6C8EBF"/>
+  <text class="lt" x="160" y="776" text-anchor="middle">Why scheme</text>
+  <text class="lt" x="160" y="792" text-anchor="middle">is relevant</text>
+  <rect class="box" x="255" y="750" width="160" height="58" stroke="#6C8EBF"/>
+  <text class="lt" x="335" y="776" text-anchor="middle">📋 Required</text>
+  <text class="lt" x="335" y="792" text-anchor="middle">documents</text>
+  <rect class="box" x="430" y="750" width="160" height="58" stroke="#6C8EBF"/>
+  <text class="lt" x="510" y="776" text-anchor="middle">📨 Step-by-step</text>
+  <text class="lt" x="510" y="792" text-anchor="middle">application</text>
+  <rect class="box" x="605" y="750" width="175" height="58" stroke="#6C8EBF"/>
+  <text class="lt" x="692" y="776" text-anchor="middle">🔗 Official</text>
+  <text class="lt" x="692" y="792" text-anchor="middle">portal / office</text>
+
+  <!-- Output -->
+  <rect class="band" x="200" y="850" width="460" height="70" fill="#D5E8D4" stroke="#82B366"/>
+  <text class="bt" x="430" y="878" text-anchor="middle">7 — Multilingual Voice Output  (Indic TTS)</text>
+  <text class="lt" x="430" y="900" text-anchor="middle">Response delivered to citizen in the selected language 🔊</text>
+
+  <!-- Tech stack -->
+  <rect x="60" y="950" width="740" height="110" fill="#F5F5F5" stroke="#666" stroke-width="2" rx="10" stroke-dasharray="6 4" filter="url(#rough)"/>
+  <text class="bt" x="78" y="970">Technology Stack</text>
+  <rect class="box" x="75"  y="985" width="130" height="58" stroke="#666"/>
+  <text class="lt" x="140" y="1010" text-anchor="middle">Frontend</text>
+  <text class="st" x="140" y="1026" text-anchor="middle">Flutter / RN</text>
+  <rect class="box" x="215" y="985" width="130" height="58" stroke="#666"/>
+  <text class="lt" x="280" y="1010" text-anchor="middle">Backend</text>
+  <text class="st" x="280" y="1026" text-anchor="middle">FastAPI / Node</text>
+  <rect class="box" x="355" y="985" width="120" height="58" stroke="#666"/>
+  <text class="lt" x="415" y="1010" text-anchor="middle">Database</text>
+  <text class="st" x="415" y="1026" text-anchor="middle">PostgreSQL</text>
+  <rect class="box" x="485" y="985" width="145" height="58" stroke="#666"/>
+  <text class="lt" x="557" y="1010" text-anchor="middle">AI / LLM</text>
+  <text class="st" x="557" y="1026" text-anchor="middle">LLM + RAG</text>
+  <rect class="box" x="640" y="985" width="140" height="58" stroke="#666"/>
+  <text class="lt" x="710" y="1010" text-anchor="middle">Voice</text>
+  <text class="st" x="710" y="1026" text-anchor="middle">Indic STT + TTS</text>
+
+  <!-- Flow arrows -->
+  <path class="flow" d="M430,160 L430,184"/>
+  <path class="flow" d="M430,285 L430,309"/>
+  <path class="flow" d="M430,430 L430,454"/>
+  <path class="flow" d="M430,565 L430,589"/>
+  <path class="flow" d="M430,690 L430,714"/>
+  <path class="flow" d="M430,825 L430,849"/>
+  <!-- retrieved context dashed -->
+  <path d="M360,415 C360,435 360,440 300,460" fill="none" stroke="#9673A6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrowP)"/>
+  <text x="250" y="448" font-size="9" fill="#9673A6" font-style="italic">retrieved context</text>
+</svg>
+
+      <div class="figcap">Fig. 3.&nbsp;&nbsp;Layered system flow and architecture of GraminSahay.</div>
+    </div>
+
+    <!-- ================= XI. EXPECTED RESULTS ================= -->
+    <p class="sec">XI.&nbsp;&nbsp;Expected Results</p>
+    <p>As this is a research proposal, the following results are the <i>expected</i> outcomes anticipated from the planned implementation and evaluation. They are reported here to establish target performance levels and the evaluation methodology; actual measured values will be substituted after experimentation. <span class="ph">[Replace expected figures with measured values after experiments: ________]</span></p>
+
+    <p class="subsec">A. Expected Performance (Tabular)</p>
+    <p>Table II summarizes the anticipated performance of the GraminSahay pipeline across the five pilot welfare categories, using standard RAG and classification metrics&mdash;retrieval Recall@5, answer faithfulness [4], [7], eligibility-classification accuracy, and macro-F1.</p>
+    <div class="onecol">
+    <p class="noind" style="font-weight:bold;text-align:center;">Table II.&nbsp;&nbsp;Expected Performance Across Welfare Categories</p>
+    <table class="lit">
+      <tr><th>Welfare Category</th><th>Recall@5</th><th>Faithfulness</th><th>Eligibility Accuracy (%)</th><th>Macro-F1</th></tr>
+      <tr><td>Agriculture</td><td>0.90</td><td>0.92</td><td>91</td><td>0.89</td></tr>
+      <tr><td>Education</td><td>0.88</td><td>0.90</td><td>88</td><td>0.86</td></tr>
+      <tr><td>Healthcare</td><td>0.86</td><td>0.89</td><td>86</td><td>0.84</td></tr>
+      <tr><td>Housing</td><td>0.89</td><td>0.91</td><td>89</td><td>0.87</td></tr>
+      <tr><td>Pensions</td><td>0.92</td><td>0.93</td><td>93</td><td>0.90</td></tr>
+      <tr><td style="font-weight:bold">Overall (avg.)</td><td style="font-weight:bold">0.89</td><td style="font-weight:bold">0.91</td><td style="font-weight:bold">89.4</td><td style="font-weight:bold">0.87</td></tr>
+    </table>
+    </div>
+    <p>Table III contrasts GraminSahay with the existing manual approach on the qualitative capabilities identified as research gaps in Section III.</p>
+    <div class="onecol">
+    <p class="noind" style="font-weight:bold;text-align:center;">Table III.&nbsp;&nbsp;Expected Capability Comparison</p>
+    <table class="lit">
+      <tr><th>Capability</th><th>Existing (manual portal)</th><th>GraminSahay (proposed)</th></tr>
+      <tr><td>Situation-first discovery (no scheme name needed)</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Personalized to profile</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Explainable eligibility</td><td>Limited</td><td>Yes (4-way + reasons)</td></tr>
+      <tr><td>Scheme-conflict detection</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Multilingual voice access</td><td>No</td><td>Yes (English+Telugu+Hindi)</td></tr>
+      <tr><td>Step-by-step application guidance</td><td>Partial</td><td>Yes</td></tr>
+    </table>
+    </div>
+
+    <p class="subsec">B. Expected Performance (Graphs)</p>
+    <p>Fig. 4 shows the expected eligibility-classification accuracy per welfare category, and Fig. 5 shows the anticipated trade-off between retrieval Recall@k and answer faithfulness as the number of retrieved passages (<i>k</i>) increases&mdash;larger <i>k</i> raises recall but can dilute faithfulness, motivating a balanced operating point around <i>k</i>&nbsp;=&nbsp;5.</p>
+    <div class="figwrap chart">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" font-family="'Segoe UI',Arial,sans-serif">
+  <style>
+    .ax{stroke:#333;stroke-width:1.4}.gl{stroke:#ddd;stroke-width:1}
+    .lbl{font-size:11px;fill:#222}.ttl{font-size:12.5px;font-weight:700;fill:#1F3864}
+    .yl{font-size:10px;fill:#555}
+  </style>
+  <text x="220" y="20" text-anchor="middle" class="ttl">Expected Accuracy by Welfare Category (%)</text>
+  <!-- plot area: x 55..420, y 45..250 ; 0..100 scale -->
+  <g>
+    <!-- gridlines + y labels -->
+    <line class="gl" x1="55" y1="250" x2="420" y2="250"/>
+    <line class="gl" x1="55" y1="209" x2="420" y2="209"/><text class="yl" x="50" y="213" text-anchor="end">20</text>
+    <line class="gl" x1="55" y1="168" x2="420" y2="168"/><text class="yl" x="50" y="172" text-anchor="end">40</text>
+    <line class="gl" x1="55" y1="127" x2="420" y2="127"/><text class="yl" x="50" y="131" text-anchor="end">60</text>
+    <line class="gl" x1="55" y1="86"  x2="420" y2="86"/><text class="yl" x="50" y="90"  text-anchor="end">80</text>
+    <line class="gl" x1="55" y1="45"  x2="420" y2="45"/><text class="yl" x="50" y="49"  text-anchor="end">100</text>
+    <text class="yl" x="50" y="254" text-anchor="end">0</text>
+    <line class="ax" x1="55" y1="45" x2="55" y2="250"/>
+    <line class="ax" x1="55" y1="250" x2="420" y2="250"/>
+  </g>
+  <!-- bars: value% -> height = v*2.05 ; cats: Agri 91, Edu 88, Health 86, Housing 89, Pension 93 -->
+  <!-- each category band ~70px wide, bar 46px -->
+  <g>
+    <rect x="68"  y="63"  width="46" height="187" fill="#4472C4" stroke="#2a4a8a"/>
+    <text class="lbl" x="91"  y="58" text-anchor="middle">91</text>
+    <text class="lbl" x="91"  y="266" text-anchor="middle">Agri</text>
+
+    <rect x="138" y="70"  width="46" height="180" fill="#5B9BD5" stroke="#2a4a8a"/>
+    <text class="lbl" x="161" y="65" text-anchor="middle">88</text>
+    <text class="lbl" x="161" y="266" text-anchor="middle">Edu</text>
+
+    <rect x="208" y="74"  width="46" height="176" fill="#70AD47" stroke="#4a7a2a"/>
+    <text class="lbl" x="231" y="69" text-anchor="middle">86</text>
+    <text class="lbl" x="231" y="266" text-anchor="middle">Health</text>
+
+    <rect x="278" y="68"  width="46" height="182" fill="#ED7D31" stroke="#a85418"/>
+    <text class="lbl" x="301" y="63" text-anchor="middle">89</text>
+    <text class="lbl" x="301" y="266" text-anchor="middle">Housing</text>
+
+    <rect x="348" y="59"  width="46" height="191" fill="#9673A6" stroke="#5e3f74"/>
+    <text class="lbl" x="371" y="54" text-anchor="middle">93</text>
+    <text class="lbl" x="371" y="266" text-anchor="middle">Pension</text>
+  </g>
+  <text x="12" y="150" transform="rotate(-90 12,150)" text-anchor="middle" class="yl">Accuracy (%)</text>
+  <text x="235" y="288" text-anchor="middle" class="yl">Welfare Category</text>
+</svg>
+
+      <div class="figcap">Fig. 4.&nbsp;&nbsp;Expected eligibility-classification accuracy by category.</div>
+    </div>
+    <div class="figwrap chart">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" font-family="'Segoe UI',Arial,sans-serif">
+  <style>
+    .ax{stroke:#333;stroke-width:1.4}.gl{stroke:#e2e2e2;stroke-width:1}
+    .lbl{font-size:10px;fill:#444}.ttl{font-size:12.5px;font-weight:700;fill:#1F3864}
+    .yl{font-size:10px;fill:#555}.leg{font-size:10.5px;fill:#222}
+  </style>
+  <text x="220" y="20" text-anchor="middle" class="ttl">Retrieval Quality vs. Top-k Passages Retrieved</text>
+  <!-- plot: x 55..410 (k=1..10), y 45..245 (0..1.0) -->
+  <g>
+    <line class="gl" x1="55" y1="245" x2="410" y2="245"/>
+    <line class="gl" x1="55" y1="205" x2="410" y2="205"/><text class="yl" x="50" y="209" text-anchor="end">0.2</text>
+    <line class="gl" x1="55" y1="165" x2="410" y2="165"/><text class="yl" x="50" y="169" text-anchor="end">0.4</text>
+    <line class="gl" x1="55" y1="125" x2="410" y2="125"/><text class="yl" x="50" y="129" text-anchor="end">0.6</text>
+    <line class="gl" x1="55" y1="85"  x2="410" y2="85"/><text class="yl" x="50" y="89"  text-anchor="end">0.8</text>
+    <line class="gl" x1="55" y1="45"  x2="410" y2="45"/><text class="yl" x="50" y="49"  text-anchor="end">1.0</text>
+    <text class="yl" x="50" y="249" text-anchor="end">0</text>
+    <line class="ax" x1="55" y1="45" x2="55" y2="245"/>
+    <line class="ax" x1="55" y1="245" x2="410" y2="245"/>
+  </g>
+  <!-- x ticks k=1..10 at x=55 + (k-1)*39.4 -->
+  <g class="lbl">
+    <text x="55"  y="260" text-anchor="middle">1</text>
+    <text x="134" y="260" text-anchor="middle">3</text>
+    <text x="213" y="260" text-anchor="middle">5</text>
+    <text x="292" y="260" text-anchor="middle">7</text>
+    <text x="371" y="260" text-anchor="middle">9</text>
+  </g>
+  <text x="232" y="282" text-anchor="middle" class="yl">Top-k</text>
+  <text x="14" y="145" transform="rotate(-90 14,145)" text-anchor="middle" class="yl">Score</text>
+
+  <!-- Recall@k (rising, blue): k=1..10 ; x=55+(k-1)*39.4 ; y=245 - score*200 -->
+  <polyline fill="none" stroke="#4472C4" stroke-width="2.4"
+     points="55,129 94,101 134,85 173,75 213,69 252,65 292,63 331,61 371,60 410,59"/>
+  <g fill="#4472C4">
+    <circle cx="55"  cy="129" r="3"/><circle cx="134" cy="85" r="3"/><circle cx="213" cy="69" r="3"/>
+    <circle cx="292" cy="63" r="3"/><circle cx="371" cy="60" r="3"/>
+  </g>
+  <!-- Faithfulness (gently falling, green) -->
+  <polyline fill="none" stroke="#70AD47" stroke-width="2.4" stroke-dasharray="6 4"
+     points="55,61 94,63 134,66 173,70 213,75 252,82 292,90 331,99 371,109 410,120"/>
+  <g fill="#70AD47">
+    <circle cx="55"  cy="61" r="3"/><circle cx="134" cy="66" r="3"/><circle cx="213" cy="75" r="3"/>
+    <circle cx="292" cy="90" r="3"/><circle cx="371" cy="109" r="3"/>
+  </g>
+  <!-- legend -->
+  <rect x="250" y="150" width="150" height="46" fill="#fff" stroke="#ccc"/>
+  <line x1="258" y1="164" x2="282" y2="164" stroke="#4472C4" stroke-width="2.4"/>
+  <text class="leg" x="288" y="168">Recall@k</text>
+  <line x1="258" y1="184" x2="282" y2="184" stroke="#70AD47" stroke-width="2.4" stroke-dasharray="6 4"/>
+  <text class="leg" x="288" y="188">Faithfulness</text>
+</svg>
+
+      <div class="figcap">Fig. 5.&nbsp;&nbsp;Expected retrieval quality vs. top-<i>k</i> passages retrieved.</div>
+    </div>
+
+    <!-- ================= XII. FUTURE ENHANCEMENTS ================= -->
+    <p class="sec">XII.&nbsp;&nbsp;Future Enhancements</p>
+    <p>Several extensions are planned beyond the initial prototype:</p>
+    <p class="noind">&bull;&nbsp;<b>Broader coverage:</b> Expand beyond the five pilot categories and beyond Telangana to additional states and central schemes, with a continuously updated policy corpus.</p>
+    <p class="noind">&bull;&nbsp;<b>More languages:</b> Extend Indic STT/TTS and multilingual retrieval beyond English, Telugu, and Hindi to further regional languages and dialects.</p>
+    <p class="noind">&bull;&nbsp;<b>Document-aware applications:</b> Let citizens upload or photograph documents (e.g., land records, ration cards) so the system can auto-verify eligibility conditions and pre-fill application forms.</p>
+    <p class="noind">&bull;&nbsp;<b>Offline / low-bandwidth mode:</b> On-device lightweight models and cached scheme data for areas with poor connectivity.</p>
+    <p class="noind">&bull;&nbsp;<b>Live policy integration:</b> Direct API integration with official government portals for real-time scheme updates, application submission, and status tracking.</p>
+    <p class="noind">&bull;&nbsp;<b>Explainability and trust:</b> Source-cited answers with confidence scores and a human-in-the-loop escalation path for borderline eligibility cases.</p>
+    <p class="noind">&bull;&nbsp;<b>Accessibility:</b> Integration with IVR / telephone and WhatsApp channels so citizens without smartphones can access the navigator.</p>
+
+    <!-- ================= XIII. CONCLUSION ================= -->
+    <p class="sec">XIII.&nbsp;&nbsp;Conclusion</p>
+    <p>This paper reviewed the literature most relevant to building a situation-aware rural welfare navigator and derived the research gaps that motivate GraminSahay. The survey shows that RAG grounds generation in authoritative documents, that faithfulness evaluation and retrieval-augmented reasoning support trustworthy multi-step eligibility inference, that multilingual retrieval and Indic speech processing enable voice-based access in regional languages, and that domain adaptation improves performance on specialized policy text. Building on these foundations, GraminSahay combines situation understanding, RAG retrieval, eligibility reasoning, scheme-conflict detection, and multilingual voice delivery. The expected outcome is an explainable and accessible welfare assistant that helps rural citizens identify relevant government support, understand their eligibility, recognize missing information, and proceed toward application without needing prior knowledge of a scheme&rsquo;s name. Future work will expand beyond the five pilot categories and the initial language set, and will report quantitative evaluation of retrieval and eligibility performance.</p>
+
+    <!-- ================= REFERENCES ================= -->
+    <p class="sec">References</p>
+    <div class="refs">
+      <p class="noind">[1]&nbsp;&nbsp;X. Zhang, Z. Ma, Y. Ma, and I. Ismail, &ldquo;Large Language Models for Interpretive Support in Digital Government Service Systems: A Systematic Review,&rdquo; <i>Systems</i>, vol. 14, no. 7, art. 823, 2026.</p>
+      <p class="noind">[2]&nbsp;&nbsp;J. Qi, R. Fern&aacute;ndez, and A. Bisazza, &ldquo;On the Consistency of Multilingual Context Utilization in Retrieval-Augmented Generation,&rdquo; in <i>Proc. 5th Workshop on Multilingual Representation Learning (MRL 2025)</i>, 2025.</p>
+      <p class="noind">[3]&nbsp;&nbsp;Y. Li, W. Zhang, Y. Yang, W.-C. Huang, Y. Wu, J. Luo, Y. Bei, H. P. Zou, X. Luo, Y. Zhao, C. Chan, Y. Chen, Z. Deng, Y. Li, H.-T. Zheng, D. Li, R. Jiang, M. Zhang, Y. Song, and P. S. Yu, &ldquo;A Survey of RAG-Reasoning Systems in Large Language Models,&rdquo; in <i>Findings of ACL: EMNLP 2025</i>, pp. 12120&ndash;12145, 2025.</p>
+      <p class="noind">[4]&nbsp;&nbsp;S. Filice, E. Haramaty, G. Horowitz, Z. Karnin, L. Lewin-Eytan, and A. Shtoff, &ldquo;Generate but Verify: Answering with Faithfulness in RAG-based Question Answering,&rdquo; in <i>Proc. IJCNLP-AACL 2025</i>, pp. 1017&ndash;1037, 2025.</p>
+      <p class="noind">[5]&nbsp;&nbsp;L. Ranaldi, B. Haddow, and A. Birch, &ldquo;Multilingual Retrieval-Augmented Generation for Knowledge-Intensive Question Answering Task,&rdquo; in <i>Findings of EACL 2026</i>, 2026.</p>
+      <p class="noind">[6]&nbsp;&nbsp;T. Zhang, S. G. Patil, N. Jain, S. Shen, M. Zaharia, I. Stoica, and J. E. Gonzalez, &ldquo;RAFT: Adapting Language Model to Domain-Specific RAG,&rdquo; in <i>Proc. Conf. on Language Modeling (COLM)</i>, 2024. arXiv:2403.10131.</p>
+      <p class="noind">[7]&nbsp;&nbsp;S. Es, J. James, L. Espinosa-Anke, and S. Schockaert, &ldquo;RAGAs: Automated Evaluation of Retrieval Augmented Generation,&rdquo; in <i>Proc. 18th Conf. of the European Chapter of the Association for Computational Linguistics (EACL): System Demonstrations</i>, 2024, pp. 150&ndash;158.</p>
+      <p class="noind">[8]&nbsp;&nbsp;P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal, H. K&uuml;ttler, M. Lewis, W. Yih, T. Rockt&auml;schel, S. Riedel, and D. Kiela, &ldquo;Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks,&rdquo; in <i>Advances in Neural Information Processing Systems (NeurIPS)</i>, 2020.</p>
+      <p class="noind">[9]&nbsp;&nbsp;A. Asai, Z. Wu, Y. Wang, A. Sil, and H. Hajishirzi, &ldquo;Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection,&rdquo; in <i>Proc. Int. Conf. on Learning Representations (ICLR)</i>, 2024.</p>
+      <p class="noind">[10]&nbsp;G. Izacard, M. Caron, L. Hosseini, S. Riedel, P. Bojanowski, A. Joulin, and E. Grave, &ldquo;Unsupervised Dense Information Retrieval with Contrastive Learning,&rdquo; <i>Transactions on Machine Learning Research (TMLR)</i>, 2022.</p>
+      <p class="noind">[11]&nbsp;M. G. Kumar and S. Rao, &ldquo;Context-Optimized Retrieval Augmented Generation for Local Government Welfare Subsidies,&rdquo; in <i>Proc. IEEE Int. Conf. on Systems, Man, and Cybernetics (SMC)</i>, 2025, pp. 1105&ndash;1112.</p>
+    </div>
+
+  </div><!-- /.cols -->
+</div><!-- /.page -->
+</body>
+</html>

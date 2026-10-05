@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="300" viewBox="0 0 440 300" font-family="'Segoe UI',Arial,sans-serif">
+  <style>
+    .ax{stroke:#333;stroke-width:1.4}.gl{stroke:#ddd;stroke-width:1}
+    .lbl{font-size:11px;fill:#222}.ttl{font-size:12.5px;font-weight:700;fill:#1F3864}
+    .yl{font-size:10px;fill:#555}
+  </style>
+  <text x="220" y="20" text-anchor="middle" class="ttl">Expected Accuracy by Welfare Category (%)</text>
+  <!-- plot area: x 55..420, y 45..250 ; 0..100 scale -->
+  <g>
+    <!-- gridlines + y labels -->
+    <line class="gl" x1="55" y1="250" x2="420" y2="250"/>
+    <line class="gl" x1="55" y1="209" x2="420" y2="209"/><text class="yl" x="50" y="213" text-anchor="end">20</text>
+    <line class="gl" x1="55" y1="168" x2="420" y2="168"/><text class="yl" x="50" y="172" text-anchor="end">40</text>
+    <line class="gl" x1="55" y1="127" x2="420" y2="127"/><text class="yl" x="50" y="131" text-anchor="end">60</text>
+    <line class="gl" x1="55" y1="86"  x2="420" y2="86"/><text class="yl" x="50" y="90"  text-anchor="end">80</text>
+    <line class="gl" x1="55" y1="45"  x2="420" y2="45"/><text class="yl" x="50" y="49"  text-anchor="end">100</text>
+    <text class="yl" x="50" y="254" text-anchor="end">0</text>
+    <line class="ax" x1="55" y1="45" x2="55" y2="250"/>
+    <line class="ax" x1="55" y1="250" x2="420" y2="250"/>
+  </g>
+  <!-- bars: value% -> height = v*2.05 ; cats: Agri 91, Edu 88, Health 86, Housing 89, Pension 93 -->
+  <!-- each category band ~70px wide, bar 46px -->
+  <g>
+    <rect x="68"  y="63"  width="46" height="187" fill="#4472C4" stroke="#2a4a8a"/>
+    <text class="lbl" x="91"  y="58" text-anchor="middle">91</text>
+    <text class="lbl" x="91"  y="266" text-anchor="middle">Agri</text>
+
+    <rect x="138" y="70"  width="46" height="180" fill="#5B9BD5" stroke="#2a4a8a"/>
+    <text class="lbl" x="161" y="65" text-anchor="middle">88</text>
+    <text class="lbl" x="161" y="266" text-anchor="middle">Edu</text>
+
+    <rect x="208" y="74"  width="46" height="176" fill="#70AD47" stroke="#4a7a2a"/>
+    <text class="lbl" x="231" y="69" text-anchor="middle">86</text>
+    <text class="lbl" x="231" y="266" text-anchor="middle">Health</text>
+
+    <rect x="278" y="68"  width="46" height="182" fill="#ED7D31" stroke="#a85418"/>
+    <text class="lbl" x="301" y="63" text-anchor="middle">89</text>
+    <text class="lbl" x="301" y="266" text-anchor="middle">Housing</text>
+
+    <rect x="348" y="59"  width="46" height="191" fill="#9673A6" stroke="#5e3f74"/>
+    <text class="lbl" x="371" y="54" text-anchor="middle">93</text>
+    <text class="lbl" x="371" y="266" text-anchor="middle">Pension</text>
+  </g>
+  <text x="12" y="150" transform="rotate(-90 12,150)" text-anchor="middle" class="yl">Accuracy (%)</text>
+  <text x="235" y="288" text-anchor="middle" class="yl">Welfare Category</text>
+</svg>

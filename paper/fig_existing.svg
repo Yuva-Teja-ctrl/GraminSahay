@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="190" viewBox="0 0 820 190" font-family="'Segoe UI','Trebuchet MS',sans-serif">
+  <defs>
+    <filter id="r1" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="a1" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#444"/></marker>
+  </defs>
+  <style>
+    .b{fill:#f0f0f0;stroke:#888;stroke-width:1.6;rx:8;filter:url(#r1)}
+    .t{font-size:12px;fill:#222}.lim{font-size:11px;fill:#9a3b3b;font-style:italic}
+    .fl{stroke:#444;stroke-width:2.2;fill:none;marker-end:url(#a1)}
+    .lab{font-size:12.5px;font-weight:700;fill:#7a2a2a}
+  </style>
+  <text x="410" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3864">Existing System — Manual Welfare Scheme Lookup</text>
+
+  <rect class="b" x="25"  y="55" width="120" height="48"/>
+  <text class="t" x="85"  y="84" text-anchor="middle">Citizen</text>
+  <rect class="b" x="190" y="55" width="130" height="48"/>
+  <text class="t" x="255" y="78" text-anchor="middle">Search Govt.</text>
+  <text class="t" x="255" y="93" text-anchor="middle">Portal (by name)</text>
+  <rect class="b" x="365" y="55" width="120" height="48"/>
+  <text class="t" x="425" y="84" text-anchor="middle">Find Scheme</text>
+  <rect class="b" x="530" y="55" width="130" height="48"/>
+  <text class="t" x="595" y="78" text-anchor="middle">Check Eligibility</text>
+  <text class="t" x="595" y="93" text-anchor="middle">(manual reading)</text>
+  <rect class="b" x="705" y="55" width="90" height="48"/>
+  <text class="t" x="750" y="84" text-anchor="middle">Apply</text>
+
+  <path class="fl" d="M145,79 L188,79"/>
+  <path class="fl" d="M320,79 L363,79"/>
+  <path class="fl" d="M485,79 L528,79"/>
+  <path class="fl" d="M660,79 L703,79"/>
+
+  <text class="lab" x="25" y="135">Limitations:</text>
+  <text class="lim" x="25"  y="158">• Must know scheme name</text>
+  <text class="lim" x="230" y="158">• No personalization</text>
+  <text class="lim" x="400" y="158">• Language barriers</text>
+  <text class="lim" x="575" y="158">• No conflict detection</text>
+  <text class="lim" x="25"  y="178">• Info scattered across sources</text>
+  <text class="lim" x="400" y="178">• Eligibility needs manual interpretation</text>
+</svg>

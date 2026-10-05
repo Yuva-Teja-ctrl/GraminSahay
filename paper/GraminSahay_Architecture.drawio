@@ -1,0 +1,163 @@
+<mxfile host="app.diagrams.net" modified="2026-10-02T00:00:00.000Z" agent="draw.io" version="24.0.0" type="device">
+  <diagram id="graminsahay-arch" name="GraminSahay Architecture">
+    <mxGraphModel dx="1100" dy="760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1250" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== TITLE ===== -->
+        <mxCell id="title" value="Fig. 1.  GraminSahay — System Flow &amp; Architecture" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;fontColor=#1F3864;" vertex="1" parent="1">
+          <mxGeometry x="140" y="20" width="560" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LAYER 1: INPUT ===== -->
+        <mxCell id="L1" value="1 — Citizen Interaction Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontStyle=1;fontSize=13;verticalAlign=top;spacingTop=6;arcSize=8;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="60" width="690" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="L1a" value="&#128483; Voice Input&#10;(Indic STT)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="95" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L1b" value="&#9000; Text Input" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="95" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L1c" value="&#127760; Language Select&#10;(English + 2 Regional)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="440" y="95" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L1d" value="&#128100; &quot;I am a farmer with&#10;a small landholding.&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;sketch=1;arcSize=14;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="620" y="95" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LAYER 2: PROFILE ===== -->
+        <mxCell id="L2" value="2 — Profile Understanding Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=13;verticalAlign=top;spacingTop=6;arcSize=8;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="200" width="690" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="L2a" value="Occupation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="235" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2b" value="Family Situation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="235" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2c" value="Location" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="440" y="235" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2d" value="Other Details" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="610" y="235" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LAYER 3: RAG RETRIEVAL ===== -->
+        <mxCell id="L3" value="3 — RAG Retrieval Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontStyle=1;fontSize=13;verticalAlign=top;spacingTop=6;arcSize=8;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="330" width="690" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="L3a" value="&#128218; Scheme Guidelines&#10;&amp; Eligibility Rules" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="365" width="170" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="L3b" value="&#128451; Vector Database&#10;(semantic search)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#FFFFFF;strokeColor=#D79B00;sketch=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="300" y="360" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="L3c" value="&#128269; Embedding +&#10;Top-k Passage Retrieval" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="480" y="365" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LAYER 4: ELIGIBILITY REASONING ===== -->
+        <mxCell id="L4" value="4 — Eligibility Reasoning Layer  (LLM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontStyle=1;fontSize=13;verticalAlign=top;spacingTop=6;arcSize=8;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="480" width="690" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="L4a" value="&#9989; Eligible" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="515" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="L4b" value="&#10067; Possibly Eligible" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="515" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="L4c" value="&#10060; Not Eligible" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="440" y="515" width="140" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="L4d" value="&#8505; Missing Information" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="600" y="515" width="150" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LAYER 5: CONFLICT DETECTION ===== -->
+        <mxCell id="L5" value="5 — Scheme Conflict Detection Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;verticalAlign=top;spacingTop=6;arcSize=8;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="620" width="690" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="L5a" value="&#9888; Identify mutually&#10;exclusive schemes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B85450;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="655" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L5b" value="Warn about ineligible&#10;benefit combinations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B85450;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="655" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L5c" value="&quot;Scheme A &amp; B cannot&#10;be claimed together.&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;sketch=1;arcSize=14;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="520" y="655" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ===== LAYER 6: APPLICATION GUIDANCE ===== -->
+        <mxCell id="L6" value="6 — Application Guidance Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontStyle=1;fontSize=13;verticalAlign=top;spacingTop=6;arcSize=8;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="750" width="690" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="L6a" value="Why the scheme&#10;is relevant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="785" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="L6b" value="&#128203; Required&#10;documents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="270" y="785" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="L6c" value="&#128228; Step-by-step&#10;application process" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="440" y="785" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="L6d" value="&#128279; Link to official&#10;portal / office" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;sketch=1;arcSize=14;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="610" y="785" width="140" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ===== OUTPUT: MULTILINGUAL VOICE ===== -->
+        <mxCell id="OUT" value="7 — Multilingual Voice Output  (Indic TTS)&#10;Response delivered to citizen in the selected language" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=12;arcSize=10;sketch=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="890" width="450" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ===== TECHNOLOGY STACK BAND ===== -->
+        <mxCell id="TS" value="Technology Stack" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontStyle=1;fontSize=12;verticalAlign=top;spacingTop=6;arcSize=6;sketch=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="990" width="690" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="TSa" value="Frontend&#10;Flutter / React Native" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;sketch=1;arcSize=14;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="95" y="1025" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="TSb" value="Backend&#10;FastAPI / Node.js" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;sketch=1;arcSize=14;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="225" y="1025" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="TSc" value="Database&#10;PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;sketch=1;arcSize=14;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="355" y="1025" width="110" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="TSd" value="AI / LLM&#10;Multilingual LLM + RAG" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;sketch=1;arcSize=14;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="475" y="1025" width="130" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="TSe" value="Voice&#10;Indic STT + TTS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;sketch=1;arcSize=14;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="615" y="1025" width="140" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ===== FLOW ARROWS BETWEEN LAYERS ===== -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#333333;strokeWidth=2;endArrow=block;endFill=1;sketch=1;" edge="1" parent="1" source="L1" target="L2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#333333;strokeWidth=2;endArrow=block;endFill=1;sketch=1;" edge="1" parent="1" source="L2" target="L3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#333333;strokeWidth=2;endArrow=block;endFill=1;sketch=1;" edge="1" parent="1" source="L3" target="L4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#333333;strokeWidth=2;endArrow=block;endFill=1;sketch=1;" edge="1" parent="1" source="L4" target="L5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#333333;strokeWidth=2;endArrow=block;endFill=1;sketch=1;" edge="1" parent="1" source="L5" target="L6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#333333;strokeWidth=2;endArrow=block;endFill=1;sketch=1;" edge="1" parent="1" source="L6" target="OUT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#9673A6;strokeWidth=2;endArrow=open;dashed=1;sketch=1;" edge="1" parent="1" source="L3b" target="L4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="elbl" value="retrieved context" style="edgeLabel;html=1;align=center;fontSize=9;fontColor=#9673A6;" vertex="1" connectable="0" parent="e7">
+          <mxGeometry x="-0.2" relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
