@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="345" viewBox="0 0 560 345" font-family="'Times New Roman', Times, serif">
+<defs><marker id="ar" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#000" stroke-width="1.2"/></marker></defs>
+<rect x="0" y="0" width="560" height="345" fill="#fff"/>
+<text x="280" y="22" text-anchor="middle" font-size="15" font-weight="bold">Retrieval Quality vs. Top-k</text>
+<line x1="60" y1="50" x2="60" y2="300" stroke="#000" stroke-width="2"/>
+<line x1="60" y1="300" x2="520" y2="300" stroke="#000" stroke-width="2"/>
+<text x="52" y="304" text-anchor="end" font-size="11">0.0</text>
+<line x1="60" y1="300" x2="520" y2="300" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="52" y="254" text-anchor="end" font-size="11">0.2</text>
+<line x1="60" y1="250" x2="520" y2="250" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="52" y="204" text-anchor="end" font-size="11">0.4</text>
+<line x1="60" y1="200" x2="520" y2="200" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="52" y="154" text-anchor="end" font-size="11">0.6</text>
+<line x1="60" y1="150" x2="520" y2="150" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="52" y="104" text-anchor="end" font-size="11">0.8</text>
+<line x1="60" y1="100" x2="520" y2="100" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="52" y="54" text-anchor="end" font-size="11">1.0</text>
+<line x1="60" y1="50" x2="520" y2="50" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+<polyline points="60,162 111,130 162,110 213,98 264,90 316,85 367,82 418,80 469,79 520,78" fill="none" stroke="#000" stroke-width="2"/>
+<polyline points="60,68 111,69 162,71 213,75 264,79 316,84 367,89 418,94 469,99 520,105" fill="none" stroke="#000" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="60.0" y="318" text-anchor="middle" font-size="11">1</text>
+<text x="162.22222222222223" y="318" text-anchor="middle" font-size="11">3</text>
+<text x="264.44444444444446" y="318" text-anchor="middle" font-size="11">5</text>
+<text x="366.6666666666667" y="318" text-anchor="middle" font-size="11">7</text>
+<text x="468.8888888888889" y="318" text-anchor="middle" font-size="11">9</text>
+<text x="290.0" y="336" text-anchor="middle" font-size="11">Top-k</text>
+<line x1="330" y1="120" x2="360" y2="120" stroke="#000" stroke-width="2"/>
+<text x="366" y="124" text-anchor="start" font-size="12">Recall@k (solid)</text>
+<line x1="330" y1="142" x2="360" y2="142" stroke="#000" stroke-width="2" stroke-dasharray="7 4"/>
+<text x="366" y="146" text-anchor="start" font-size="12">Faithfulness (dashed)</text>
+</svg>
