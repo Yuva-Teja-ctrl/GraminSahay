@@ -1,69 +1,66 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="820" height="300" viewBox="0 0 820 300" font-family="'Segoe UI','Trebuchet MS',sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="310" viewBox="0 0 820 310" font-family="'Comic Sans MS','Segoe Print','Bradley Hand',cursive,sans-serif">
   <defs>
-    <filter id="r2" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="9" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    <filter id="r2" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <marker id="a2" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#345"/></marker>
+    <marker id="a2" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#111" stroke-width="1.3"/></marker>
   </defs>
   <style>
-    .t{font-size:11.5px;fill:#1a1a1a}
-    .fl{stroke:#345;stroke-width:2.2;fill:none;marker-end:url(#a2)}
-    .step{font-size:11px;font-weight:700;fill:#2a4a7a}
+    .b{fill:#fff;stroke:#111;stroke-width:1.7;filter:url(#r2)}
+    .t{font-size:12px;fill:#111}
+    .fl{stroke:#111;stroke-width:1.8;fill:none;marker-end:url(#a2);filter:url(#r2)}
+    .step{font-size:12px;font-weight:700;fill:#111}
   </style>
-  <text x="410" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3864">Proposed System — GraminSahay Situation-First Flow</text>
+  <text x="410" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#111">Proposed System &#8212; GraminSahay Situation-First Flow</text>
 
-  <!-- row 1 -->
   <g>
-    <rect x="25"  y="50" width="150" height="60" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <rect class="b" x="25"  y="50" width="150" height="62" rx="4"/>
     <text class="step" x="100" y="70" text-anchor="middle">1. Voice / Text Input</text>
     <text class="t" x="100" y="88" text-anchor="middle">Describe situation</text>
-    <text class="t" x="100" y="103" text-anchor="middle">(Eng+Telugu+Hindi)</text>
+    <text class="t" x="100" y="104" text-anchor="middle">(Eng+Telugu+Hindi)</text>
 
-    <rect x="215" y="50" width="150" height="60" fill="#D5E8D4" stroke="#82B366" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <rect class="b" x="215" y="50" width="150" height="62" rx="4"/>
     <text class="step" x="290" y="70" text-anchor="middle">2. Profile Build</text>
     <text class="t" x="290" y="88" text-anchor="middle">Occupation, family,</text>
-    <text class="t" x="290" y="103" text-anchor="middle">location</text>
+    <text class="t" x="290" y="104" text-anchor="middle">location</text>
 
-    <rect x="405" y="50" width="150" height="60" fill="#FFE6CC" stroke="#D79B00" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <rect class="b" x="405" y="50" width="150" height="62" rx="4"/>
     <text class="step" x="480" y="70" text-anchor="middle">3. RAG Retrieval</text>
     <text class="t" x="480" y="88" text-anchor="middle">Vector DB over</text>
-    <text class="t" x="480" y="103" text-anchor="middle">official documents</text>
+    <text class="t" x="480" y="104" text-anchor="middle">official documents</text>
 
-    <rect x="595" y="50" width="150" height="60" fill="#E1D5E7" stroke="#9673A6" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-    <text class="step" x="670" y="70" text-anchor="middle">4. Eligibility Reasoning</text>
+    <rect class="b" x="595" y="50" width="150" height="62" rx="4"/>
+    <text class="step" x="670" y="70" text-anchor="middle">4. Eligibility</text>
     <text class="t" x="670" y="88" text-anchor="middle">LLM classifies +</text>
-    <text class="t" x="670" y="103" text-anchor="middle">explains</text>
+    <text class="t" x="670" y="104" text-anchor="middle">explains</text>
   </g>
-  <path class="fl" d="M175,80 L213,80"/>
-  <path class="fl" d="M365,80 L403,80"/>
-  <path class="fl" d="M555,80 L593,80"/>
-  <!-- down connector -->
-  <path class="fl" d="M670,110 L670,135 L480,135 L480,158"/>
+  <path class="fl" d="M175,81 L213,81"/>
+  <path class="fl" d="M365,81 L403,81"/>
+  <path class="fl" d="M555,81 L593,81"/>
+  <path class="fl" d="M670,112 L670,137 L480,137 L480,160"/>
 
-  <!-- row 2 (right to left feel) -->
   <g>
-    <rect x="405" y="160" width="150" height="60" fill="#F8CECC" stroke="#B85450" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-    <text class="step" x="480" y="180" text-anchor="middle">5. Conflict Detection</text>
-    <text class="t" x="480" y="198" text-anchor="middle">Warns mutually</text>
-    <text class="t" x="480" y="213" text-anchor="middle">exclusive schemes</text>
+    <rect class="b" x="405" y="162" width="150" height="62" rx="4"/>
+    <text class="step" x="480" y="182" text-anchor="middle">5. Conflict Detection</text>
+    <text class="t" x="480" y="200" text-anchor="middle">Warns mutually</text>
+    <text class="t" x="480" y="216" text-anchor="middle">exclusive schemes</text>
 
-    <rect x="215" y="160" width="150" height="60" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-    <text class="step" x="290" y="180" text-anchor="middle">6. Application Guidance</text>
-    <text class="t" x="290" y="198" text-anchor="middle">Docs + steps +</text>
-    <text class="t" x="290" y="213" text-anchor="middle">portal link</text>
+    <rect class="b" x="215" y="162" width="150" height="62" rx="4"/>
+    <text class="step" x="290" y="182" text-anchor="middle">6. App. Guidance</text>
+    <text class="t" x="290" y="200" text-anchor="middle">Docs + steps +</text>
+    <text class="t" x="290" y="216" text-anchor="middle">portal link</text>
 
-    <rect x="25"  y="160" width="150" height="60" fill="#D5E8D4" stroke="#82B366" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-    <text class="step" x="100" y="180" text-anchor="middle">7. Voice Output</text>
-    <text class="t" x="100" y="198" text-anchor="middle">Indic TTS in</text>
-    <text class="t" x="100" y="213" text-anchor="middle">selected language</text>
+    <rect class="b" x="25"  y="162" width="150" height="62" rx="4"/>
+    <text class="step" x="100" y="182" text-anchor="middle">7. Voice Output</text>
+    <text class="t" x="100" y="200" text-anchor="middle">Indic TTS in</text>
+    <text class="t" x="100" y="216" text-anchor="middle">selected language</text>
   </g>
-  <path class="fl" d="M405,190 L367,190"/>
-  <path class="fl" d="M215,190 L177,190"/>
+  <path class="fl" d="M405,193 L367,193"/>
+  <path class="fl" d="M215,193 L177,193"/>
 
-  <!-- outcome -->
-  <rect x="235" y="245" width="350" height="42" fill="#FFF2CC" stroke="#D6B656" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-  <text x="410" y="263" text-anchor="middle" font-size="12" font-weight="700" fill="#7a5c00">Explainable, situation-aware welfare navigation</text>
-  <text x="410" y="279" text-anchor="middle" class="t">— no prior knowledge of scheme name required</text>
-  <path class="fl" d="M100,220 L100,266 L233,266"/>
+  <rect class="b" x="235" y="252" width="350" height="46" rx="4"/>
+  <text x="410" y="272" text-anchor="middle" font-size="13" font-weight="700" fill="#111">Explainable, situation-aware navigation</text>
+  <text x="410" y="289" text-anchor="middle" class="t">&#8212; no prior knowledge of scheme name required</text>
+  <path class="fl" d="M100,224 L100,274 L233,274"/>
 </svg>

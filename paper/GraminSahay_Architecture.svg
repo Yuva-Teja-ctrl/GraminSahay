@@ -1,147 +1,141 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="860" height="1180" viewBox="0 0 860 1180" font-family="'Segoe UI', 'Comic Sans MS', 'Trebuchet MS', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="1120" viewBox="0 0 760 1120" font-family="'Comic Sans MS','Segoe Print','Bradley Hand',cursive,sans-serif">
   <defs>
-    <!-- subtle hand-drawn jitter filter so boxes don't look machine-perfect -->
-    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="noise"/>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+    <filter id="rough" x="-4%" y="-4%" width="108%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <marker id="arrow" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#333"/>
+    <marker id="arrow" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L11,5 L0,10" fill="none" stroke="#111" stroke-width="1.3"/>
     </marker>
-    <marker id="arrowP" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#9673A6" stroke-width="1.4"/>
+    <marker id="arrowP" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L11,5 L0,10" fill="none" stroke="#555" stroke-width="1.2"/>
     </marker>
   </defs>
-
   <style>
-    .band  { stroke-width:2; rx:10; filter:url(#rough); }
-    .box   { fill:#ffffff; stroke-width:1.6; rx:9; filter:url(#rough); }
-    .bt    { font-size:13px; font-weight:700; }
-    .lt    { font-size:11px; }
-    .st    { font-size:10px; font-style:italic; }
-    .flow  { stroke:#333; stroke-width:2.2; fill:none; marker-end:url(#arrow); }
-    text   { fill:#1a1a1a; }
+    .band{fill:#fff;stroke:#111;stroke-width:2;filter:url(#rough)}
+    .box{fill:#fff;stroke:#111;stroke-width:1.5;filter:url(#rough)}
+    .shade{fill:#eee;stroke:#111;stroke-width:1.5;filter:url(#rough)}
+    .bt{font-size:14px;font-weight:700;fill:#111}
+    .lt{font-size:12px;fill:#111}.st{font-size:11px;fill:#111;font-style:italic}
+    .flow{stroke:#111;stroke-width:2;fill:none;marker-end:url(#arrow);filter:url(#rough)}
+    text{fill:#111}
   </style>
 
-  <text x="430" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1F3864">Fig. 1.  GraminSahay — System Flow &amp; Architecture</text>
+  <text x="380" y="30" text-anchor="middle" font-size="17" font-weight="700">Fig. 3.  GraminSahay — System Flow &amp; Architecture</text>
 
-  <!-- L1 Citizen Interaction -->
-  <rect class="band" x="60" y="48" width="740" height="112" fill="#DAE8FC" stroke="#6C8EBF"/>
-  <text class="bt" x="78" y="68">1 — Citizen Interaction Layer</text>
-  <rect class="box" x="80"  y="80" width="150" height="62" stroke="#6C8EBF"/>
-  <text class="lt" x="155" y="106" text-anchor="middle">🎙 Voice Input</text>
-  <text class="lt" x="155" y="122" text-anchor="middle">(Indic STT)</text>
-  <rect class="box" x="245" y="80" width="150" height="62" stroke="#6C8EBF"/>
-  <text class="lt" x="320" y="115" text-anchor="middle">⌨ Text Input</text>
-  <rect class="box" x="410" y="80" width="170" height="62" stroke="#6C8EBF"/>
-  <text class="lt" x="495" y="106" text-anchor="middle">🌐 Language Select</text>
-  <text class="lt" x="495" y="122" text-anchor="middle">(English + 2 Regional)</text>
-  <rect class="box" x="595" y="80" width="185" height="62" fill="#FFF2CC" stroke="#D6B656"/>
-  <text class="st" x="687" y="106" text-anchor="middle">"I am a farmer with</text>
-  <text class="st" x="687" y="122" text-anchor="middle">a small landholding."</text>
+  <!-- L1 -->
+  <rect class="band" x="40" y="48" width="680" height="112" rx="8"/>
+  <text class="bt" x="58" y="70">1 — Citizen Interaction Layer</text>
+  <rect class="box" x="60"  y="82" width="150" height="62" rx="5"/>
+  <text class="lt" x="135" y="108" text-anchor="middle">Voice Input</text>
+  <text class="lt" x="135" y="124" text-anchor="middle">(Indic STT)</text>
+  <rect class="box" x="225" y="82" width="150" height="62" rx="5"/>
+  <text class="lt" x="300" y="117" text-anchor="middle">Text Input</text>
+  <rect class="box" x="390" y="82" width="170" height="62" rx="5"/>
+  <text class="lt" x="475" y="108" text-anchor="middle">Language Select</text>
+  <text class="lt" x="475" y="124" text-anchor="middle">(Eng+Telugu+Hindi)</text>
+  <rect class="shade" x="575" y="82" width="130" height="62" rx="5"/>
+  <text class="st" x="640" y="108" text-anchor="middle">"I am a farmer</text>
+  <text class="st" x="640" y="124" text-anchor="middle">with small land."</text>
 
-  <!-- L2 Profile -->
-  <rect class="band" x="60" y="185" width="740" height="100" fill="#D5E8D4" stroke="#82B366"/>
-  <text class="bt" x="78" y="205">2 — Profile Understanding Layer</text>
-  <rect class="box" x="80"  y="218" width="160" height="50" stroke="#82B366"/>
-  <text class="lt" x="160" y="248" text-anchor="middle">Occupation</text>
-  <rect class="box" x="255" y="218" width="160" height="50" stroke="#82B366"/>
-  <text class="lt" x="335" y="248" text-anchor="middle">Family Situation</text>
-  <rect class="box" x="430" y="218" width="160" height="50" stroke="#82B366"/>
-  <text class="lt" x="510" y="248" text-anchor="middle">Location</text>
-  <rect class="box" x="605" y="218" width="175" height="50" stroke="#82B366"/>
-  <text class="lt" x="692" y="248" text-anchor="middle">Other Details</text>
+  <!-- L2 -->
+  <rect class="band" x="40" y="185" width="680" height="100" rx="8"/>
+  <text class="bt" x="58" y="207">2 — Profile Understanding Layer</text>
+  <rect class="box" x="60"  y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="135" y="249" text-anchor="middle">Occupation</text>
+  <rect class="box" x="235" y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="310" y="249" text-anchor="middle">Family Situation</text>
+  <rect class="box" x="410" y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="485" y="249" text-anchor="middle">Location</text>
+  <rect class="box" x="575" y="220" width="130" height="48" rx="5"/>
+  <text class="lt" x="640" y="249" text-anchor="middle">Other Details</text>
 
-  <!-- L3 RAG -->
-  <rect class="band" x="60" y="310" width="740" height="120" fill="#FFE6CC" stroke="#D79B00"/>
-  <text class="bt" x="78" y="330">3 — RAG Retrieval Layer</text>
-  <rect class="box" x="80" y="345" width="180" height="70" stroke="#D79B00"/>
-  <text class="lt" x="170" y="373" text-anchor="middle">📚 Scheme Guidelines</text>
-  <text class="lt" x="170" y="389" text-anchor="middle">&amp; Eligibility Rules</text>
-  <!-- cylinder -->
+  <!-- L3 -->
+  <rect class="band" x="40" y="310" width="680" height="118" rx="8"/>
+  <text class="bt" x="58" y="332">3 — RAG Retrieval Layer</text>
+  <rect class="box" x="60" y="345" width="175" height="70" rx="5"/>
+  <text class="lt" x="147" y="373" text-anchor="middle">Scheme Guidelines</text>
+  <text class="lt" x="147" y="389" text-anchor="middle">&amp; Eligibility Rules</text>
   <g filter="url(#rough)">
-    <path d="M290,355 a70,10 0 0 0 140,0 v60 a70,10 0 0 1 -140,0 Z" fill="#ffffff" stroke="#D79B00" stroke-width="1.6"/>
-    <ellipse cx="360" cy="355" rx="70" ry="10" fill="#ffffff" stroke="#D79B00" stroke-width="1.6"/>
+    <path d="M270,356 a65,10 0 0 0 130,0 v58 a65,10 0 0 1 -130,0 Z" fill="#eee" stroke="#111" stroke-width="1.5"/>
+    <ellipse cx="335" cy="356" rx="65" ry="10" fill="#fff" stroke="#111" stroke-width="1.5"/>
   </g>
-  <text class="lt" x="360" y="382" text-anchor="middle">🗃 Vector DB</text>
-  <text class="lt" x="360" y="398" text-anchor="middle">(semantic search)</text>
-  <rect class="box" x="460" y="345" width="190" height="70" stroke="#D79B00"/>
-  <text class="lt" x="555" y="373" text-anchor="middle">🔍 Embedding +</text>
-  <text class="lt" x="555" y="389" text-anchor="middle">Top-k Retrieval</text>
+  <text class="lt" x="335" y="384" text-anchor="middle">Vector DB</text>
+  <text class="lt" x="335" y="400" text-anchor="middle">(semantic search)</text>
+  <rect class="box" x="440" y="345" width="180" height="70" rx="5"/>
+  <text class="lt" x="530" y="373" text-anchor="middle">Embedding +</text>
+  <text class="lt" x="530" y="389" text-anchor="middle">Top-k Retrieval</text>
 
-  <!-- L4 Eligibility Reasoning -->
-  <rect class="band" x="60" y="455" width="740" height="110" fill="#E1D5E7" stroke="#9673A6"/>
-  <text class="bt" x="78" y="475">4 — Eligibility Reasoning Layer  (LLM)</text>
-  <rect class="box" x="80"  y="490" width="160" height="58" fill="#D5E8D4" stroke="#82B366"/>
-  <text class="lt" x="160" y="524" text-anchor="middle">✅ Eligible</text>
-  <rect class="box" x="255" y="490" width="160" height="58" fill="#FFF2CC" stroke="#D6B656"/>
-  <text class="lt" x="335" y="524" text-anchor="middle">❓ Possibly Eligible</text>
-  <rect class="box" x="430" y="490" width="150" height="58" fill="#F8CECC" stroke="#B85450"/>
-  <text class="lt" x="505" y="524" text-anchor="middle">❌ Not Eligible</text>
-  <rect class="box" x="595" y="490" width="185" height="58" fill="#DAE8FC" stroke="#6C8EBF"/>
-  <text class="lt" x="687" y="524" text-anchor="middle">ℹ Missing Information</text>
+  <!-- L4 -->
+  <rect class="band" x="40" y="453" width="680" height="108" rx="8"/>
+  <text class="bt" x="58" y="475">4 — Eligibility Reasoning Layer  (LLM)</text>
+  <rect class="box" x="60"  y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="135" y="522" text-anchor="middle">Eligible</text>
+  <rect class="box" x="225" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="300" y="522" text-anchor="middle">Possibly Eligible</text>
+  <rect class="box" x="390" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="465" y="522" text-anchor="middle">Not Eligible</text>
+  <rect class="box" x="555" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="630" y="522" text-anchor="middle">Missing Info</text>
 
-  <!-- L5 Conflict -->
-  <rect class="band" x="60" y="590" width="740" height="100" fill="#F8CECC" stroke="#B85450"/>
-  <text class="bt" x="78" y="610">5 — Scheme Conflict Detection Layer</text>
-  <rect class="box" x="80"  y="623" width="200" height="52" stroke="#B85450"/>
-  <text class="lt" x="180" y="646" text-anchor="middle">⚠ Identify mutually</text>
-  <text class="lt" x="180" y="662" text-anchor="middle">exclusive schemes</text>
-  <rect class="box" x="300" y="623" width="200" height="52" stroke="#B85450"/>
-  <text class="lt" x="400" y="646" text-anchor="middle">Warn: ineligible</text>
-  <text class="lt" x="400" y="662" text-anchor="middle">benefit combinations</text>
-  <rect class="box" x="520" y="623" width="260" height="52" fill="#FFF2CC" stroke="#D6B656"/>
-  <text class="st" x="650" y="646" text-anchor="middle">"Scheme A &amp; B cannot</text>
-  <text class="st" x="650" y="662" text-anchor="middle">be claimed together."</text>
+  <!-- L5 -->
+  <rect class="band" x="40" y="586" width="680" height="100" rx="8"/>
+  <text class="bt" x="58" y="608">5 — Scheme Conflict Detection Layer</text>
+  <rect class="box" x="60"  y="621" width="195" height="50" rx="5"/>
+  <text class="lt" x="157" y="650" text-anchor="middle">Identify exclusive schemes</text>
+  <rect class="box" x="285" y="621" width="195" height="50" rx="5"/>
+  <text class="lt" x="382" y="650" text-anchor="middle">Warn bad combinations</text>
+  <rect class="shade" x="510" y="621" width="195" height="50" rx="5"/>
+  <text class="st" x="607" y="643" text-anchor="middle">"A &amp; B cannot be</text>
+  <text class="st" x="607" y="659" text-anchor="middle">claimed together."</text>
 
-  <!-- L6 Guidance -->
-  <rect class="band" x="60" y="715" width="740" height="110" fill="#DAE8FC" stroke="#6C8EBF"/>
-  <text class="bt" x="78" y="735">6 — Application Guidance Layer</text>
-  <rect class="box" x="80"  y="750" width="160" height="58" stroke="#6C8EBF"/>
-  <text class="lt" x="160" y="776" text-anchor="middle">Why scheme</text>
-  <text class="lt" x="160" y="792" text-anchor="middle">is relevant</text>
-  <rect class="box" x="255" y="750" width="160" height="58" stroke="#6C8EBF"/>
-  <text class="lt" x="335" y="776" text-anchor="middle">📋 Required</text>
-  <text class="lt" x="335" y="792" text-anchor="middle">documents</text>
-  <rect class="box" x="430" y="750" width="160" height="58" stroke="#6C8EBF"/>
-  <text class="lt" x="510" y="776" text-anchor="middle">📨 Step-by-step</text>
-  <text class="lt" x="510" y="792" text-anchor="middle">application</text>
-  <rect class="box" x="605" y="750" width="175" height="58" stroke="#6C8EBF"/>
-  <text class="lt" x="692" y="776" text-anchor="middle">🔗 Official</text>
-  <text class="lt" x="692" y="792" text-anchor="middle">portal / office</text>
+  <!-- L6 -->
+  <rect class="band" x="40" y="711" width="680" height="108" rx="8"/>
+  <text class="bt" x="58" y="733">6 — Application Guidance Layer</text>
+  <rect class="box" x="60"  y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="135" y="772" text-anchor="middle">Why scheme</text>
+  <text class="lt" x="135" y="788" text-anchor="middle">is relevant</text>
+  <rect class="box" x="225" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="300" y="772" text-anchor="middle">Required</text>
+  <text class="lt" x="300" y="788" text-anchor="middle">documents</text>
+  <rect class="box" x="390" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="465" y="772" text-anchor="middle">Step-by-step</text>
+  <text class="lt" x="465" y="788" text-anchor="middle">application</text>
+  <rect class="box" x="555" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="630" y="772" text-anchor="middle">Official</text>
+  <text class="lt" x="630" y="788" text-anchor="middle">portal / office</text>
 
   <!-- Output -->
-  <rect class="band" x="200" y="850" width="460" height="70" fill="#D5E8D4" stroke="#82B366"/>
-  <text class="bt" x="430" y="878" text-anchor="middle">7 — Multilingual Voice Output  (Indic TTS)</text>
-  <text class="lt" x="430" y="900" text-anchor="middle">Response delivered to citizen in the selected language 🔊</text>
+  <rect class="shade" x="180" y="844" width="400" height="66" rx="8"/>
+  <text class="bt" x="380" y="872" text-anchor="middle">7 — Multilingual Voice Output (Indic TTS)</text>
+  <text class="lt" x="380" y="893" text-anchor="middle">Response delivered in the selected language</text>
 
   <!-- Tech stack -->
-  <rect x="60" y="950" width="740" height="110" fill="#F5F5F5" stroke="#666" stroke-width="2" rx="10" stroke-dasharray="6 4" filter="url(#rough)"/>
-  <text class="bt" x="78" y="970">Technology Stack</text>
-  <rect class="box" x="75"  y="985" width="130" height="58" stroke="#666"/>
-  <text class="lt" x="140" y="1010" text-anchor="middle">Frontend</text>
-  <text class="st" x="140" y="1026" text-anchor="middle">Flutter / RN</text>
-  <rect class="box" x="215" y="985" width="130" height="58" stroke="#666"/>
-  <text class="lt" x="280" y="1010" text-anchor="middle">Backend</text>
-  <text class="st" x="280" y="1026" text-anchor="middle">FastAPI / Node</text>
-  <rect class="box" x="355" y="985" width="120" height="58" stroke="#666"/>
-  <text class="lt" x="415" y="1010" text-anchor="middle">Database</text>
-  <text class="st" x="415" y="1026" text-anchor="middle">PostgreSQL</text>
-  <rect class="box" x="485" y="985" width="145" height="58" stroke="#666"/>
-  <text class="lt" x="557" y="1010" text-anchor="middle">AI / LLM</text>
-  <text class="st" x="557" y="1026" text-anchor="middle">LLM + RAG</text>
-  <rect class="box" x="640" y="985" width="140" height="58" stroke="#666"/>
-  <text class="lt" x="710" y="1010" text-anchor="middle">Voice</text>
-  <text class="st" x="710" y="1026" text-anchor="middle">Indic STT + TTS</text>
+  <rect x="40" y="940" width="680" height="108" rx="8" fill="#fff" stroke="#111" stroke-width="2" stroke-dasharray="7 5" filter="url(#rough)"/>
+  <text class="bt" x="58" y="962">Technology Stack</text>
+  <rect class="box" x="55"  y="975" width="122" height="56" rx="5"/>
+  <text class="lt" x="116" y="999" text-anchor="middle">Frontend</text>
+  <text class="st" x="116" y="1015" text-anchor="middle">Flutter / RN</text>
+  <rect class="box" x="187" y="975" width="122" height="56" rx="5"/>
+  <text class="lt" x="248" y="999" text-anchor="middle">Backend</text>
+  <text class="st" x="248" y="1015" text-anchor="middle">FastAPI / Node</text>
+  <rect class="box" x="319" y="975" width="112" height="56" rx="5"/>
+  <text class="lt" x="375" y="999" text-anchor="middle">Database</text>
+  <text class="st" x="375" y="1015" text-anchor="middle">PostgreSQL</text>
+  <rect class="box" x="441" y="975" width="132" height="56" rx="5"/>
+  <text class="lt" x="507" y="999" text-anchor="middle">AI / LLM</text>
+  <text class="st" x="507" y="1015" text-anchor="middle">LLM + RAG</text>
+  <rect class="box" x="583" y="975" width="130" height="56" rx="5"/>
+  <text class="lt" x="648" y="999" text-anchor="middle">Voice</text>
+  <text class="st" x="648" y="1015" text-anchor="middle">Indic STT+TTS</text>
 
-  <!-- Flow arrows -->
-  <path class="flow" d="M430,160 L430,184"/>
-  <path class="flow" d="M430,285 L430,309"/>
-  <path class="flow" d="M430,430 L430,454"/>
-  <path class="flow" d="M430,565 L430,589"/>
-  <path class="flow" d="M430,690 L430,714"/>
-  <path class="flow" d="M430,825 L430,849"/>
-  <!-- retrieved context dashed -->
-  <path d="M360,415 C360,435 360,440 300,460" fill="none" stroke="#9673A6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrowP)"/>
-  <text x="250" y="448" font-size="9" fill="#9673A6" font-style="italic">retrieved context</text>
+  <!-- flow arrows -->
+  <path class="flow" d="M380,160 L380,184"/>
+  <path class="flow" d="M380,285 L380,309"/>
+  <path class="flow" d="M380,428 L380,452"/>
+  <path class="flow" d="M380,561 L380,585"/>
+  <path class="flow" d="M380,686 L380,710"/>
+  <path class="flow" d="M380,819 L380,843"/>
+  <path d="M335,415 C335,432 320,436 300,452" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowP)"/>
+  <text x="238" y="440" font-size="10" fill="#555" font-style="italic">retrieved context</text>
 </svg>

@@ -75,10 +75,10 @@ Everything marked in <span class="ph">red italics</span> is a placeholder — re
   <h1 class="title">GraminSahay: An LLM-Powered RAG-Based Rural Welfare and Government Services Navigator</h1>
 
   <div class="authors">
+    <div class="a"><div class="name">Mr. S. Lingaiah</div>Guide, Assistant Professor<br>Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India</div>
     <div class="a"><div class="name">Adigarla Yuva Teja</div>Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India<br>yuvateja976@gmail.com</div>
     <div class="a"><div class="name">Akhil Vankudoth</div>Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India<br>akhilvankudoth58@gmail.com</div>
     <div class="a"><div class="name">Adiserla Praneel</div>Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India<br>praneeladiserla@gmail.com</div>
-    <div class="a"><div class="name">Mr. S. Lingaiah (Guide)</div>Assistant Professor, Dept. of CSE<br>MLR Institute of Technology<br>Hyderabad, India<br><span class="ph">email@________</span></div>
   </div>
 
   <!-- ================= ABSTRACT / KEYWORDS ================= -->
@@ -93,6 +93,9 @@ Everything marked in <span class="ph">red italics</span> is a placeholder — re
     <p>A key limitation of existing government portals is that they are organized around scheme names. A citizen must effectively already know the name of a scheme before the portal becomes useful, which inverts the real need&mdash;citizens know their own situation, not the catalogue of schemes mapped to it. This gap is compounded by language and accessibility barriers, because most portals are primarily text-based and language-dependent, which disadvantages users who are more comfortable speaking in a regional language than reading official text [1].</p>
     <p>Recent progress in large language models (LLMs) and Retrieval-Augmented Generation (RAG) offers an opportunity to address this gap. RAG couples a neural retriever with a generative model so that answers are grounded in an external, authoritative document collection rather than only in the parameters of the model [8]. This grounding is particularly valuable in the welfare domain, where correctness, traceability to official sources, and the ability to update the corpus as policies change are essential. When paired with multilingual retrieval and Indic speech-to-text/text-to-speech, such a system can accept a spoken description of a citizen&rsquo;s situation and respond in that citizen&rsquo;s own language.</p>
     <p>This paper presents GraminSahay, a multilingual, voice-first welfare navigator that lets a citizen describe their life situation&mdash;for example, &ldquo;I am a farmer with a small landholding&rdquo; or &ldquo;my daughter is starting college&rdquo;&mdash;and returns the schemes they may be eligible for, an explanation of the eligibility decision, warnings about schemes that cannot be claimed together, and guidance on how to apply. The focus of this paper is the literature that underpins such a system and the research gaps it must close.</p>
+    <p>The significance of the problem is reinforced by its alignment with national development priorities. Welfare delivery sits at the intersection of Sustainable Development Goal&nbsp;1 (No Poverty) and Goal&nbsp;10 (Reduced Inequalities): schemes are designed precisely to protect vulnerable households, yet the benefit of a scheme is realized only when an eligible citizen successfully claims it. The &ldquo;last-mile&rdquo; of welfare is therefore not policy formulation but discovery, interpretation, and application&mdash;exactly the stages where rural citizens face the greatest friction. An intelligent assistant that reduces this friction can translate existing policy into realized benefit without any change to the underlying schemes.</p>
+    <p>Three design principles guide GraminSahay. First, <i>situation-first interaction</i>: the citizen should never need to know a scheme&rsquo;s name; the system maps a described situation to candidate schemes. Second, <i>explainability</i>: every eligibility decision must be accompanied by a human-readable justification traceable to an official source, because an unexplained &ldquo;not eligible&rdquo; verdict is of little help to a citizen who wants to understand what to do next. Third, <i>accessibility</i>: voice and regional-language support are treated as primary interaction modes rather than add-ons, acknowledging that a substantial share of the target population is more comfortable speaking than reading official text. The remainder of this paper reviews the literature supporting these principles, identifies the gaps, and specifies the system that addresses them.</p>
+    <p>The rest of the paper is organized as follows. Section&nbsp;II reviews the relevant literature across six strands and summarizes it in Table&nbsp;I. Section&nbsp;III states the research gaps, and Section&nbsp;IV describes the knowledge sources and data. Sections&nbsp;V and&nbsp;VI present the problem statement and motivation, and Section&nbsp;VII lists the research objectives. Section&nbsp;VIII contrasts the existing and proposed systems, Section&nbsp;IX details the methodology, and Section&nbsp;X presents the proposed solution and system architecture. Section&nbsp;XI reports the expected results, Section&nbsp;XII outlines future enhancements, and Section&nbsp;XIII concludes.</p>
 
     <!-- ================= II. LITERATURE REVIEW ================= -->
     <p class="sec">II.&nbsp;&nbsp;Literature Review</p>
@@ -116,7 +119,9 @@ Everything marked in <span class="ph">red italics</span> is a placeholder — re
     <p class="subsec">F. LLMs for Interpretive Support in Digital Government</p>
     <p>At the application level, a systematic review of LLMs for interpretive support in digital-government service systems analyzes sixty studies and reports a shift from simple question answering toward service navigation and interpretive support, with the strongest evidence for gains in efficiency, responsiveness, and accessibility [1]. Crucially, it notes that realized benefits depend on reliability, legal boundaries, responsibility allocation, privacy and security, and organizational capacity&mdash;non-functional requirements that any deployed welfare navigator must respect. Context-optimized RAG for local-government welfare subsidies further demonstrates the feasibility of grounding welfare answers in local policy documents.</p>
 
-    <p class="subsec">G. Summary of the Literature Survey</p>
+    <p class="subsec">G. Synthesis Across the Strands</p>
+    <p>Taken together, the six strands point to a consistent architecture for a trustworthy welfare navigator. Foundational RAG supplies the grounding mechanism; faithfulness evaluation supplies the guarantee that grounding is actually used; retrieval-augmented reasoning supplies the multi-step inference needed for eligibility rules; multilingual retrieval and dense retrieval with domain adaptation supply the access and precision needed for regional-language queries over specialized policy text; and the digital-government review supplies the governance frame within which such a system must operate. No single work addresses the complete pipeline the welfare setting requires&mdash;situation understanding, grounded retrieval, explainable eligibility reasoning, conflict detection, and multilingual voice delivery&mdash;which is precisely the integration gap GraminSahay targets. A second observation is that every technique reviewed trades additional capability for additional complexity or data cost, so a practical system must choose a configuration that is strong enough to be trustworthy yet light enough to maintain against a frequently changing policy corpus.</p>
+    <p class="subsec">H. Summary of the Literature Survey</p>
     <p>Table I consolidates the primary studies reviewed, their objectives, outcomes, and limitations, and provides the evidential basis for the research gaps identified in Section III.</p>
 
     <!-- ===== LITERATURE TABLE (full width) ===== -->
@@ -185,48 +190,49 @@ Everything marked in <span class="ph">red italics</span> is a placeholder — re
     <p>In the current approach, citizens manually search government portals and documents, typically needing to know a scheme&rsquo;s name beforehand. Information is spread across multiple sources; eligibility and document requirements require manual interpretation; and personalized guidance is unavailable. The basic flow is shown in Fig. 1. Its principal limitations are manual search, limited personalization, language barriers, and no integrated conflict detection.</p>
 
     <div class="onecol figwrap">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 190" font-family="'Segoe UI','Trebuchet MS',sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 200" font-family="'Comic Sans MS','Segoe Print','Bradley Hand',cursive,sans-serif">
   <defs>
-    <filter id="r1" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="4" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    <filter id="r1" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <marker id="a1" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#444"/></marker>
+    <marker id="a1" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#111" stroke-width="1.3"/></marker>
   </defs>
   <style>
-    .b{fill:#f0f0f0;stroke:#888;stroke-width:1.6;rx:8;filter:url(#r1)}
-    .t{font-size:12px;fill:#222}.lim{font-size:11px;fill:#9a3b3b;font-style:italic}
-    .fl{stroke:#444;stroke-width:2.2;fill:none;marker-end:url(#a1)}
-    .lab{font-size:12.5px;font-weight:700;fill:#7a2a2a}
+    .b{fill:#fff;stroke:#111;stroke-width:1.7;filter:url(#r1)}
+    .t{font-size:13px;fill:#111}.lim{font-size:12px;fill:#333}
+    .fl{stroke:#111;stroke-width:1.8;fill:none;marker-end:url(#a1);filter:url(#r1)}
+    .lab{font-size:13px;font-weight:700;fill:#111}
   </style>
-  <text x="410" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3864">Existing System — Manual Welfare Scheme Lookup</text>
+  <text x="410" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#111">Existing System &#8212; Manual Welfare Scheme Lookup</text>
 
-  <rect class="b" x="25"  y="55" width="120" height="48"/>
-  <text class="t" x="85"  y="84" text-anchor="middle">Citizen</text>
-  <rect class="b" x="190" y="55" width="130" height="48"/>
-  <text class="t" x="255" y="78" text-anchor="middle">Search Govt.</text>
-  <text class="t" x="255" y="93" text-anchor="middle">Portal (by name)</text>
-  <rect class="b" x="365" y="55" width="120" height="48"/>
-  <text class="t" x="425" y="84" text-anchor="middle">Find Scheme</text>
-  <rect class="b" x="530" y="55" width="130" height="48"/>
-  <text class="t" x="595" y="78" text-anchor="middle">Check Eligibility</text>
-  <text class="t" x="595" y="93" text-anchor="middle">(manual reading)</text>
-  <rect class="b" x="705" y="55" width="90" height="48"/>
-  <text class="t" x="750" y="84" text-anchor="middle">Apply</text>
+  <rect class="b" x="25"  y="55" width="120" height="50" rx="4"/>
+  <text class="t" x="85"  y="85" text-anchor="middle">Citizen</text>
+  <rect class="b" x="190" y="55" width="130" height="50" rx="4"/>
+  <text class="t" x="255" y="80" text-anchor="middle">Search Govt.</text>
+  <text class="t" x="255" y="95" text-anchor="middle">Portal (by name)</text>
+  <rect class="b" x="365" y="55" width="120" height="50" rx="4"/>
+  <text class="t" x="425" y="85" text-anchor="middle">Find Scheme</text>
+  <rect class="b" x="530" y="55" width="130" height="50" rx="4"/>
+  <text class="t" x="595" y="80" text-anchor="middle">Check Eligibility</text>
+  <text class="t" x="595" y="95" text-anchor="middle">(manual reading)</text>
+  <rect class="b" x="705" y="55" width="90" height="50" rx="4"/>
+  <text class="t" x="750" y="85" text-anchor="middle">Apply</text>
 
-  <path class="fl" d="M145,79 L188,79"/>
-  <path class="fl" d="M320,79 L363,79"/>
-  <path class="fl" d="M485,79 L528,79"/>
-  <path class="fl" d="M660,79 L703,79"/>
+  <path class="fl" d="M145,80 L188,80"/>
+  <path class="fl" d="M320,80 L363,80"/>
+  <path class="fl" d="M485,80 L528,80"/>
+  <path class="fl" d="M660,80 L703,80"/>
 
-  <text class="lab" x="25" y="135">Limitations:</text>
-  <text class="lim" x="25"  y="158">• Must know scheme name</text>
-  <text class="lim" x="230" y="158">• No personalization</text>
-  <text class="lim" x="400" y="158">• Language barriers</text>
-  <text class="lim" x="575" y="158">• No conflict detection</text>
-  <text class="lim" x="25"  y="178">• Info scattered across sources</text>
-  <text class="lim" x="400" y="178">• Eligibility needs manual interpretation</text>
+  <text class="lab" x="25" y="140">Limitations:</text>
+  <text class="lim" x="25"  y="162">&#8226; Must know scheme name</text>
+  <text class="lim" x="235" y="162">&#8226; No personalization</text>
+  <text class="lim" x="405" y="162">&#8226; Language barriers</text>
+  <text class="lim" x="580" y="162">&#8226; No conflict detection</text>
+  <text class="lim" x="25"  y="184">&#8226; Info scattered across sources</text>
+  <text class="lim" x="405" y="184">&#8226; Eligibility needs manual interpretation</text>
 </svg>
+
 
       <div class="figcap">Fig. 1.&nbsp;&nbsp;Existing system &mdash; manual welfare scheme lookup.</div>
     </div>
@@ -235,75 +241,73 @@ Everything marked in <span class="ph">red italics</span> is a placeholder — re
     <p>GraminSahay replaces name-based search with situation-first discovery, as illustrated in Fig. 2. A citizen&rsquo;s spoken or typed description is converted to a structured profile; a RAG layer retrieves relevant passages from the official-document index; an LLM-based reasoning layer determines and explains eligibility; a conflict-detection layer warns about mutually exclusive benefits; and an application-guidance layer produces next steps. The final response is delivered as multilingual voice output in the citizen&rsquo;s selected language.</p>
 
     <div class="onecol figwrap">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" font-family="'Segoe UI','Trebuchet MS',sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" font-family="'Comic Sans MS','Segoe Print','Bradley Hand',cursive,sans-serif">
   <defs>
-    <filter id="r2" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" seed="9" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    <filter id="r2" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <marker id="a2" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#345"/></marker>
+    <marker id="a2" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#111" stroke-width="1.3"/></marker>
   </defs>
   <style>
-    .t{font-size:11.5px;fill:#1a1a1a}
-    .fl{stroke:#345;stroke-width:2.2;fill:none;marker-end:url(#a2)}
-    .step{font-size:11px;font-weight:700;fill:#2a4a7a}
+    .b{fill:#fff;stroke:#111;stroke-width:1.7;filter:url(#r2)}
+    .t{font-size:12px;fill:#111}
+    .fl{stroke:#111;stroke-width:1.8;fill:none;marker-end:url(#a2);filter:url(#r2)}
+    .step{font-size:12px;font-weight:700;fill:#111}
   </style>
-  <text x="410" y="22" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3864">Proposed System — GraminSahay Situation-First Flow</text>
+  <text x="410" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#111">Proposed System &#8212; GraminSahay Situation-First Flow</text>
 
-  <!-- row 1 -->
   <g>
-    <rect x="25"  y="50" width="150" height="60" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <rect class="b" x="25"  y="50" width="150" height="62" rx="4"/>
     <text class="step" x="100" y="70" text-anchor="middle">1. Voice / Text Input</text>
     <text class="t" x="100" y="88" text-anchor="middle">Describe situation</text>
-    <text class="t" x="100" y="103" text-anchor="middle">(Eng+Telugu+Hindi)</text>
+    <text class="t" x="100" y="104" text-anchor="middle">(Eng+Telugu+Hindi)</text>
 
-    <rect x="215" y="50" width="150" height="60" fill="#D5E8D4" stroke="#82B366" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <rect class="b" x="215" y="50" width="150" height="62" rx="4"/>
     <text class="step" x="290" y="70" text-anchor="middle">2. Profile Build</text>
     <text class="t" x="290" y="88" text-anchor="middle">Occupation, family,</text>
-    <text class="t" x="290" y="103" text-anchor="middle">location</text>
+    <text class="t" x="290" y="104" text-anchor="middle">location</text>
 
-    <rect x="405" y="50" width="150" height="60" fill="#FFE6CC" stroke="#D79B00" stroke-width="1.6" rx="9" filter="url(#r2)"/>
+    <rect class="b" x="405" y="50" width="150" height="62" rx="4"/>
     <text class="step" x="480" y="70" text-anchor="middle">3. RAG Retrieval</text>
     <text class="t" x="480" y="88" text-anchor="middle">Vector DB over</text>
-    <text class="t" x="480" y="103" text-anchor="middle">official documents</text>
+    <text class="t" x="480" y="104" text-anchor="middle">official documents</text>
 
-    <rect x="595" y="50" width="150" height="60" fill="#E1D5E7" stroke="#9673A6" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-    <text class="step" x="670" y="70" text-anchor="middle">4. Eligibility Reasoning</text>
+    <rect class="b" x="595" y="50" width="150" height="62" rx="4"/>
+    <text class="step" x="670" y="70" text-anchor="middle">4. Eligibility</text>
     <text class="t" x="670" y="88" text-anchor="middle">LLM classifies +</text>
-    <text class="t" x="670" y="103" text-anchor="middle">explains</text>
+    <text class="t" x="670" y="104" text-anchor="middle">explains</text>
   </g>
-  <path class="fl" d="M175,80 L213,80"/>
-  <path class="fl" d="M365,80 L403,80"/>
-  <path class="fl" d="M555,80 L593,80"/>
-  <!-- down connector -->
-  <path class="fl" d="M670,110 L670,135 L480,135 L480,158"/>
+  <path class="fl" d="M175,81 L213,81"/>
+  <path class="fl" d="M365,81 L403,81"/>
+  <path class="fl" d="M555,81 L593,81"/>
+  <path class="fl" d="M670,112 L670,137 L480,137 L480,160"/>
 
-  <!-- row 2 (right to left feel) -->
   <g>
-    <rect x="405" y="160" width="150" height="60" fill="#F8CECC" stroke="#B85450" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-    <text class="step" x="480" y="180" text-anchor="middle">5. Conflict Detection</text>
-    <text class="t" x="480" y="198" text-anchor="middle">Warns mutually</text>
-    <text class="t" x="480" y="213" text-anchor="middle">exclusive schemes</text>
+    <rect class="b" x="405" y="162" width="150" height="62" rx="4"/>
+    <text class="step" x="480" y="182" text-anchor="middle">5. Conflict Detection</text>
+    <text class="t" x="480" y="200" text-anchor="middle">Warns mutually</text>
+    <text class="t" x="480" y="216" text-anchor="middle">exclusive schemes</text>
 
-    <rect x="215" y="160" width="150" height="60" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-    <text class="step" x="290" y="180" text-anchor="middle">6. Application Guidance</text>
-    <text class="t" x="290" y="198" text-anchor="middle">Docs + steps +</text>
-    <text class="t" x="290" y="213" text-anchor="middle">portal link</text>
+    <rect class="b" x="215" y="162" width="150" height="62" rx="4"/>
+    <text class="step" x="290" y="182" text-anchor="middle">6. App. Guidance</text>
+    <text class="t" x="290" y="200" text-anchor="middle">Docs + steps +</text>
+    <text class="t" x="290" y="216" text-anchor="middle">portal link</text>
 
-    <rect x="25"  y="160" width="150" height="60" fill="#D5E8D4" stroke="#82B366" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-    <text class="step" x="100" y="180" text-anchor="middle">7. Voice Output</text>
-    <text class="t" x="100" y="198" text-anchor="middle">Indic TTS in</text>
-    <text class="t" x="100" y="213" text-anchor="middle">selected language</text>
+    <rect class="b" x="25"  y="162" width="150" height="62" rx="4"/>
+    <text class="step" x="100" y="182" text-anchor="middle">7. Voice Output</text>
+    <text class="t" x="100" y="200" text-anchor="middle">Indic TTS in</text>
+    <text class="t" x="100" y="216" text-anchor="middle">selected language</text>
   </g>
-  <path class="fl" d="M405,190 L367,190"/>
-  <path class="fl" d="M215,190 L177,190"/>
+  <path class="fl" d="M405,193 L367,193"/>
+  <path class="fl" d="M215,193 L177,193"/>
 
-  <!-- outcome -->
-  <rect x="235" y="245" width="350" height="42" fill="#FFF2CC" stroke="#D6B656" stroke-width="1.6" rx="9" filter="url(#r2)"/>
-  <text x="410" y="263" text-anchor="middle" font-size="12" font-weight="700" fill="#7a5c00">Explainable, situation-aware welfare navigation</text>
-  <text x="410" y="279" text-anchor="middle" class="t">— no prior knowledge of scheme name required</text>
-  <path class="fl" d="M100,220 L100,266 L233,266"/>
+  <rect class="b" x="235" y="252" width="350" height="46" rx="4"/>
+  <text x="410" y="272" text-anchor="middle" font-size="13" font-weight="700" fill="#111">Explainable, situation-aware navigation</text>
+  <text x="410" y="289" text-anchor="middle" class="t">&#8212; no prior knowledge of scheme name required</text>
+  <path class="fl" d="M100,224 L100,274 L233,274"/>
 </svg>
+
 
       <div class="figcap">Fig. 2.&nbsp;&nbsp;Proposed system &mdash; GraminSahay situation-first flow.</div>
     </div>
@@ -317,160 +321,156 @@ Everything marked in <span class="ph">red italics</span> is a placeholder — re
     <p><b>5) Scheme-Conflict Detection:</b> The system checks selected schemes for mutual exclusivity and warns the citizen when benefits cannot legally be claimed together.</p>
     <p><b>6) Application Guidance:</b> For a chosen scheme, the system explains why it is relevant, lists required documents, outlines the step-by-step application process, and links to the official portal/office.</p>
     <p><b>7) Multilingual Voice Output:</b> The response is rendered through Indic TTS in the citizen&rsquo;s selected language.</p>
-    <p><b>8) Evaluation:</b> Retrieval relevance, answer faithfulness, and eligibility-classification quality will be assessed using reference-free RAG metrics [7] and faithfulness evaluation [4]. <span class="ph">[Specific metrics / test-set details to be finalized: ________]</span></p>
+    <p><b>8) Evaluation:</b> Retrieval relevance, answer faithfulness, and eligibility-classification quality will be assessed using reference-free RAG metrics [7] and faithfulness evaluation [4]. Retrieval is measured by Recall@k and mean reciprocal rank over a labelled set of situation&ndash;scheme pairs; eligibility classification is measured by per-class precision, recall, and macro-F1 across the four labels (eligible, possibly eligible, not eligible, missing information); and faithfulness is measured by the proportion of generated justifications fully supported by the retrieved passages. A small human-evaluation study with domain reviewers will rate explanation clarity and correctness, since automated metrics may not fully capture the correctness of policy eligibility decisions. <span class="ph">[Specific metrics / test-set details to be finalized: ________]</span></p>
+    <p>Two cross-cutting concerns are built into the methodology. <i>Data freshness:</i> because welfare schemes and their eligibility thresholds change, the corpus is versioned and re-indexed on a schedule, and each answer records the document version it relied on. <i>Privacy:</i> the citizen profile is minimal by design&mdash;only the attributes needed for eligibility are collected&mdash;and sensitive details are not persisted beyond the session unless the citizen opts in, consistent with the governance conditions highlighted in the digital-government literature [1].</p>
 
     <!-- ================= X. ARCHITECTURE / SOLUTION ================= -->
     <p class="sec">X.&nbsp;&nbsp;Proposed Solution and System Architecture</p>
     <p>Fig. 3 presents the layered architecture of GraminSahay. Processing flows top-down from citizen interaction through profile understanding, RAG retrieval, eligibility reasoning, conflict detection, and application guidance, culminating in multilingual voice output. The technology-stack band summarizes the implementation: a Flutter / React Native frontend, a FastAPI / Node.js backend, a PostgreSQL store for user and application data, a multilingual LLM with RAG for reasoning and generation, a vector database for document retrieval, and Indic STT/TTS for voice interaction.</p>
 
     <div class="onecol figwrap">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 1180" font-family="'Segoe UI', 'Comic Sans MS', 'Trebuchet MS', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1120" font-family="'Comic Sans MS','Segoe Print','Bradley Hand',cursive,sans-serif">
   <defs>
-    <!-- subtle hand-drawn jitter filter so boxes don't look machine-perfect -->
-    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="noise"/>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+    <filter id="rough" x="-4%" y="-4%" width="108%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <marker id="arrow" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#333"/>
+    <marker id="arrow" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L11,5 L0,10" fill="none" stroke="#111" stroke-width="1.3"/>
     </marker>
-    <marker id="arrowP" markerWidth="12" markerHeight="12" refX="8" refY="5" orient="auto">
-      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#9673A6" stroke-width="1.4"/>
+    <marker id="arrowP" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L11,5 L0,10" fill="none" stroke="#555" stroke-width="1.2"/>
     </marker>
   </defs>
-
   <style>
-    .band  { stroke-width:2; rx:10; filter:url(#rough); }
-    .box   { fill:#ffffff; stroke-width:1.6; rx:9; filter:url(#rough); }
-    .bt    { font-size:13px; font-weight:700; }
-    .lt    { font-size:11px; }
-    .st    { font-size:10px; font-style:italic; }
-    .flow  { stroke:#333; stroke-width:2.2; fill:none; marker-end:url(#arrow); }
-    text   { fill:#1a1a1a; }
+    .band{fill:#fff;stroke:#111;stroke-width:2;filter:url(#rough)}
+    .box{fill:#fff;stroke:#111;stroke-width:1.5;filter:url(#rough)}
+    .shade{fill:#eee;stroke:#111;stroke-width:1.5;filter:url(#rough)}
+    .bt{font-size:14px;font-weight:700;fill:#111}
+    .lt{font-size:12px;fill:#111}.st{font-size:11px;fill:#111;font-style:italic}
+    .flow{stroke:#111;stroke-width:2;fill:none;marker-end:url(#arrow);filter:url(#rough)}
+    text{fill:#111}
   </style>
 
-  <text x="430" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1F3864">Fig. 1.  GraminSahay — System Flow &amp; Architecture</text>
+  <text x="380" y="30" text-anchor="middle" font-size="17" font-weight="700">Fig. 3.  GraminSahay — System Flow &amp; Architecture</text>
 
-  <!-- L1 Citizen Interaction -->
-  <rect class="band" x="60" y="48" width="740" height="112" fill="#DAE8FC" stroke="#6C8EBF"/>
-  <text class="bt" x="78" y="68">1 — Citizen Interaction Layer</text>
-  <rect class="box" x="80"  y="80" width="150" height="62" stroke="#6C8EBF"/>
-  <text class="lt" x="155" y="106" text-anchor="middle">🎙 Voice Input</text>
-  <text class="lt" x="155" y="122" text-anchor="middle">(Indic STT)</text>
-  <rect class="box" x="245" y="80" width="150" height="62" stroke="#6C8EBF"/>
-  <text class="lt" x="320" y="115" text-anchor="middle">⌨ Text Input</text>
-  <rect class="box" x="410" y="80" width="170" height="62" stroke="#6C8EBF"/>
-  <text class="lt" x="495" y="106" text-anchor="middle">🌐 Language Select</text>
-  <text class="lt" x="495" y="122" text-anchor="middle">(English + 2 Regional)</text>
-  <rect class="box" x="595" y="80" width="185" height="62" fill="#FFF2CC" stroke="#D6B656"/>
-  <text class="st" x="687" y="106" text-anchor="middle">"I am a farmer with</text>
-  <text class="st" x="687" y="122" text-anchor="middle">a small landholding."</text>
+  <!-- L1 -->
+  <rect class="band" x="40" y="48" width="680" height="112" rx="8"/>
+  <text class="bt" x="58" y="70">1 — Citizen Interaction Layer</text>
+  <rect class="box" x="60"  y="82" width="150" height="62" rx="5"/>
+  <text class="lt" x="135" y="108" text-anchor="middle">Voice Input</text>
+  <text class="lt" x="135" y="124" text-anchor="middle">(Indic STT)</text>
+  <rect class="box" x="225" y="82" width="150" height="62" rx="5"/>
+  <text class="lt" x="300" y="117" text-anchor="middle">Text Input</text>
+  <rect class="box" x="390" y="82" width="170" height="62" rx="5"/>
+  <text class="lt" x="475" y="108" text-anchor="middle">Language Select</text>
+  <text class="lt" x="475" y="124" text-anchor="middle">(Eng+Telugu+Hindi)</text>
+  <rect class="shade" x="575" y="82" width="130" height="62" rx="5"/>
+  <text class="st" x="640" y="108" text-anchor="middle">"I am a farmer</text>
+  <text class="st" x="640" y="124" text-anchor="middle">with small land."</text>
 
-  <!-- L2 Profile -->
-  <rect class="band" x="60" y="185" width="740" height="100" fill="#D5E8D4" stroke="#82B366"/>
-  <text class="bt" x="78" y="205">2 — Profile Understanding Layer</text>
-  <rect class="box" x="80"  y="218" width="160" height="50" stroke="#82B366"/>
-  <text class="lt" x="160" y="248" text-anchor="middle">Occupation</text>
-  <rect class="box" x="255" y="218" width="160" height="50" stroke="#82B366"/>
-  <text class="lt" x="335" y="248" text-anchor="middle">Family Situation</text>
-  <rect class="box" x="430" y="218" width="160" height="50" stroke="#82B366"/>
-  <text class="lt" x="510" y="248" text-anchor="middle">Location</text>
-  <rect class="box" x="605" y="218" width="175" height="50" stroke="#82B366"/>
-  <text class="lt" x="692" y="248" text-anchor="middle">Other Details</text>
+  <!-- L2 -->
+  <rect class="band" x="40" y="185" width="680" height="100" rx="8"/>
+  <text class="bt" x="58" y="207">2 — Profile Understanding Layer</text>
+  <rect class="box" x="60"  y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="135" y="249" text-anchor="middle">Occupation</text>
+  <rect class="box" x="235" y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="310" y="249" text-anchor="middle">Family Situation</text>
+  <rect class="box" x="410" y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="485" y="249" text-anchor="middle">Location</text>
+  <rect class="box" x="575" y="220" width="130" height="48" rx="5"/>
+  <text class="lt" x="640" y="249" text-anchor="middle">Other Details</text>
 
-  <!-- L3 RAG -->
-  <rect class="band" x="60" y="310" width="740" height="120" fill="#FFE6CC" stroke="#D79B00"/>
-  <text class="bt" x="78" y="330">3 — RAG Retrieval Layer</text>
-  <rect class="box" x="80" y="345" width="180" height="70" stroke="#D79B00"/>
-  <text class="lt" x="170" y="373" text-anchor="middle">📚 Scheme Guidelines</text>
-  <text class="lt" x="170" y="389" text-anchor="middle">&amp; Eligibility Rules</text>
-  <!-- cylinder -->
+  <!-- L3 -->
+  <rect class="band" x="40" y="310" width="680" height="118" rx="8"/>
+  <text class="bt" x="58" y="332">3 — RAG Retrieval Layer</text>
+  <rect class="box" x="60" y="345" width="175" height="70" rx="5"/>
+  <text class="lt" x="147" y="373" text-anchor="middle">Scheme Guidelines</text>
+  <text class="lt" x="147" y="389" text-anchor="middle">&amp; Eligibility Rules</text>
   <g filter="url(#rough)">
-    <path d="M290,355 a70,10 0 0 0 140,0 v60 a70,10 0 0 1 -140,0 Z" fill="#ffffff" stroke="#D79B00" stroke-width="1.6"/>
-    <ellipse cx="360" cy="355" rx="70" ry="10" fill="#ffffff" stroke="#D79B00" stroke-width="1.6"/>
+    <path d="M270,356 a65,10 0 0 0 130,0 v58 a65,10 0 0 1 -130,0 Z" fill="#eee" stroke="#111" stroke-width="1.5"/>
+    <ellipse cx="335" cy="356" rx="65" ry="10" fill="#fff" stroke="#111" stroke-width="1.5"/>
   </g>
-  <text class="lt" x="360" y="382" text-anchor="middle">🗃 Vector DB</text>
-  <text class="lt" x="360" y="398" text-anchor="middle">(semantic search)</text>
-  <rect class="box" x="460" y="345" width="190" height="70" stroke="#D79B00"/>
-  <text class="lt" x="555" y="373" text-anchor="middle">🔍 Embedding +</text>
-  <text class="lt" x="555" y="389" text-anchor="middle">Top-k Retrieval</text>
+  <text class="lt" x="335" y="384" text-anchor="middle">Vector DB</text>
+  <text class="lt" x="335" y="400" text-anchor="middle">(semantic search)</text>
+  <rect class="box" x="440" y="345" width="180" height="70" rx="5"/>
+  <text class="lt" x="530" y="373" text-anchor="middle">Embedding +</text>
+  <text class="lt" x="530" y="389" text-anchor="middle">Top-k Retrieval</text>
 
-  <!-- L4 Eligibility Reasoning -->
-  <rect class="band" x="60" y="455" width="740" height="110" fill="#E1D5E7" stroke="#9673A6"/>
-  <text class="bt" x="78" y="475">4 — Eligibility Reasoning Layer  (LLM)</text>
-  <rect class="box" x="80"  y="490" width="160" height="58" fill="#D5E8D4" stroke="#82B366"/>
-  <text class="lt" x="160" y="524" text-anchor="middle">✅ Eligible</text>
-  <rect class="box" x="255" y="490" width="160" height="58" fill="#FFF2CC" stroke="#D6B656"/>
-  <text class="lt" x="335" y="524" text-anchor="middle">❓ Possibly Eligible</text>
-  <rect class="box" x="430" y="490" width="150" height="58" fill="#F8CECC" stroke="#B85450"/>
-  <text class="lt" x="505" y="524" text-anchor="middle">❌ Not Eligible</text>
-  <rect class="box" x="595" y="490" width="185" height="58" fill="#DAE8FC" stroke="#6C8EBF"/>
-  <text class="lt" x="687" y="524" text-anchor="middle">ℹ Missing Information</text>
+  <!-- L4 -->
+  <rect class="band" x="40" y="453" width="680" height="108" rx="8"/>
+  <text class="bt" x="58" y="475">4 — Eligibility Reasoning Layer  (LLM)</text>
+  <rect class="box" x="60"  y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="135" y="522" text-anchor="middle">Eligible</text>
+  <rect class="box" x="225" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="300" y="522" text-anchor="middle">Possibly Eligible</text>
+  <rect class="box" x="390" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="465" y="522" text-anchor="middle">Not Eligible</text>
+  <rect class="box" x="555" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="630" y="522" text-anchor="middle">Missing Info</text>
 
-  <!-- L5 Conflict -->
-  <rect class="band" x="60" y="590" width="740" height="100" fill="#F8CECC" stroke="#B85450"/>
-  <text class="bt" x="78" y="610">5 — Scheme Conflict Detection Layer</text>
-  <rect class="box" x="80"  y="623" width="200" height="52" stroke="#B85450"/>
-  <text class="lt" x="180" y="646" text-anchor="middle">⚠ Identify mutually</text>
-  <text class="lt" x="180" y="662" text-anchor="middle">exclusive schemes</text>
-  <rect class="box" x="300" y="623" width="200" height="52" stroke="#B85450"/>
-  <text class="lt" x="400" y="646" text-anchor="middle">Warn: ineligible</text>
-  <text class="lt" x="400" y="662" text-anchor="middle">benefit combinations</text>
-  <rect class="box" x="520" y="623" width="260" height="52" fill="#FFF2CC" stroke="#D6B656"/>
-  <text class="st" x="650" y="646" text-anchor="middle">"Scheme A &amp; B cannot</text>
-  <text class="st" x="650" y="662" text-anchor="middle">be claimed together."</text>
+  <!-- L5 -->
+  <rect class="band" x="40" y="586" width="680" height="100" rx="8"/>
+  <text class="bt" x="58" y="608">5 — Scheme Conflict Detection Layer</text>
+  <rect class="box" x="60"  y="621" width="195" height="50" rx="5"/>
+  <text class="lt" x="157" y="650" text-anchor="middle">Identify exclusive schemes</text>
+  <rect class="box" x="285" y="621" width="195" height="50" rx="5"/>
+  <text class="lt" x="382" y="650" text-anchor="middle">Warn bad combinations</text>
+  <rect class="shade" x="510" y="621" width="195" height="50" rx="5"/>
+  <text class="st" x="607" y="643" text-anchor="middle">"A &amp; B cannot be</text>
+  <text class="st" x="607" y="659" text-anchor="middle">claimed together."</text>
 
-  <!-- L6 Guidance -->
-  <rect class="band" x="60" y="715" width="740" height="110" fill="#DAE8FC" stroke="#6C8EBF"/>
-  <text class="bt" x="78" y="735">6 — Application Guidance Layer</text>
-  <rect class="box" x="80"  y="750" width="160" height="58" stroke="#6C8EBF"/>
-  <text class="lt" x="160" y="776" text-anchor="middle">Why scheme</text>
-  <text class="lt" x="160" y="792" text-anchor="middle">is relevant</text>
-  <rect class="box" x="255" y="750" width="160" height="58" stroke="#6C8EBF"/>
-  <text class="lt" x="335" y="776" text-anchor="middle">📋 Required</text>
-  <text class="lt" x="335" y="792" text-anchor="middle">documents</text>
-  <rect class="box" x="430" y="750" width="160" height="58" stroke="#6C8EBF"/>
-  <text class="lt" x="510" y="776" text-anchor="middle">📨 Step-by-step</text>
-  <text class="lt" x="510" y="792" text-anchor="middle">application</text>
-  <rect class="box" x="605" y="750" width="175" height="58" stroke="#6C8EBF"/>
-  <text class="lt" x="692" y="776" text-anchor="middle">🔗 Official</text>
-  <text class="lt" x="692" y="792" text-anchor="middle">portal / office</text>
+  <!-- L6 -->
+  <rect class="band" x="40" y="711" width="680" height="108" rx="8"/>
+  <text class="bt" x="58" y="733">6 — Application Guidance Layer</text>
+  <rect class="box" x="60"  y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="135" y="772" text-anchor="middle">Why scheme</text>
+  <text class="lt" x="135" y="788" text-anchor="middle">is relevant</text>
+  <rect class="box" x="225" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="300" y="772" text-anchor="middle">Required</text>
+  <text class="lt" x="300" y="788" text-anchor="middle">documents</text>
+  <rect class="box" x="390" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="465" y="772" text-anchor="middle">Step-by-step</text>
+  <text class="lt" x="465" y="788" text-anchor="middle">application</text>
+  <rect class="box" x="555" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="630" y="772" text-anchor="middle">Official</text>
+  <text class="lt" x="630" y="788" text-anchor="middle">portal / office</text>
 
   <!-- Output -->
-  <rect class="band" x="200" y="850" width="460" height="70" fill="#D5E8D4" stroke="#82B366"/>
-  <text class="bt" x="430" y="878" text-anchor="middle">7 — Multilingual Voice Output  (Indic TTS)</text>
-  <text class="lt" x="430" y="900" text-anchor="middle">Response delivered to citizen in the selected language 🔊</text>
+  <rect class="shade" x="180" y="844" width="400" height="66" rx="8"/>
+  <text class="bt" x="380" y="872" text-anchor="middle">7 — Multilingual Voice Output (Indic TTS)</text>
+  <text class="lt" x="380" y="893" text-anchor="middle">Response delivered in the selected language</text>
 
   <!-- Tech stack -->
-  <rect x="60" y="950" width="740" height="110" fill="#F5F5F5" stroke="#666" stroke-width="2" rx="10" stroke-dasharray="6 4" filter="url(#rough)"/>
-  <text class="bt" x="78" y="970">Technology Stack</text>
-  <rect class="box" x="75"  y="985" width="130" height="58" stroke="#666"/>
-  <text class="lt" x="140" y="1010" text-anchor="middle">Frontend</text>
-  <text class="st" x="140" y="1026" text-anchor="middle">Flutter / RN</text>
-  <rect class="box" x="215" y="985" width="130" height="58" stroke="#666"/>
-  <text class="lt" x="280" y="1010" text-anchor="middle">Backend</text>
-  <text class="st" x="280" y="1026" text-anchor="middle">FastAPI / Node</text>
-  <rect class="box" x="355" y="985" width="120" height="58" stroke="#666"/>
-  <text class="lt" x="415" y="1010" text-anchor="middle">Database</text>
-  <text class="st" x="415" y="1026" text-anchor="middle">PostgreSQL</text>
-  <rect class="box" x="485" y="985" width="145" height="58" stroke="#666"/>
-  <text class="lt" x="557" y="1010" text-anchor="middle">AI / LLM</text>
-  <text class="st" x="557" y="1026" text-anchor="middle">LLM + RAG</text>
-  <rect class="box" x="640" y="985" width="140" height="58" stroke="#666"/>
-  <text class="lt" x="710" y="1010" text-anchor="middle">Voice</text>
-  <text class="st" x="710" y="1026" text-anchor="middle">Indic STT + TTS</text>
+  <rect x="40" y="940" width="680" height="108" rx="8" fill="#fff" stroke="#111" stroke-width="2" stroke-dasharray="7 5" filter="url(#rough)"/>
+  <text class="bt" x="58" y="962">Technology Stack</text>
+  <rect class="box" x="55"  y="975" width="122" height="56" rx="5"/>
+  <text class="lt" x="116" y="999" text-anchor="middle">Frontend</text>
+  <text class="st" x="116" y="1015" text-anchor="middle">Flutter / RN</text>
+  <rect class="box" x="187" y="975" width="122" height="56" rx="5"/>
+  <text class="lt" x="248" y="999" text-anchor="middle">Backend</text>
+  <text class="st" x="248" y="1015" text-anchor="middle">FastAPI / Node</text>
+  <rect class="box" x="319" y="975" width="112" height="56" rx="5"/>
+  <text class="lt" x="375" y="999" text-anchor="middle">Database</text>
+  <text class="st" x="375" y="1015" text-anchor="middle">PostgreSQL</text>
+  <rect class="box" x="441" y="975" width="132" height="56" rx="5"/>
+  <text class="lt" x="507" y="999" text-anchor="middle">AI / LLM</text>
+  <text class="st" x="507" y="1015" text-anchor="middle">LLM + RAG</text>
+  <rect class="box" x="583" y="975" width="130" height="56" rx="5"/>
+  <text class="lt" x="648" y="999" text-anchor="middle">Voice</text>
+  <text class="st" x="648" y="1015" text-anchor="middle">Indic STT+TTS</text>
 
-  <!-- Flow arrows -->
-  <path class="flow" d="M430,160 L430,184"/>
-  <path class="flow" d="M430,285 L430,309"/>
-  <path class="flow" d="M430,430 L430,454"/>
-  <path class="flow" d="M430,565 L430,589"/>
-  <path class="flow" d="M430,690 L430,714"/>
-  <path class="flow" d="M430,825 L430,849"/>
-  <!-- retrieved context dashed -->
-  <path d="M360,415 C360,435 360,440 300,460" fill="none" stroke="#9673A6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrowP)"/>
-  <text x="250" y="448" font-size="9" fill="#9673A6" font-style="italic">retrieved context</text>
+  <!-- flow arrows -->
+  <path class="flow" d="M380,160 L380,184"/>
+  <path class="flow" d="M380,285 L380,309"/>
+  <path class="flow" d="M380,428 L380,452"/>
+  <path class="flow" d="M380,561 L380,585"/>
+  <path class="flow" d="M380,686 L380,710"/>
+  <path class="flow" d="M380,819 L380,843"/>
+  <path d="M335,415 C335,432 320,436 300,452" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowP)"/>
+  <text x="238" y="440" font-size="10" fill="#555" font-style="italic">retrieved context</text>
 </svg>
+
 
       <div class="figcap">Fig. 3.&nbsp;&nbsp;Layered system flow and architecture of GraminSahay.</div>
     </div>
@@ -510,110 +510,118 @@ Everything marked in <span class="ph">red italics</span> is a placeholder — re
     <p class="subsec">B. Expected Performance (Graphs)</p>
     <p>Fig. 4 shows the expected eligibility-classification accuracy per welfare category, and Fig. 5 shows the anticipated trade-off between retrieval Recall@k and answer faithfulness as the number of retrieved passages (<i>k</i>) increases&mdash;larger <i>k</i> raises recall but can dilute faithfulness, motivating a balanced operating point around <i>k</i>&nbsp;=&nbsp;5.</p>
     <div class="figwrap chart">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" font-family="'Segoe UI',Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 310" font-family="'Segoe UI',Arial,sans-serif">
+  <defs>
+    <pattern id="h1" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#111" stroke-width="1.4"/>
+    </pattern>
+    <pattern id="h2" patternUnits="userSpaceOnUse" width="7" height="7">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#111" stroke-width="1.4"/>
+    </pattern>
+    <pattern id="h3" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#111" stroke-width="1"/>
+      <line x1="0" y1="0" x2="8" y2="0" stroke="#111" stroke-width="1"/>
+    </pattern>
+  </defs>
   <style>
-    .ax{stroke:#333;stroke-width:1.4}.gl{stroke:#ddd;stroke-width:1}
-    .lbl{font-size:11px;fill:#222}.ttl{font-size:12.5px;font-weight:700;fill:#1F3864}
-    .yl{font-size:10px;fill:#555}
+    .ax{stroke:#111;stroke-width:1.4}.gl{stroke:#bbb;stroke-width:1;stroke-dasharray:3 3}
+    .lbl{font-size:11px;fill:#111}.ttl{font-size:13px;font-weight:700;fill:#111}
+    .yl{font-size:10px;fill:#333}.bar{stroke:#111;stroke-width:1.4;fill:#fff}
   </style>
-  <text x="220" y="20" text-anchor="middle" class="ttl">Expected Accuracy by Welfare Category (%)</text>
-  <!-- plot area: x 55..420, y 45..250 ; 0..100 scale -->
+  <text x="230" y="20" text-anchor="middle" class="ttl">Expected Accuracy by Welfare Category (%)</text>
   <g>
-    <!-- gridlines + y labels -->
-    <line class="gl" x1="55" y1="250" x2="420" y2="250"/>
-    <line class="gl" x1="55" y1="209" x2="420" y2="209"/><text class="yl" x="50" y="213" text-anchor="end">20</text>
-    <line class="gl" x1="55" y1="168" x2="420" y2="168"/><text class="yl" x="50" y="172" text-anchor="end">40</text>
-    <line class="gl" x1="55" y1="127" x2="420" y2="127"/><text class="yl" x="50" y="131" text-anchor="end">60</text>
-    <line class="gl" x1="55" y1="86"  x2="420" y2="86"/><text class="yl" x="50" y="90"  text-anchor="end">80</text>
-    <line class="gl" x1="55" y1="45"  x2="420" y2="45"/><text class="yl" x="50" y="49"  text-anchor="end">100</text>
-    <text class="yl" x="50" y="254" text-anchor="end">0</text>
-    <line class="ax" x1="55" y1="45" x2="55" y2="250"/>
-    <line class="ax" x1="55" y1="250" x2="420" y2="250"/>
+    <line class="gl" x1="60" y1="255" x2="435" y2="255"/>
+    <line class="gl" x1="60" y1="213" x2="435" y2="213"/><text class="yl" x="54" y="217" text-anchor="end">20</text>
+    <line class="gl" x1="60" y1="171" x2="435" y2="171"/><text class="yl" x="54" y="175" text-anchor="end">40</text>
+    <line class="gl" x1="60" y1="129" x2="435" y2="129"/><text class="yl" x="54" y="133" text-anchor="end">60</text>
+    <line class="gl" x1="60" y1="87"  x2="435" y2="87"/><text class="yl" x="54" y="91"  text-anchor="end">80</text>
+    <line class="gl" x1="60" y1="45"  x2="435" y2="45"/><text class="yl" x="54" y="49"  text-anchor="end">100</text>
+    <text class="yl" x="54" y="259" text-anchor="end">0</text>
+    <line class="ax" x1="60" y1="45" x2="60" y2="255"/>
+    <line class="ax" x1="60" y1="255" x2="435" y2="255"/>
   </g>
-  <!-- bars: value% -> height = v*2.05 ; cats: Agri 91, Edu 88, Health 86, Housing 89, Pension 93 -->
-  <!-- each category band ~70px wide, bar 46px -->
-  <g>
-    <rect x="68"  y="63"  width="46" height="187" fill="#4472C4" stroke="#2a4a8a"/>
-    <text class="lbl" x="91"  y="58" text-anchor="middle">91</text>
-    <text class="lbl" x="91"  y="266" text-anchor="middle">Agri</text>
-
-    <rect x="138" y="70"  width="46" height="180" fill="#5B9BD5" stroke="#2a4a8a"/>
-    <text class="lbl" x="161" y="65" text-anchor="middle">88</text>
-    <text class="lbl" x="161" y="266" text-anchor="middle">Edu</text>
-
-    <rect x="208" y="74"  width="46" height="176" fill="#70AD47" stroke="#4a7a2a"/>
-    <text class="lbl" x="231" y="69" text-anchor="middle">86</text>
-    <text class="lbl" x="231" y="266" text-anchor="middle">Health</text>
-
-    <rect x="278" y="68"  width="46" height="182" fill="#ED7D31" stroke="#a85418"/>
-    <text class="lbl" x="301" y="63" text-anchor="middle">89</text>
-    <text class="lbl" x="301" y="266" text-anchor="middle">Housing</text>
-
-    <rect x="348" y="59"  width="46" height="191" fill="#9673A6" stroke="#5e3f74"/>
-    <text class="lbl" x="371" y="54" text-anchor="middle">93</text>
-    <text class="lbl" x="371" y="266" text-anchor="middle">Pension</text>
-  </g>
-  <text x="12" y="150" transform="rotate(-90 12,150)" text-anchor="middle" class="yl">Accuracy (%)</text>
-  <text x="235" y="288" text-anchor="middle" class="yl">Welfare Category</text>
+  <!-- bar height = val*2.1 ; base 255 -->
+  <rect class="bar" x="74"  y="64"  width="48" height="191" fill="url(#h1)"/>
+  <text class="lbl" x="98"  y="58" text-anchor="middle">91</text>
+  <text class="lbl" x="98"  y="272" text-anchor="middle">Agri</text>
+  <rect class="bar" x="146" y="70"  width="48" height="185" fill="url(#h2)"/>
+  <text class="lbl" x="170" y="64" text-anchor="middle">88</text>
+  <text class="lbl" x="170" y="272" text-anchor="middle">Edu</text>
+  <rect class="bar" x="218" y="74"  width="48" height="181" fill="url(#h3)"/>
+  <text class="lbl" x="242" y="68" text-anchor="middle">86</text>
+  <text class="lbl" x="242" y="272" text-anchor="middle">Health</text>
+  <rect class="bar" x="290" y="68"  width="48" height="187" fill="url(#h1)"/>
+  <text class="lbl" x="314" y="62" text-anchor="middle">89</text>
+  <text class="lbl" x="314" y="272" text-anchor="middle">Housing</text>
+  <rect class="bar" x="362" y="60"  width="48" height="195" fill="url(#h2)"/>
+  <text class="lbl" x="386" y="54" text-anchor="middle">93</text>
+  <text class="lbl" x="386" y="272" text-anchor="middle">Pension</text>
+  <text x="16" y="150" transform="rotate(-90 16,150)" text-anchor="middle" class="yl">Accuracy (%)</text>
+  <text x="247" y="294" text-anchor="middle" class="yl">Welfare Category</text>
 </svg>
+
 
       <div class="figcap">Fig. 4.&nbsp;&nbsp;Expected eligibility-classification accuracy by category.</div>
     </div>
     <div class="figwrap chart">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" font-family="'Segoe UI',Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 310" font-family="'Segoe UI',Arial,sans-serif">
   <style>
-    .ax{stroke:#333;stroke-width:1.4}.gl{stroke:#e2e2e2;stroke-width:1}
-    .lbl{font-size:10px;fill:#444}.ttl{font-size:12.5px;font-weight:700;fill:#1F3864}
-    .yl{font-size:10px;fill:#555}.leg{font-size:10.5px;fill:#222}
+    .ax{stroke:#111;stroke-width:1.4}.gl{stroke:#bbb;stroke-width:1;stroke-dasharray:3 3}
+    .lbl{font-size:10px;fill:#111}.ttl{font-size:13px;font-weight:700;fill:#111}
+    .yl{font-size:10px;fill:#333}.leg{font-size:10.5px;fill:#111}
   </style>
-  <text x="220" y="20" text-anchor="middle" class="ttl">Retrieval Quality vs. Top-k Passages Retrieved</text>
-  <!-- plot: x 55..410 (k=1..10), y 45..245 (0..1.0) -->
+  <text x="230" y="20" text-anchor="middle" class="ttl">Retrieval Quality vs. Top-k Passages</text>
   <g>
-    <line class="gl" x1="55" y1="245" x2="410" y2="245"/>
-    <line class="gl" x1="55" y1="205" x2="410" y2="205"/><text class="yl" x="50" y="209" text-anchor="end">0.2</text>
-    <line class="gl" x1="55" y1="165" x2="410" y2="165"/><text class="yl" x="50" y="169" text-anchor="end">0.4</text>
-    <line class="gl" x1="55" y1="125" x2="410" y2="125"/><text class="yl" x="50" y="129" text-anchor="end">0.6</text>
-    <line class="gl" x1="55" y1="85"  x2="410" y2="85"/><text class="yl" x="50" y="89"  text-anchor="end">0.8</text>
-    <line class="gl" x1="55" y1="45"  x2="410" y2="45"/><text class="yl" x="50" y="49"  text-anchor="end">1.0</text>
-    <text class="yl" x="50" y="249" text-anchor="end">0</text>
-    <line class="ax" x1="55" y1="45" x2="55" y2="245"/>
-    <line class="ax" x1="55" y1="245" x2="410" y2="245"/>
+    <line class="gl" x1="60" y1="250" x2="430" y2="250"/>
+    <line class="gl" x1="60" y1="210" x2="430" y2="210"/><text class="yl" x="54" y="214" text-anchor="end">0.2</text>
+    <line class="gl" x1="60" y1="170" x2="430" y2="170"/><text class="yl" x="54" y="174" text-anchor="end">0.4</text>
+    <line class="gl" x1="60" y1="130" x2="430" y2="130"/><text class="yl" x="54" y="134" text-anchor="end">0.6</text>
+    <line class="gl" x1="60" y1="90"  x2="430" y2="90"/><text class="yl" x="54" y="94"  text-anchor="end">0.8</text>
+    <line class="gl" x1="60" y1="50"  x2="430" y2="50"/><text class="yl" x="54" y="54"  text-anchor="end">1.0</text>
+    <text class="yl" x="54" y="254" text-anchor="end">0</text>
+    <line class="ax" x1="60" y1="50" x2="60" y2="250"/>
+    <line class="ax" x1="60" y1="250" x2="430" y2="250"/>
   </g>
-  <!-- x ticks k=1..10 at x=55 + (k-1)*39.4 -->
   <g class="lbl">
-    <text x="55"  y="260" text-anchor="middle">1</text>
-    <text x="134" y="260" text-anchor="middle">3</text>
-    <text x="213" y="260" text-anchor="middle">5</text>
-    <text x="292" y="260" text-anchor="middle">7</text>
-    <text x="371" y="260" text-anchor="middle">9</text>
+    <text x="60"  y="265" text-anchor="middle">1</text>
+    <text x="142" y="265" text-anchor="middle">3</text>
+    <text x="224" y="265" text-anchor="middle">5</text>
+    <text x="306" y="265" text-anchor="middle">7</text>
+    <text x="388" y="265" text-anchor="middle">9</text>
   </g>
-  <text x="232" y="282" text-anchor="middle" class="yl">Top-k</text>
-  <text x="14" y="145" transform="rotate(-90 14,145)" text-anchor="middle" class="yl">Score</text>
+  <text x="245" y="286" text-anchor="middle" class="yl">Top-k</text>
+  <text x="16" y="150" transform="rotate(-90 16,150)" text-anchor="middle" class="yl">Score</text>
 
-  <!-- Recall@k (rising, blue): k=1..10 ; x=55+(k-1)*39.4 ; y=245 - score*200 -->
-  <polyline fill="none" stroke="#4472C4" stroke-width="2.4"
-     points="55,129 94,101 134,85 173,75 213,69 252,65 292,63 331,61 371,60 410,59"/>
-  <g fill="#4472C4">
-    <circle cx="55"  cy="129" r="3"/><circle cx="134" cy="85" r="3"/><circle cx="213" cy="69" r="3"/>
-    <circle cx="292" cy="63" r="3"/><circle cx="371" cy="60" r="3"/>
+  <!-- Recall@k solid, round markers ; x=60+(k-1)*41.1 ; y=250 - v*200 -->
+  <polyline fill="none" stroke="#111" stroke-width="2.2"
+     points="60,140 101,114 142,98 183,88 224,82 265,78 306,76 347,74 388,73 430,72"/>
+  <g fill="#fff" stroke="#111" stroke-width="1.4">
+    <circle cx="60"  cy="140" r="3.5"/><circle cx="142" cy="98" r="3.5"/><circle cx="224" cy="82" r="3.5"/>
+    <circle cx="306" cy="76" r="3.5"/><circle cx="388" cy="73" r="3.5"/>
   </g>
-  <!-- Faithfulness (gently falling, green) -->
-  <polyline fill="none" stroke="#70AD47" stroke-width="2.4" stroke-dasharray="6 4"
-     points="55,61 94,63 134,66 173,70 213,75 252,82 292,90 331,99 371,109 410,120"/>
-  <g fill="#70AD47">
-    <circle cx="55"  cy="61" r="3"/><circle cx="134" cy="66" r="3"/><circle cx="213" cy="75" r="3"/>
-    <circle cx="292" cy="90" r="3"/><circle cx="371" cy="109" r="3"/>
+  <!-- Faithfulness dashed, square markers -->
+  <polyline fill="none" stroke="#111" stroke-width="2.2" stroke-dasharray="7 4"
+     points="60,74 101,76 142,79 183,84 224,90 265,98 306,107 347,117 388,128 430,140"/>
+  <g fill="#111">
+    <rect x="56.5" y="70.5" width="7" height="7"/><rect x="138.5" y="75.5" width="7" height="7"/>
+    <rect x="220.5" y="86.5" width="7" height="7"/><rect x="302.5" y="103.5" width="7" height="7"/>
+    <rect x="384.5" y="124.5" width="7" height="7"/>
   </g>
-  <!-- legend -->
-  <rect x="250" y="150" width="150" height="46" fill="#fff" stroke="#ccc"/>
-  <line x1="258" y1="164" x2="282" y2="164" stroke="#4472C4" stroke-width="2.4"/>
-  <text class="leg" x="288" y="168">Recall@k</text>
-  <line x1="258" y1="184" x2="282" y2="184" stroke="#70AD47" stroke-width="2.4" stroke-dasharray="6 4"/>
-  <text class="leg" x="288" y="188">Faithfulness</text>
+  <rect x="255" y="155" width="165" height="48" fill="#fff" stroke="#111"/>
+  <line x1="263" y1="169" x2="289" y2="169" stroke="#111" stroke-width="2.2"/>
+  <circle cx="276" cy="169" r="3.5" fill="#fff" stroke="#111" stroke-width="1.4"/>
+  <text class="leg" x="295" y="173">Recall@k</text>
+  <line x1="263" y1="190" x2="289" y2="190" stroke="#111" stroke-width="2.2" stroke-dasharray="7 4"/>
+  <rect x="272.5" y="186.5" width="7" height="7" fill="#111"/>
+  <text class="leg" x="295" y="194">Faithfulness</text>
 </svg>
+
 
       <div class="figcap">Fig. 5.&nbsp;&nbsp;Expected retrieval quality vs. top-<i>k</i> passages retrieved.</div>
     </div>
+
+    <p class="subsec">C. Discussion of Expected Outcomes</p>
+    <p>The expected results in Tables II and III and Figs. 4 and 5 together describe the target operating behaviour of the system. The per-category figures in Table II are deliberately conservative for healthcare and education, where eligibility rules depend on more conditions (income bands, institution type, age) and are therefore harder to classify than, for example, pension schemes whose criteria are comparatively uniform. The capability comparison in Table III captures the qualitative difference that matters most to a citizen: the existing manual process offers none of situation-first discovery, explainable eligibility, or conflict detection, whereas the proposed system offers all three. Fig. 5 makes explicit the central engineering trade-off&mdash;retrieving more passages raises recall but can dilute the proportion of the answer that is strictly supported by evidence&mdash;and justifies the choice of a balanced operating point near <i>k</i>&nbsp;=&nbsp;5. These targets will serve as acceptance thresholds during evaluation: a configuration will be considered successful only if it meets or exceeds the tabulated accuracy and faithfulness levels while keeping end-to-end latency within an interactive budget suitable for a voice interface.</p>
 
     <!-- ================= XII. FUTURE ENHANCEMENTS ================= -->
     <p class="sec">XII.&nbsp;&nbsp;Future Enhancements</p>

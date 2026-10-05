@@ -6,8 +6,9 @@ Literature review / research-proposal paper for **GraminSahay: An LLM-Powered RA
 
 | File | Description |
 |------|-------------|
-| `GraminSahay_IEEE_Paper.doc` | **Main paper** — open in Microsoft Word (two-column IEEE layout, 5 figures as editable vector drawings, 3 tables, references). |
-| `GraminSahay_IEEE_Paper.html` | Same paper for the browser — open and use **Print → Save as PDF** (A4). |
+| `GraminSahay_IEEE_Paper.docx` | **Main paper (recommended)** — real Word document (OOXML). Opens reliably in Microsoft Word / Google Docs / LibreOffice. Two-column IEEE layout, 5 black-&-white figures, 3 tables, references. |
+| `GraminSahay_IEEE_Paper.doc` | Legacy Word-HTML version (fallback). |
+| `GraminSahay_IEEE_Paper.html` | Browser version — open and use **Print → Save as PDF** (A4). |
 | `GraminSahay_Architecture.drawio` | Editable draw.io source for the system-architecture figure (Fig. 3). |
 | `GraminSahay_Architecture.svg` | System architecture figure (Fig. 3). |
 | `fig_existing.svg` | Fig. 1 — Existing system flow. |
