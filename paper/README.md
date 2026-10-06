@@ -6,9 +6,10 @@ Literature review / research-proposal paper for **GraminSahay: An LLM-Powered RA
 
 | File | Description |
 |------|-------------|
-| `GraminSahay_IEEE_Paper.docx` | **Main paper (recommended)** — real Word document (OOXML). Opens reliably in Microsoft Word / Google Docs / LibreOffice. Two-column IEEE layout, 5 black-&-white figures, 3 tables, references. |
+| `26MPTC13-IEEE-PAPER.pdf` | **Final paper (PDF)** — two-column IEEE layout, 5 black-&-white figures, 3 tables, references. |
+| `26MPTC13-IEEE-PAPER.docx` | **Main paper (editable)** — real Word document (OOXML). Opens reliably in Microsoft Word / Google Docs / LibreOffice. |
 | `GraminSahay_IEEE_Paper.doc` | Legacy Word-HTML version (fallback). |
-| `GraminSahay_IEEE_Paper.html` | Browser version — open and use **Print → Save as PDF** (A4). |
+| `26MPTC13-IEEE-PAPER.html` | Browser version — open and use **Print → Save as PDF** (A4). |
 | `GraminSahay_Architecture.drawio` | Editable draw.io source for the system-architecture figure (Fig. 3). |
 | `GraminSahay_Architecture.svg` | System architecture figure (Fig. 3). |
 | `fig_existing.svg` | Fig. 1 — Existing system flow. |
@@ -22,5 +23,4 @@ I. Introduction · II. Literature Review (Table I) · III. Research Gaps · IV. 
 
 ## Pending before final submission
 
-- Guide's email (Mr. S. Lingaiah) — currently a placeholder in the author block.
 - Expected-results values are **target** numbers (this is a proposal); replace with measured values after experiments.
