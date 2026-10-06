@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="200" viewBox="0 0 820 200" font-family="'Comic Sans MS','Segoe Print','Bradley Hand',cursive,sans-serif">
+  <defs>
+    <filter id="r1" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="a1" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#111" stroke-width="1.3"/></marker>
+  </defs>
+  <style>
+    .b{fill:#fff;stroke:#111;stroke-width:1.7;filter:url(#r1)}
+    .t{font-size:13px;fill:#111}.lim{font-size:12px;fill:#333}
+    .fl{stroke:#111;stroke-width:1.8;fill:none;marker-end:url(#a1);filter:url(#r1)}
+    .lab{font-size:13px;font-weight:700;fill:#111}
+  </style>
+  <text x="410" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#111">Existing System &#8212; Manual Welfare Scheme Lookup</text>
+
+  <rect class="b" x="25"  y="55" width="120" height="50" rx="4"/>
+  <text class="t" x="85"  y="85" text-anchor="middle">Citizen</text>
+  <rect class="b" x="190" y="55" width="130" height="50" rx="4"/>
+  <text class="t" x="255" y="80" text-anchor="middle">Search Govt.</text>
+  <text class="t" x="255" y="95" text-anchor="middle">Portal (by name)</text>
+  <rect class="b" x="365" y="55" width="120" height="50" rx="4"/>
+  <text class="t" x="425" y="85" text-anchor="middle">Find Scheme</text>
+  <rect class="b" x="530" y="55" width="130" height="50" rx="4"/>
+  <text class="t" x="595" y="80" text-anchor="middle">Check Eligibility</text>
+  <text class="t" x="595" y="95" text-anchor="middle">(manual reading)</text>
+  <rect class="b" x="705" y="55" width="90" height="50" rx="4"/>
+  <text class="t" x="750" y="85" text-anchor="middle">Apply</text>
+
+  <path class="fl" d="M145,80 L188,80"/>
+  <path class="fl" d="M320,80 L363,80"/>
+  <path class="fl" d="M485,80 L528,80"/>
+  <path class="fl" d="M660,80 L703,80"/>
+
+  <text class="lab" x="25" y="140">Limitations:</text>
+  <text class="lim" x="25"  y="162">&#8226; Must know scheme name</text>
+  <text class="lim" x="235" y="162">&#8226; No personalization</text>
+  <text class="lim" x="405" y="162">&#8226; Language barriers</text>
+  <text class="lim" x="580" y="162">&#8226; No conflict detection</text>
+  <text class="lim" x="25"  y="184">&#8226; Info scattered across sources</text>
+  <text class="lim" x="405" y="184">&#8226; Eligibility needs manual interpretation</text>
+</svg>

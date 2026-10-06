@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="310" viewBox="0 0 460 310" font-family="'Segoe UI',Arial,sans-serif">
+  <defs>
+    <pattern id="h1" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#111" stroke-width="1.4"/>
+    </pattern>
+    <pattern id="h2" patternUnits="userSpaceOnUse" width="7" height="7">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#111" stroke-width="1.4"/>
+    </pattern>
+    <pattern id="h3" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#111" stroke-width="1"/>
+      <line x1="0" y1="0" x2="8" y2="0" stroke="#111" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <style>
+    .ax{stroke:#111;stroke-width:1.4}.gl{stroke:#bbb;stroke-width:1;stroke-dasharray:3 3}
+    .lbl{font-size:11px;fill:#111}.ttl{font-size:13px;font-weight:700;fill:#111}
+    .yl{font-size:10px;fill:#333}.bar{stroke:#111;stroke-width:1.4;fill:#fff}
+  </style>
+  <text x="230" y="20" text-anchor="middle" class="ttl">Expected Accuracy by Welfare Category (%)</text>
+  <g>
+    <line class="gl" x1="60" y1="255" x2="435" y2="255"/>
+    <line class="gl" x1="60" y1="213" x2="435" y2="213"/><text class="yl" x="54" y="217" text-anchor="end">20</text>
+    <line class="gl" x1="60" y1="171" x2="435" y2="171"/><text class="yl" x="54" y="175" text-anchor="end">40</text>
+    <line class="gl" x1="60" y1="129" x2="435" y2="129"/><text class="yl" x="54" y="133" text-anchor="end">60</text>
+    <line class="gl" x1="60" y1="87"  x2="435" y2="87"/><text class="yl" x="54" y="91"  text-anchor="end">80</text>
+    <line class="gl" x1="60" y1="45"  x2="435" y2="45"/><text class="yl" x="54" y="49"  text-anchor="end">100</text>
+    <text class="yl" x="54" y="259" text-anchor="end">0</text>
+    <line class="ax" x1="60" y1="45" x2="60" y2="255"/>
+    <line class="ax" x1="60" y1="255" x2="435" y2="255"/>
+  </g>
+  <!-- bar height = val*2.1 ; base 255 -->
+  <rect class="bar" x="74"  y="64"  width="48" height="191" fill="url(#h1)"/>
+  <text class="lbl" x="98"  y="58" text-anchor="middle">91</text>
+  <text class="lbl" x="98"  y="272" text-anchor="middle">Agri</text>
+  <rect class="bar" x="146" y="70"  width="48" height="185" fill="url(#h2)"/>
+  <text class="lbl" x="170" y="64" text-anchor="middle">88</text>
+  <text class="lbl" x="170" y="272" text-anchor="middle">Edu</text>
+  <rect class="bar" x="218" y="74"  width="48" height="181" fill="url(#h3)"/>
+  <text class="lbl" x="242" y="68" text-anchor="middle">86</text>
+  <text class="lbl" x="242" y="272" text-anchor="middle">Health</text>
+  <rect class="bar" x="290" y="68"  width="48" height="187" fill="url(#h1)"/>
+  <text class="lbl" x="314" y="62" text-anchor="middle">89</text>
+  <text class="lbl" x="314" y="272" text-anchor="middle">Housing</text>
+  <rect class="bar" x="362" y="60"  width="48" height="195" fill="url(#h2)"/>
+  <text class="lbl" x="386" y="54" text-anchor="middle">93</text>
+  <text class="lbl" x="386" y="272" text-anchor="middle">Pension</text>
+  <text x="16" y="150" transform="rotate(-90 16,150)" text-anchor="middle" class="yl">Accuracy (%)</text>
+  <text x="247" y="294" text-anchor="middle" class="yl">Welfare Category</text>
+</svg>

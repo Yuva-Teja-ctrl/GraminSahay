@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="310" viewBox="0 0 460 310" font-family="'Segoe UI',Arial,sans-serif">
+  <style>
+    .ax{stroke:#111;stroke-width:1.4}.gl{stroke:#bbb;stroke-width:1;stroke-dasharray:3 3}
+    .lbl{font-size:10px;fill:#111}.ttl{font-size:13px;font-weight:700;fill:#111}
+    .yl{font-size:10px;fill:#333}.leg{font-size:10.5px;fill:#111}
+  </style>
+  <text x="230" y="20" text-anchor="middle" class="ttl">Retrieval Quality vs. Top-k Passages</text>
+  <g>
+    <line class="gl" x1="60" y1="250" x2="430" y2="250"/>
+    <line class="gl" x1="60" y1="210" x2="430" y2="210"/><text class="yl" x="54" y="214" text-anchor="end">0.2</text>
+    <line class="gl" x1="60" y1="170" x2="430" y2="170"/><text class="yl" x="54" y="174" text-anchor="end">0.4</text>
+    <line class="gl" x1="60" y1="130" x2="430" y2="130"/><text class="yl" x="54" y="134" text-anchor="end">0.6</text>
+    <line class="gl" x1="60" y1="90"  x2="430" y2="90"/><text class="yl" x="54" y="94"  text-anchor="end">0.8</text>
+    <line class="gl" x1="60" y1="50"  x2="430" y2="50"/><text class="yl" x="54" y="54"  text-anchor="end">1.0</text>
+    <text class="yl" x="54" y="254" text-anchor="end">0</text>
+    <line class="ax" x1="60" y1="50" x2="60" y2="250"/>
+    <line class="ax" x1="60" y1="250" x2="430" y2="250"/>
+  </g>
+  <g class="lbl">
+    <text x="60"  y="265" text-anchor="middle">1</text>
+    <text x="142" y="265" text-anchor="middle">3</text>
+    <text x="224" y="265" text-anchor="middle">5</text>
+    <text x="306" y="265" text-anchor="middle">7</text>
+    <text x="388" y="265" text-anchor="middle">9</text>
+  </g>
+  <text x="245" y="286" text-anchor="middle" class="yl">Top-k</text>
+  <text x="16" y="150" transform="rotate(-90 16,150)" text-anchor="middle" class="yl">Score</text>
+
+  <!-- Recall@k solid, round markers ; x=60+(k-1)*41.1 ; y=250 - v*200 -->
+  <polyline fill="none" stroke="#111" stroke-width="2.2"
+     points="60,140 101,114 142,98 183,88 224,82 265,78 306,76 347,74 388,73 430,72"/>
+  <g fill="#fff" stroke="#111" stroke-width="1.4">
+    <circle cx="60"  cy="140" r="3.5"/><circle cx="142" cy="98" r="3.5"/><circle cx="224" cy="82" r="3.5"/>
+    <circle cx="306" cy="76" r="3.5"/><circle cx="388" cy="73" r="3.5"/>
+  </g>
+  <!-- Faithfulness dashed, square markers -->
+  <polyline fill="none" stroke="#111" stroke-width="2.2" stroke-dasharray="7 4"
+     points="60,74 101,76 142,79 183,84 224,90 265,98 306,107 347,117 388,128 430,140"/>
+  <g fill="#111">
+    <rect x="56.5" y="70.5" width="7" height="7"/><rect x="138.5" y="75.5" width="7" height="7"/>
+    <rect x="220.5" y="86.5" width="7" height="7"/><rect x="302.5" y="103.5" width="7" height="7"/>
+    <rect x="384.5" y="124.5" width="7" height="7"/>
+  </g>
+  <rect x="255" y="155" width="165" height="48" fill="#fff" stroke="#111"/>
+  <line x1="263" y1="169" x2="289" y2="169" stroke="#111" stroke-width="2.2"/>
+  <circle cx="276" cy="169" r="3.5" fill="#fff" stroke="#111" stroke-width="1.4"/>
+  <text class="leg" x="295" y="173">Recall@k</text>
+  <line x1="263" y1="190" x2="289" y2="190" stroke="#111" stroke-width="2.2" stroke-dasharray="7 4"/>
+  <rect x="272.5" y="186.5" width="7" height="7" fill="#111"/>
+  <text class="leg" x="295" y="194">Faithfulness</text>
+</svg>
