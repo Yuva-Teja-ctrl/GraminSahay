@@ -32,6 +32,11 @@
 
 * { box-sizing: border-box; }
 
+/* Ensure the HTML `hidden` attribute always wins, even for elements that CSS gives an
+   explicit `display` (flex/inline-block/etc.). Without this, hidden modals/buttons leak
+   onto the page before JavaScript toggles them. */
+[hidden] { display: none !important; }
+
 body {
     margin: 0;
     font-family: var(--font);
