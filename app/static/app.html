@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>GraminSahay — Rural Welfare Navigator</title>
+    <title>GraminSahay — Rural Welfare &amp; Government Services Navigator</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"/>
@@ -12,7 +13,7 @@
 <body>
 <header class="site-header">
     <div class="brand">
-        <span class="logo">🌾</span>
+        <span class="logo"><img src="logo.svg" alt="GraminSahay logo" width="40" height="40"/></span>
         <div>
             <h1>GraminSahay</h1>
             <p class="tagline">Discover the government welfare schemes you are entitled to — without knowing their names.</p>
@@ -143,8 +144,50 @@
     <section id="results" class="results"></section>
 </main>
 
+    <section class="card about-card" id="about">
+        <h2>How GraminSahay works</h2>
+        <div class="about-grid">
+            <div class="about-step">
+                <span class="about-ico">🗣️</span>
+                <h4>1. Describe your life</h4>
+                <p>Tell us your situation by voice or text, in English, Telugu or Hindi — no need to know any scheme's name.</p>
+            </div>
+            <div class="about-step">
+                <span class="about-ico">🧠</span>
+                <h4>2. We understand &amp; match</h4>
+                <p>AI reads your situation and searches official government scheme documents to find what fits you.</p>
+            </div>
+            <div class="about-step">
+                <span class="about-ico">✅</span>
+                <h4>3. Clear eligibility</h4>
+                <p>Transparent rules decide whether you're eligible, and explain exactly why — with the official source.</p>
+            </div>
+            <div class="about-step">
+                <span class="about-ico">🧭</span>
+                <h4>4. Guided application</h4>
+                <p>Get a documents checklist, step-by-step guidance, and a direct link to apply on the official portal.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
 <footer class="site-footer">
-    <p>GraminSahay · LLM-powered RAG welfare navigator · Scheme details are for demonstration — always verify on the official portal.</p>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <img src="logo.svg" alt="GraminSahay" width="30" height="30"/>
+            <strong>GraminSahay</strong>
+            <p>Helping rural citizens discover and access the government welfare they are entitled to.</p>
+        </div>
+        <div class="footer-col">
+            <h5>Welfare areas</h5>
+            <p>Agriculture · Education · Healthcare · Housing · Pensions</p>
+        </div>
+        <div class="footer-col">
+            <h5>Important</h5>
+            <p class="footer-disclaimer">GraminSahay is an informational aid. Scheme details may change — always confirm eligibility and apply through the official government portal linked in each result.</p>
+        </div>
+    </div>
+    <p class="footer-bottom">Supports SDG 1 (No Poverty) &amp; SDG 10 (Reduced Inequalities)</p>
 </footer>
 
 <!-- Template for a single scheme result card -->
@@ -160,17 +203,42 @@
             <button type="button" class="speak-btn" title="Read aloud" hidden>🔊</button>
         </div>
 
-        <details class="scheme-details">
-            <summary>Details &amp; how to apply</summary>
-            <div class="detail-block satisfied"><h4>✅ Conditions you meet</h4><ul></ul></div>
-            <div class="detail-block unmet"><h4>❌ Conditions not met</h4><ul></ul></div>
-            <div class="detail-block missing"><h4>❓ Information still needed</h4><ul></ul></div>
-            <div class="detail-block documents"><h4>📄 Required documents</h4><ul></ul></div>
-            <div class="detail-block steps"><h4>🧭 How to apply</h4><ol></ol></div>
-            <a class="official-link" target="_blank" rel="noopener">Official source ↗</a>
-        </details>
+        <div class="card-actions">
+            <button type="button" class="apply-btn">🧭 How to apply</button>
+            <details class="scheme-details">
+                <summary>Eligibility details</summary>
+                <div class="detail-block satisfied"><h4>✅ Conditions you meet</h4><ul></ul></div>
+                <div class="detail-block unmet"><h4>❌ Conditions not met</h4><ul></ul></div>
+                <div class="detail-block missing"><h4>❓ Information still needed</h4><ul></ul></div>
+            </details>
+        </div>
     </article>
 </template>
+
+<!-- Application-guidance modal (the PPT's step 6: documents, steps, official portal) -->
+<div id="apply-modal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="apply-title">
+        <button type="button" id="apply-close" class="modal-close" aria-label="Close">✕</button>
+        <h2 id="apply-title" class="apply-title"></h2>
+        <p class="apply-sub">Follow these steps to apply. Tick off documents as you gather them.</p>
+
+        <div class="apply-section">
+            <h3>📄 Documents you'll need</h3>
+            <ul id="apply-docs" class="doc-checklist"></ul>
+            <p id="apply-docs-progress" class="doc-progress"></p>
+        </div>
+
+        <div class="apply-section">
+            <h3>🧭 Steps to apply</h3>
+            <ol id="apply-steps" class="apply-steps"></ol>
+        </div>
+
+        <div class="apply-cta">
+            <a id="apply-portal" class="portal-btn" target="_blank" rel="noopener">Apply on the official portal ↗</a>
+            <p class="apply-disclaimer">Always confirm the latest details on the official government portal before applying.</p>
+        </div>
+    </div>
+</div>
 
 <script src="app.js"></script>
 </body>

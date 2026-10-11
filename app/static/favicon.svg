@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="GraminSahay">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#166534"/>
+      <stop offset="1" stop-color="#1f9d55"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#g)"/>
+  <path d="M32 10 L48 16 V30 C48 40 41 47 32 51 C23 47 16 40 16 30 V16 Z"
+        fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.8"/>
+  <path d="M32 42 V26" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M32 31 C25 31 21 27 21 21 C28 21 32 25 32 31 Z" fill="#ffffff"/>
+  <path d="M32 28 C39 28 43 24 43 18 C36 18 32 22 32 28 Z" fill="#ffffff" fill-opacity="0.78"/>
+  <path d="M24 43 H40" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
+</svg>

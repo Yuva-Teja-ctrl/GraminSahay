@@ -221,14 +221,14 @@ function buildCard(scheme) {
     fillList(node.querySelector(".satisfied ul"), scheme.satisfiedConditions, node.querySelector(".satisfied"));
     fillList(node.querySelector(".unmet ul"), scheme.unmetConditions, node.querySelector(".unmet"));
     fillList(node.querySelector(".missing ul"), scheme.informationNeeded, node.querySelector(".missing"));
-    fillList(node.querySelector(".documents ul"), scheme.requiredDocuments, node.querySelector(".documents"));
-    fillList(node.querySelector(".steps ol"), scheme.applicationSteps, node.querySelector(".steps"));
 
-    const link = node.querySelector(".official-link");
-    if (scheme.officialUrl) {
-        link.href = scheme.officialUrl;
+    // "How to apply" opens the guided application modal (PPT step 6). Hide it for schemes the
+    // citizen is not eligible for — there is nothing to apply to yet.
+    const applyBtn = node.querySelector(".apply-btn");
+    if (scheme.status === "NOT_ELIGIBLE") {
+        applyBtn.remove();
     } else {
-        link.remove();
+        applyBtn.addEventListener("click", () => openApplyModal(scheme));
     }
 
     return node;
@@ -246,6 +246,71 @@ function fillList(listEl, items, block) {
         listEl.appendChild(li);
     });
 }
+
+/* =========================================================================
+   Application guidance modal (PPT step 6): documents checklist, steps,
+   and a prominent link to the official portal.
+   ========================================================================= */
+const applyModal = document.getElementById("apply-modal");
+const applyClose = document.getElementById("apply-close");
+
+function openApplyModal(scheme) {
+    document.getElementById("apply-title").textContent = scheme.schemeName;
+
+    // Documents as a tickable checklist, with live progress ("2 of 4 gathered").
+    const docsEl = document.getElementById("apply-docs");
+    const progressEl = document.getElementById("apply-docs-progress");
+    docsEl.innerHTML = "";
+    const docs = scheme.requiredDocuments || [];
+    const updateProgress = () => {
+        const total = docs.length;
+        const done = docsEl.querySelectorAll("input:checked").length;
+        progressEl.textContent = total ? `${done} of ${total} documents gathered` : "";
+    };
+    docs.forEach((doc, i) => {
+        const li = document.createElement("li");
+        const id = `doc-${i}`;
+        li.innerHTML = `<label><input type="checkbox" id="${id}"/> <span></span></label>`;
+        li.querySelector("span").textContent = doc;
+        li.querySelector("input").addEventListener("change", updateProgress);
+        docsEl.appendChild(li);
+    });
+    updateProgress();
+
+    // Numbered steps.
+    const stepsEl = document.getElementById("apply-steps");
+    stepsEl.innerHTML = "";
+    (scheme.applicationSteps || []).forEach((step) => {
+        const li = document.createElement("li");
+        li.textContent = step;
+        stepsEl.appendChild(li);
+    });
+
+    // Official portal link.
+    const portal = document.getElementById("apply-portal");
+    if (scheme.officialUrl) {
+        portal.href = scheme.officialUrl;
+        portal.hidden = false;
+    } else {
+        portal.hidden = true;
+    }
+
+    applyModal.hidden = false;
+    document.body.style.overflow = "hidden"; // lock background scroll
+}
+
+function closeApplyModal() {
+    applyModal.hidden = true;
+    document.body.style.overflow = "";
+}
+
+applyClose.addEventListener("click", closeApplyModal);
+applyModal.addEventListener("click", (e) => {
+    if (e.target === applyModal) closeApplyModal(); // click the dim backdrop to close
+});
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !applyModal.hidden) closeApplyModal();
+});
 
 /* ---- small UI helpers ---- */
 function setLoading(isLoading) {

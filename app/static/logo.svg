@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="GraminSahay logo" fill="none">
+  <!-- Shield: government protection / welfare -->
+  <path d="M32 4 L54 12 V30 C54 44 44 54 32 60 C20 54 10 44 10 30 V12 Z"
+        fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2"/>
+  <!-- Sprout stem: rural growth -->
+  <path d="M32 46 V26" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"/>
+  <!-- Left leaf -->
+  <path d="M32 32 C24 32 19 27 19 20 C27 20 32 25 32 32 Z" fill="#ffffff" fill-opacity="0.92"/>
+  <!-- Right leaf -->
+  <path d="M32 28 C40 28 45 23 45 16 C37 16 32 21 32 28 Z" fill="#ffffff" fill-opacity="0.75"/>
+  <!-- Base ground line -->
+  <path d="M23 48 H41" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"/>
+  <!-- Navigator dot: location/guidance -->
+  <circle cx="32" cy="52.5" r="2.4" fill="#ffffff"/>
+</svg>
