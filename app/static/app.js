@@ -1,4 +1,30 @@
 // GraminSahay frontend — calls the Spring Boot /api/navigate endpoint and renders results.
+// ---- Auth guard: require a token, else go to the login page ----
+const TOKEN_KEY = "graminsahay_token";
+const USER_KEY = "graminsahay_user";
+const authToken = localStorage.getItem(TOKEN_KEY);
+if (!authToken) {
+    window.location.replace("/login.html");
+}
+
+function authHeaders(extra = {}) {
+    return { ...extra, Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}` };
+}
+
+function logout() {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    window.location.replace("/login.html");
+}
+
+// Show the logged-in username and wire the logout button.
+document.addEventListener("DOMContentLoaded", () => {
+    const nameEl = document.getElementById("user-name");
+    const user = localStorage.getItem(USER_KEY);
+    if (nameEl && user) nameEl.textContent = `Hi, ${user}`;
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) logoutBtn.addEventListener("click", logout);
+});
 
 const form = document.getElementById("navigate-form");
 const submitBtn = document.getElementById("submit-btn");
@@ -34,10 +60,14 @@ async function navigate() {
     try {
         const response = await fetch("/api/navigate", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: authHeaders({ "Content-Type": "application/json" }),
             body: JSON.stringify(body),
         });
 
+        if (response.status === 401) {
+            logout();
+            return;
+        }
         if (!response.ok) {
             const text = await response.text();
             throw new Error(`Server returned ${response.status}. ${text}`);
@@ -297,7 +327,15 @@ async function sendForTranscription() {
     formData.append("language", currentLanguage());
 
     try {
-        const response = await fetch("/api/transcribe", { method: "POST", body: formData });
+        const response = await fetch("/api/transcribe", {
+            method: "POST",
+            headers: authHeaders(),
+            body: formData,
+        });
+        if (response.status === 401) {
+            logout();
+            return;
+        }
         if (!response.ok) {
             const detail = await response.text();
             throw new Error(detail);

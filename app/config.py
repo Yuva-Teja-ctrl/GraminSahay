@@ -50,6 +50,13 @@ class Settings(BaseSettings):
     # ---- Knowledge base location ----
     schemes_path: str = "app/data/telangana_schemes.json"
 
+    # ---- Authentication (JWT) ----
+    # IMPORTANT: set a strong, random JWT_SECRET in production (env var). The default is only
+    # for local development. Generate one with:  python -c "import secrets; print(secrets.token_hex(32))"
+    jwt_secret: str = "dev-insecure-secret-change-me"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 60 * 24  # tokens valid for 24 hours
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property

@@ -34,6 +34,7 @@ Open your web service → **Variables** and add:
 | `OPENAI_API_KEY` | your Groq key (`gsk_...`) |
 | `OPENAI_BASE_URL` | `https://api.groq.com/openai/v1` |
 | `CHAT_MODEL` | `openai/gpt-oss-20b` |
+| `JWT_SECRET` | a long random string — generate with `python -c "import secrets; print(secrets.token_hex(32))"` |
 
 > `DATABASE_URL` from Railway starts with `postgresql://`; the app rewrites it to the
 > SQLAlchemy driver form automatically (see `config.py: sqlalchemy_url`).

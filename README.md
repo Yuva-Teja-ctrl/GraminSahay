@@ -74,6 +74,7 @@ Citizen situation + profile
 | Vector store | **PostgreSQL + pgvector** (cosine distance) via SQLAlchemy |
 | LLM | OpenAI `gpt-4o-mini` *or* Groq `llama-3.3-70b-versatile` (chat only) |
 | Validation | **Pydantic v2** |
+| Auth | JWT (PyJWT) + bcrypt password hashing (passlib); users stored in Postgres |
 | Frontend | Plain HTML + CSS + JavaScript (served by FastAPI) |
 | Infra | Docker Compose |
 
@@ -135,19 +136,21 @@ On first startup the app downloads the embedding model (once), creates the pgvec
 embeds the Telangana schemes, and is then ready.
 
 ### 5. Use it
-- **Web UI:** open **http://localhost:8000/**
+- **Web UI:** open **http://localhost:8000/** — sign in / create an account, then use the app.
 - **Interactive API docs** (FastAPI gives these free): **http://localhost:8000/docs**
-- **Or curl:**
+- **Or curl** (the API is JWT-protected — register, then use the token):
 ```bash
+# 1. Create an account -> returns a token
+TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/register \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"demo","password":"secret123"}' | python3 -c "import sys,json;print(json.load(sys.stdin)['token'])")
+
+# 2. Call the protected endpoint with the token
 curl -s -X POST http://localhost:8000/api/navigate \
+  -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
   -d '{
         "situation": "I am a small farmer in Warangal and I own two acres of land",
-        "occupation": "farmer",
-        "landHoldingAcres": 2.0,
-        "age": 45,
-        "district": "Warangal",
-        "isBpl": true,
         "withExplanations": true
       }'
 ```

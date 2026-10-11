@@ -22,6 +22,10 @@ dependencies = [
     "openai>=1.40",
     # Load .env files
     "python-dotenv>=1.0",
+    # Authentication: JWT tokens + password hashing
+    "pyjwt>=2.9",
+    "passlib[bcrypt]>=1.7",
+    "python-multipart>=0.0.9",
 ]
 
 [project.optional-dependencies]

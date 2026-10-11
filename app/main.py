@@ -7,11 +7,13 @@ Combines what Spring split across GraminSahayApplication (startup), NavigatorCon
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from app.auth import AuthError, AuthService
 from app.config import get_settings
 from app.domain import CitizenProfile
 from app.extractor import ProfileExtractor
@@ -69,6 +71,15 @@ async def lifespan(app: FastAPI):
         model=settings.transcribe_model,
     )
 
+    auth_service = AuthService(
+        db_url=settings.sqlalchemy_url,
+        jwt_secret=settings.jwt_secret,
+        jwt_algorithm=settings.jwt_algorithm,
+        expire_minutes=settings.jwt_expire_minutes,
+    )
+    auth_service.ensure_schema()
+    state["auth"] = auth_service
+
     state["navigator"] = NavigatorService(
         repository=repository,
         vector_store=vector_store,
@@ -92,6 +103,61 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# ---------------------------------------------------------------------------
+# Authentication
+# ---------------------------------------------------------------------------
+_bearer = HTTPBearer(auto_error=True)
+
+
+def current_user(credentials: HTTPAuthorizationCredentials = Depends(_bearer)) -> str:
+    """FastAPI dependency: verify the Bearer JWT and return the username.
+
+    Any endpoint that lists this as a dependency becomes protected — a missing or invalid
+    token yields a 401 before the handler runs.
+    """
+    auth: AuthService = state["auth"]  # type: ignore[assignment]
+    try:
+        return auth.verify_token(credentials.credentials)
+    except AuthError as exc:
+        raise HTTPException(status_code=401, detail=str(exc)) from exc
+
+
+class AuthRequest(BaseModel):
+    """Register/login request body."""
+
+    username: str = Field(min_length=3)
+    password: str = Field(min_length=6)
+
+
+class AuthResponse(BaseModel):
+    """Returned on successful register/login."""
+
+    token: str
+    username: str
+
+
+@app.post("/api/auth/register", response_model=AuthResponse)
+def register(request: AuthRequest) -> AuthResponse:
+    """Create a new account and return a JWT."""
+    auth: AuthService = state["auth"]  # type: ignore[assignment]
+    try:
+        token = auth.register(request.username, request.password)
+    except AuthError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return AuthResponse(token=token, username=request.username.strip().lower())
+
+
+@app.post("/api/auth/login", response_model=AuthResponse)
+def login(request: AuthRequest) -> AuthResponse:
+    """Verify credentials and return a JWT."""
+    auth: AuthService = state["auth"]  # type: ignore[assignment]
+    try:
+        token = auth.login(request.username, request.password)
+    except AuthError as exc:
+        raise HTTPException(status_code=401, detail=str(exc)) from exc
+    return AuthResponse(token=token, username=request.username.strip().lower())
 
 
 class NavigateRequest(BaseModel):
@@ -135,8 +201,8 @@ class NavigateRequest(BaseModel):
 
 
 @app.post("/api/navigate", response_model=NavigationResponse, response_model_by_alias=True)
-def navigate(request: NavigateRequest) -> NavigationResponse:
-    """Find welfare schemes for a citizen's situation + profile."""
+def navigate(request: NavigateRequest, user: str = Depends(current_user)) -> NavigationResponse:
+    """Find welfare schemes for a citizen's situation + profile. Requires a valid JWT."""
     navigator: NavigatorService = state["navigator"]  # type: ignore[assignment]
     return navigator.navigate(
         situation=request.situation,
@@ -157,6 +223,7 @@ class TranscribeResponse(BaseModel):
 async def transcribe(
     audio: UploadFile = File(...),
     language: str = Form("auto"),
+    user: str = Depends(current_user),
 ) -> TranscribeResponse:
     """Voice input: accept an audio recording and return the transcribed text.
 
