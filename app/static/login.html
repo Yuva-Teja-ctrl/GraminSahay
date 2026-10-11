@@ -29,17 +29,17 @@
             <button type="button" id="tab-register" class="auth-tab">Create account</button>
         </div>
 
-        <form id="auth-form">
+        <form id="auth-form" novalidate>
             <h2 id="auth-title">Welcome back</h2>
 
             <label class="field">
                 <span>Username</span>
-                <input id="username" type="text" autocomplete="username" required placeholder="your username"/>
+                <input id="username" type="text" autocomplete="username" minlength="3" placeholder="at least 3 characters"/>
             </label>
 
             <label class="field">
                 <span>Password</span>
-                <input id="password" type="password" autocomplete="current-password" required placeholder="••••••"/>
+                <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="at least 6 characters"/>
             </label>
 
             <p id="auth-error" class="auth-error" hidden></p>

@@ -47,6 +47,17 @@ form.addEventListener("submit", async (e) => {
 
     const username = document.getElementById("username").value.trim();
     const password = passwordInput.value;
+
+    // Validate here so WE control the message (no cryptic browser-native validation popups).
+    if (username.length < 3) {
+        showError("Username must be at least 3 characters.");
+        return;
+    }
+    if (password.length < 6) {
+        showError("Password must be at least 6 characters.");
+        return;
+    }
+
     const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register";
 
     submit.disabled = true;
