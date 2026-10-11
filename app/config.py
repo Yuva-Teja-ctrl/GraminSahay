@@ -7,6 +7,7 @@ variable (or a `.env` file) at startup, with a default value if it is not set.
 
 from functools import lru_cache
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,7 +19,11 @@ class Settings(BaseSettings):
     """
 
     # ---- Database (PostgreSQL + pgvector) ----
-    db_url: str = "postgresql+psycopg://graminsahay:graminsahay@localhost:5432/graminsahay"
+    # Reads DB_URL locally; also accepts DATABASE_URL (what Railway/Render/Heroku inject).
+    db_url: str = Field(
+        default="postgresql+psycopg://graminsahay:graminsahay@localhost:5432/graminsahay",
+        validation_alias=AliasChoices("DB_URL", "DATABASE_URL"),
+    )
 
     # ---- LLM provider (OpenAI-compatible; override base_url for Groq) ----
     # Groq example:  openai_base_url=https://api.groq.com/openai/v1
@@ -46,6 +51,22 @@ class Settings(BaseSettings):
     schemes_path: str = "app/data/telangana_schemes.json"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    @property
+    def sqlalchemy_url(self) -> str:
+        """Normalise the DB URL so SQLAlchemy always uses the psycopg (v3) driver.
+
+        Cloud platforms (Railway, Render, Heroku) inject a DATABASE_URL that begins with
+        'postgres://' or 'postgresql://'. SQLAlchemy needs the explicit driver
+        'postgresql+psycopg://'. We rewrite the scheme here so the same code runs locally
+        (docker-compose) and in the cloud with no changes.
+        """
+        url = self.db_url
+        if url.startswith("postgres://"):
+            url = "postgresql://" + url[len("postgres://") :]
+        if url.startswith("postgresql://"):
+            url = "postgresql+psycopg://" + url[len("postgresql://") :]
+        return url
 
 
 @lru_cache
