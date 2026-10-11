@@ -197,6 +197,9 @@ function buildCard(scheme) {
     node.querySelector(".scheme-name").textContent = scheme.schemeName;
     node.querySelector(".scheme-category").textContent = scheme.category;
 
+    // Tint the card's left border by status (CSS: .scheme-card.s-ELIGIBLE etc.)
+    node.querySelector(".scheme-card").classList.add(`s-${scheme.status}`);
+
     const badge = node.querySelector(".badge");
     badge.textContent = STATUS_LABEL[scheme.status] || scheme.status;
     badge.classList.add(scheme.status);
