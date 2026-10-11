@@ -1,29 +1,43 @@
 // GraminSahay frontend — calls the Spring Boot /api/navigate endpoint and renders results.
-// ---- Auth guard: require a token, else go to the login page ----
+// ---- Optional auth: the navigator works with OR without an account ----
+// Login is a convenience (to save your profile), never required to get welfare info.
 const TOKEN_KEY = "graminsahay_token";
 const USER_KEY = "graminsahay_user";
-const authToken = localStorage.getItem(TOKEN_KEY);
-if (!authToken) {
-    window.location.replace("/login.html");
+
+function getToken() {
+    return localStorage.getItem(TOKEN_KEY);
 }
 
+// Attach the Bearer token ONLY if the user is signed in; otherwise call anonymously.
 function authHeaders(extra = {}) {
-    return { ...extra, Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}` };
+    const token = getToken();
+    return token ? { ...extra, Authorization: `Bearer ${token}` } : { ...extra };
 }
 
 function logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
-    window.location.replace("/login.html");
+    window.location.reload(); // back to anonymous mode, still usable
 }
 
-// Show the logged-in username and wire the logout button.
+// Header reflects sign-in state: a "Sign in" link when anonymous, name + "Log out" when signed in.
 document.addEventListener("DOMContentLoaded", () => {
     const nameEl = document.getElementById("user-name");
-    const user = localStorage.getItem(USER_KEY);
-    if (nameEl && user) nameEl.textContent = `Hi, ${user}`;
     const logoutBtn = document.getElementById("logout-btn");
-    if (logoutBtn) logoutBtn.addEventListener("click", logout);
+    const signInLink = document.getElementById("signin-link");
+    const user = localStorage.getItem(USER_KEY);
+
+    if (user && getToken()) {
+        if (nameEl) nameEl.textContent = `Hi, ${user}`;
+        if (logoutBtn) {
+            logoutBtn.hidden = false;
+            logoutBtn.addEventListener("click", logout);
+        }
+        if (signInLink) signInLink.hidden = true;
+    } else {
+        if (signInLink) signInLink.hidden = false;
+        if (logoutBtn) logoutBtn.hidden = true;
+    }
 });
 
 const form = document.getElementById("navigate-form");
@@ -65,6 +79,7 @@ async function navigate() {
         });
 
         if (response.status === 401) {
+            // An expired/invalid token — drop it and continue anonymously.
             logout();
             return;
         }

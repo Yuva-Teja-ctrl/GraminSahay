@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>GraminSahay</title>
     <script>
-        // Entry point: send logged-in users to the app, everyone else to the login page.
-        const token = localStorage.getItem("graminsahay_token");
-        window.location.replace(token ? "/app.html" : "/login.html");
+        // The navigator is open to everyone — go straight to the app. Signing in is optional
+        // and offered from inside the app (to save your profile).
+        window.location.replace("/app.html");
     </script>
 </head>
 <body>
-    <noscript>Please enable JavaScript, then open <a href="/login.html">the login page</a>.</noscript>
+    <noscript>Please enable JavaScript, then open <a href="/app.html">GraminSahay</a>.</noscript>
 </body>
 </html>

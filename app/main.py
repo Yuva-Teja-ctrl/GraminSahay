@@ -108,15 +108,23 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 # Authentication
 # ---------------------------------------------------------------------------
-_bearer = HTTPBearer(auto_error=True)
+# auto_error=False: a missing token is allowed. GraminSahay is a public-good service for
+# rural citizens, so the core navigator must work WITHOUT an account — login is an optional
+# convenience (to save a profile), never a barrier to accessing welfare information.
+_bearer = HTTPBearer(auto_error=False)
 
 
-def current_user(credentials: HTTPAuthorizationCredentials = Depends(_bearer)) -> str:
-    """FastAPI dependency: verify the Bearer JWT and return the username.
+def optional_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
+) -> str | None:
+    """FastAPI dependency: identify the user IF a valid token is supplied, else allow anonymous.
 
-    Any endpoint that lists this as a dependency becomes protected — a missing or invalid
-    token yields a 401 before the handler runs.
+    Returns the username for a valid token, or None when no token is sent (anonymous use).
+    An *invalid* token (as opposed to absent) is rejected, so a corrupt/expired session is a
+    clear 401 rather than silently falling back to anonymous.
     """
+    if credentials is None:
+        return None  # anonymous — allowed
     auth: AuthService = state["auth"]  # type: ignore[assignment]
     try:
         return auth.verify_token(credentials.credentials)
@@ -201,8 +209,14 @@ class NavigateRequest(BaseModel):
 
 
 @app.post("/api/navigate", response_model=NavigationResponse, response_model_by_alias=True)
-def navigate(request: NavigateRequest, user: str = Depends(current_user)) -> NavigationResponse:
-    """Find welfare schemes for a citizen's situation + profile. Requires a valid JWT."""
+def navigate(
+    request: NavigateRequest, user: str | None = Depends(optional_user)
+) -> NavigationResponse:
+    """Find welfare schemes for a citizen's situation + profile.
+
+    Works anonymously (no login needed). If a signed-in user's token is supplied, ``user`` is
+    their username — available for future per-user features like saving the profile.
+    """
     navigator: NavigatorService = state["navigator"]  # type: ignore[assignment]
     return navigator.navigate(
         situation=request.situation,
@@ -223,7 +237,7 @@ class TranscribeResponse(BaseModel):
 async def transcribe(
     audio: UploadFile = File(...),
     language: str = Form("auto"),
-    user: str = Depends(current_user),
+    user: str | None = Depends(optional_user),
 ) -> TranscribeResponse:
     """Voice input: accept an audio recording and return the transcribed text.
 

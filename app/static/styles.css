@@ -210,6 +210,10 @@ button:disabled { background: var(--muted); cursor: not-allowed; }
 .auth-switch { text-align: center; font-size: 14px; color: var(--muted); margin: 18px 0 0; }
 .auth-switch a { color: var(--green); font-weight: 700; text-decoration: none; }
 .auth-switch a:hover { text-decoration: underline; }
+.auth-skip { text-align: center; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border); }
+.auth-skip > a { color: var(--green-dark); font-weight: 700; text-decoration: none; }
+.auth-skip > a:hover { text-decoration: underline; }
+.auth-skip-note { font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
 
 /* Stack the panels on small screens */
 @media (max-width: 720px) {

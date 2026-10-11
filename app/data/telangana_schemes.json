@@ -200,5 +200,129 @@
       { "field": "ANNUAL_INCOME", "operator": "LESS_THAN_OR_EQUAL", "value": "200000", "humanText": "Family annual income must be within the prescribed limit" }
     ],
     "conflictsWith": []
+  },
+  {
+    "id": "ts-aasara-disability-pension",
+    "name": "Aasara Disability Pension (Divyangula)",
+    "category": "pension",
+    "state": "Telangana",
+    "description": "Monthly pension for persons with disabilities (Divyangulu) in Telangana from poor families, to support their livelihood and dignity.",
+    "benefits": "Rs 3,016 per month paid directly to the beneficiary's bank account.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "SADAREM disability certificate",
+      "White ration card / proof of low income",
+      "Bank account passbook"
+    ],
+    "applicationSteps": [
+      "Obtain a SADAREM disability assessment certificate",
+      "Apply through your nearest MeeSeva centre or Gram Panchayat",
+      "Await field verification by the local welfare officer"
+    ],
+    "officialUrl": "https://aasara.telangana.gov.in/",
+    "rules": [
+      { "field": "CATEGORY", "operator": "NOT_EQUALS", "value": "none", "humanText": "Applicant must be a person with a disability (SADAREM certified)" },
+      { "field": "IS_BPL", "operator": "IS_TRUE", "value": "true", "humanText": "Applicant must belong to a Below Poverty Line (white ration card) family" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-kcr-kit",
+    "name": "KCR Kit (Maternity Benefit)",
+    "category": "healthcare",
+    "state": "Telangana",
+    "description": "Maternity benefit scheme supporting pregnant women who deliver in government hospitals in Telangana, providing financial assistance and a kit of baby-care essentials for the mother and newborn.",
+    "benefits": "Financial assistance of Rs 12,000 (girl child) or Rs 13,000 (boy child/other) in instalments, plus a KCR Kit of mother and baby essentials, for deliveries in government hospitals.",
+    "requiredDocuments": [
+      "Aadhaar card of the mother",
+      "Proof of delivery in a government hospital",
+      "Bank account passbook linked to Aadhaar"
+    ],
+    "applicationSteps": [
+      "Register the pregnancy at a government hospital or ANM/ASHA worker",
+      "Deliver the baby in a government hospital",
+      "Receive the KCR Kit and financial assistance in instalments to your bank account"
+    ],
+    "officialUrl": "https://telangana.gov.in/",
+    "rules": [
+      { "field": "GENDER", "operator": "EQUALS", "value": "female", "humanText": "Applicant must be a pregnant woman / new mother" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-cmrf-medical",
+    "name": "Chief Minister's Relief Fund (CMRF) Medical Assistance",
+    "category": "healthcare",
+    "state": "Telangana",
+    "description": "Financial assistance from the Chief Minister's Relief Fund for poor patients in Telangana needing treatment for serious illnesses not fully covered by other schemes.",
+    "benefits": "One-time financial assistance towards major medical treatment, sanctioned on a case-by-case basis.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "Medical estimate / treatment records from the hospital",
+      "White ration card / income proof",
+      "Recommendation from a public representative (where applicable)"
+    ],
+    "applicationSteps": [
+      "Obtain a medical cost estimate from a recognised hospital",
+      "Submit the CMRF application with medical and income documents",
+      "Await sanction and disbursement to the hospital or beneficiary"
+    ],
+    "officialUrl": "https://cmrf.telangana.gov.in/",
+    "rules": [
+      { "field": "IS_BPL", "operator": "IS_TRUE", "value": "true", "humanText": "Applicant should be from a poor family (white ration card / low income)" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-aasara-toddy-weaver",
+    "name": "Aasara Pension for Toddy Tappers & Weavers",
+    "category": "pension",
+    "state": "Telangana",
+    "description": "Monthly pension for incapacitated toddy tappers and handloom weavers in Telangana who have lost their livelihood with age, as part of the Aasara social-security pensions.",
+    "benefits": "Rs 2,016 per month paid directly to the beneficiary's bank account.",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "Proof of occupation (toddy tapper / weaver society membership)",
+      "White ration card / proof of low income",
+      "Bank account passbook"
+    ],
+    "applicationSteps": [
+      "Obtain proof of your toddy-tapping or weaving occupation",
+      "Apply through your nearest MeeSeva centre or Gram Panchayat",
+      "Await field verification by the local welfare officer"
+    ],
+    "officialUrl": "https://aasara.telangana.gov.in/",
+    "rules": [
+      { "field": "OCCUPATION", "operator": "IN", "value": "toddy_tapper,weaver", "humanText": "Applicant must be a toddy tapper or handloom weaver" },
+      { "field": "IS_BPL", "operator": "IS_TRUE", "value": "true", "humanText": "Applicant must belong to a Below Poverty Line (white ration card) family" }
+    ],
+    "conflictsWith": []
+  },
+  {
+    "id": "ts-cm-overseas-scholarship",
+    "name": "CM Overseas Study Scheme (Ambedkar/Mahatma Jyotiba Phule)",
+    "category": "education",
+    "state": "Telangana",
+    "description": "Financial assistance for students from SC, ST, BC, EBC and minority communities in Telangana to pursue higher studies (postgraduate) at reputed universities abroad.",
+    "benefits": "Financial assistance towards tuition and living costs for overseas postgraduate study (up to the prescribed ceiling).",
+    "requiredDocuments": [
+      "Aadhaar card",
+      "Admission offer from a recognised foreign university",
+      "Income certificate",
+      "Caste certificate",
+      "Qualifying degree certificates"
+    ],
+    "applicationSteps": [
+      "Secure admission to an eligible foreign university",
+      "Apply online on the relevant welfare department portal",
+      "Submit income, caste and admission documents for selection"
+    ],
+    "officialUrl": "https://telangana.gov.in/",
+    "rules": [
+      { "field": "OCCUPATION", "operator": "EQUALS", "value": "student", "humanText": "Applicant must be a student pursuing higher education" },
+      { "field": "CATEGORY", "operator": "IN", "value": "sc,st,obc,bc,ebc,minority", "humanText": "Applicant must belong to SC/ST/BC/EBC/Minority category" },
+      { "field": "ANNUAL_INCOME", "operator": "LESS_THAN_OR_EQUAL", "value": "500000", "humanText": "Family annual income must be within the prescribed limit (around Rs 5,00,000)" }
+    ],
+    "conflictsWith": []
   }
 ]
