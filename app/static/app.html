@@ -16,24 +16,23 @@
         <span class="logo"><img src="logo.svg" alt="GraminSahay logo" width="40" height="40"/></span>
         <div>
             <h1>GraminSahay</h1>
-            <p class="tagline">Discover the government welfare schemes you are entitled to — without knowing their names.</p>
+            <p class="tagline" data-i18n="tagline">Discover the government welfare schemes you are entitled to — without knowing their names.</p>
         </div>
         <div class="user-bar">
             <span id="user-name" class="user-name"></span>
-            <a href="/login.html" id="signin-link" class="logout-btn" hidden>Sign in to save your profile</a>
-            <button type="button" id="logout-btn" class="logout-btn" hidden>Log out</button>
+            <a href="/login.html" id="signin-link" class="logout-btn" hidden data-i18n="signin_save">Sign in to save your profile</a>
+            <button type="button" id="logout-btn" class="logout-btn" hidden data-i18n="logout">Log out</button>
         </div>
     </div>
 </header>
 
 <main class="container">
     <section class="card form-card">
-        <h2>Describe your situation</h2>
-        <p class="hint">Just tell us about yourself in your own words — the system will understand the details automatically.
-            The fields below are optional; use them only to correct or add anything.</p>
+        <h2 data-i18n="describe_title">Describe your situation</h2>
+        <p class="hint" data-i18n="describe_hint">Just tell us about yourself in your own words — the system will understand the details automatically. The fields below are optional; use them only to correct or add anything.</p>
 
         <label class="field lang-field">
-            <span>Language / భాష / भाषा</span>
+            <span data-i18n="language_label">Language / భాష / भाषा</span>
             <select id="language">
                 <option value="en">English</option>
                 <option value="te">తెలుగు (Telugu)</option>
@@ -43,12 +42,13 @@
 
         <form id="navigate-form">
             <label class="field">
-                <span>Your situation <em>*</em></span>
+                <span><span data-i18n="situation_label">Your situation</span> <em>*</em></span>
                 <textarea id="situation" rows="3" required
+                          data-i18n-ph="situation_ph"
                           placeholder="e.g. I am a small farmer in Warangal and I own two acres of land"></textarea>
                 <div class="voice-row">
                     <button type="button" id="mic-btn" class="mic-btn" title="Speak your situation">
-                        🎤 <span id="mic-label">Speak</span>
+                        🎤 <span id="mic-label" data-i18n="speak">Speak</span>
                     </button>
                     <span id="mic-status" class="mic-status"></span>
                 </div>
@@ -56,116 +56,115 @@
 
             <div class="grid">
                 <label class="field">
-                    <span>Occupation</span>
+                    <span data-i18n="occupation">Occupation</span>
                     <select id="occupation">
-                        <option value="">— not sure —</option>
-                        <option value="farmer">Farmer</option>
-                        <option value="agricultural_labourer">Agricultural labourer</option>
-                        <option value="student">Student</option>
-                        <option value="labourer">Labourer</option>
-                        <option value="other">Other</option>
+                        <option value="" data-i18n="opt_not_sure">— not sure —</option>
+                        <option value="farmer" data-i18n="opt_farmer">Farmer</option>
+                        <option value="agricultural_labourer" data-i18n="opt_agri_lab">Agricultural labourer</option>
+                        <option value="student" data-i18n="opt_student">Student</option>
+                        <option value="labourer" data-i18n="opt_labourer">Labourer</option>
+                        <option value="other" data-i18n="opt_other">Other</option>
                     </select>
                 </label>
 
                 <label class="field">
-                    <span>Age</span>
-                    <input id="age" type="number" min="0" max="120" placeholder="e.g. 45"/>
+                    <span data-i18n="age">Age</span>
+                    <input id="age" type="number" min="0" max="120" data-i18n-ph="age_ph" placeholder="e.g. 45"/>
                 </label>
 
                 <label class="field">
-                    <span>Gender</span>
+                    <span data-i18n="gender">Gender</span>
                     <select id="gender">
-                        <option value="">— not sure —</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
+                        <option value="" data-i18n="opt_not_sure">— not sure —</option>
+                        <option value="male" data-i18n="opt_male">Male</option>
+                        <option value="female" data-i18n="opt_female">Female</option>
+                        <option value="other" data-i18n="opt_other">Other</option>
                     </select>
                 </label>
 
                 <label class="field">
-                    <span>Land owned (acres)</span>
-                    <input id="landHoldingAcres" type="number" step="0.1" min="0" placeholder="e.g. 2"/>
+                    <span data-i18n="land">Land owned (acres)</span>
+                    <input id="landHoldingAcres" type="number" step="0.1" min="0" data-i18n-ph="land_ph" placeholder="e.g. 2"/>
                 </label>
 
                 <label class="field">
-                    <span>Annual household income (₹)</span>
-                    <input id="annualIncome" type="number" min="0" placeholder="e.g. 90000"/>
+                    <span data-i18n="income">Annual household income (₹)</span>
+                    <input id="annualIncome" type="number" min="0" data-i18n-ph="income_ph" placeholder="e.g. 90000"/>
                 </label>
 
                 <label class="field">
-                    <span>District</span>
-                    <input id="district" type="text" placeholder="e.g. Warangal"/>
+                    <span data-i18n="district">District</span>
+                    <input id="district" type="text" data-i18n-ph="district_ph" placeholder="e.g. Warangal"/>
                 </label>
 
                 <label class="field">
-                    <span>Social category</span>
+                    <span data-i18n="category">Social category</span>
                     <select id="category">
-                        <option value="">— not sure —</option>
-                        <option value="general">General</option>
-                        <option value="obc">OBC / BC</option>
-                        <option value="sc">SC</option>
-                        <option value="st">ST</option>
-                        <option value="minority">Minority</option>
+                        <option value="" data-i18n="opt_not_sure">— not sure —</option>
+                        <option value="general" data-i18n="opt_general">General</option>
+                        <option value="obc" data-i18n="opt_obc">OBC / BC</option>
+                        <option value="sc" data-i18n="opt_sc">SC</option>
+                        <option value="st" data-i18n="opt_st">ST</option>
+                        <option value="minority" data-i18n="opt_minority">Minority</option>
                     </select>
                 </label>
 
                 <label class="field">
-                    <span>Below Poverty Line (white ration card)?</span>
+                    <span data-i18n="bpl">Below Poverty Line (white ration card)?</span>
                     <select id="isBpl">
-                        <option value="">— not sure —</option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option value="" data-i18n="opt_not_sure">— not sure —</option>
+                        <option value="true" data-i18n="opt_yes">Yes</option>
+                        <option value="false" data-i18n="opt_no">No</option>
                     </select>
                 </label>
             </div>
 
             <label class="checkbox">
                 <input id="withExplanations" type="checkbox" checked/>
-                <span>Generate plain-language explanations (uses the AI model)</span>
+                <span data-i18n="explanations">Generate plain-language explanations (uses the AI model)</span>
             </label>
 
-            <button type="submit" id="submit-btn">Find my schemes</button>
+            <button type="submit" id="submit-btn" data-i18n="find_btn">Find my schemes</button>
         </form>
     </section>
 
     <section id="status" class="status" hidden></section>
 
     <section id="understood" class="card understood-card" hidden>
-        <h2>📝 Here's what we understood</h2>
-        <p class="hint">We read this from your description. If anything is wrong or missing, fill in the fields above and search again.</p>
+        <h2 data-i18n="understood_title">📝 Here's what we understood</h2>
+        <p class="hint" data-i18n="understood_hint">We read this from your description. If anything is wrong or missing, fill in the fields above and search again.</p>
         <ul id="understood-list"></ul>
     </section>
 
     <section id="conflicts" class="card conflict-card" hidden>
-        <h2>⚠️ Important: schemes you cannot combine</h2>
+        <h2 data-i18n="conflicts_title">⚠️ Important: schemes you cannot combine</h2>
         <ul id="conflicts-list"></ul>
     </section>
 
     <section id="results" class="results"></section>
-</main>
 
     <section class="card about-card" id="about">
-        <h2>How GraminSahay works</h2>
+        <h2 data-i18n="about_title">How GraminSahay works</h2>
         <div class="about-grid">
             <div class="about-step">
                 <span class="about-ico">🗣️</span>
-                <h4>1. Describe your life</h4>
-                <p>Tell us your situation by voice or text, in English, Telugu or Hindi — no need to know any scheme's name.</p>
+                <h4 data-i18n="about1_h">1. Describe your life</h4>
+                <p data-i18n="about1_p">Tell us your situation by voice or text, in English, Telugu or Hindi — no need to know any scheme's name.</p>
             </div>
             <div class="about-step">
                 <span class="about-ico">🧠</span>
-                <h4>2. We understand &amp; match</h4>
-                <p>AI reads your situation and searches official government scheme documents to find what fits you.</p>
+                <h4 data-i18n="about2_h">2. We understand &amp; match</h4>
+                <p data-i18n="about2_p">AI reads your situation and searches official government scheme documents to find what fits you.</p>
             </div>
             <div class="about-step">
                 <span class="about-ico">✅</span>
-                <h4>3. Clear eligibility</h4>
-                <p>Transparent rules decide whether you're eligible, and explain exactly why — with the official source.</p>
+                <h4 data-i18n="about3_h">3. Clear eligibility</h4>
+                <p data-i18n="about3_p">Transparent rules decide whether you're eligible, and explain exactly why — with the official source.</p>
             </div>
             <div class="about-step">
                 <span class="about-ico">🧭</span>
-                <h4>4. Guided application</h4>
-                <p>Get a documents checklist, step-by-step guidance, and a direct link to apply on the official portal.</p>
+                <h4 data-i18n="about4_h">4. Guided application</h4>
+                <p data-i18n="about4_p">Get a documents checklist, step-by-step guidance, and a direct link to apply on the official portal.</p>
             </div>
         </div>
     </section>
@@ -204,12 +203,12 @@
         </div>
 
         <div class="card-actions">
-            <button type="button" class="apply-btn">🧭 How to apply</button>
+            <button type="button" class="apply-btn" data-i18n="apply_btn">🧭 How to apply</button>
             <details class="scheme-details">
-                <summary>Eligibility details</summary>
-                <div class="detail-block satisfied"><h4>✅ Conditions you meet</h4><ul></ul></div>
-                <div class="detail-block unmet"><h4>❌ Conditions not met</h4><ul></ul></div>
-                <div class="detail-block missing"><h4>❓ Information still needed</h4><ul></ul></div>
+                <summary data-i18n="details_summary">Eligibility details</summary>
+                <div class="detail-block satisfied"><h4 data-i18n="conditions_meet">✅ Conditions you meet</h4><ul></ul></div>
+                <div class="detail-block unmet"><h4 data-i18n="conditions_unmet">❌ Conditions not met</h4><ul></ul></div>
+                <div class="detail-block missing"><h4 data-i18n="info_needed">❓ Information still needed</h4><ul></ul></div>
             </details>
         </div>
     </article>
@@ -220,26 +219,27 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="apply-title">
         <button type="button" id="apply-close" class="modal-close" aria-label="Close">✕</button>
         <h2 id="apply-title" class="apply-title"></h2>
-        <p class="apply-sub">Follow these steps to apply. Tick off documents as you gather them.</p>
+        <p class="apply-sub" data-i18n="apply_sub">Follow these steps to apply. Tick off documents as you gather them.</p>
 
         <div class="apply-section">
-            <h3>📄 Documents you'll need</h3>
+            <h3 data-i18n="apply_docs_h">📄 Documents you'll need</h3>
             <ul id="apply-docs" class="doc-checklist"></ul>
             <p id="apply-docs-progress" class="doc-progress"></p>
         </div>
 
         <div class="apply-section">
-            <h3>🧭 Steps to apply</h3>
+            <h3 data-i18n="apply_steps_h">🧭 Steps to apply</h3>
             <ol id="apply-steps" class="apply-steps"></ol>
         </div>
 
         <div class="apply-cta">
-            <a id="apply-portal" class="portal-btn" target="_blank" rel="noopener">Apply on the official portal ↗</a>
-            <p class="apply-disclaimer">Always confirm the latest details on the official government portal before applying.</p>
+            <a id="apply-portal" class="portal-btn" target="_blank" rel="noopener" data-i18n="apply_portal">Apply on the official portal ↗</a>
+            <p class="apply-disclaimer" data-i18n="apply_disclaimer">Always confirm the latest details on the official government portal before applying.</p>
         </div>
     </div>
 </div>
 
+<script src="i18n.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

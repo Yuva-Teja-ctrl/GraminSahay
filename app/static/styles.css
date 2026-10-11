@@ -278,6 +278,13 @@ button:disabled { background: #cbd5e1; color: #fff; cursor: not-allowed; box-sha
 
 .apply-steps { margin: 0; padding-left: 22px; display: grid; gap: 9px; font-size: 14.5px; }
 .apply-steps li { padding-left: 4px; }
+/* Group headings inside the ordered list: shown as sub-headings, not numbered items. */
+.apply-steps li.step-heading {
+    list-style: none; margin-left: -22px; margin-top: 6px;
+    font-weight: 700; color: var(--green-700); font-size: 13px;
+    text-transform: uppercase; letter-spacing: .4px;
+}
+.apply-steps li.step-heading:first-child { margin-top: 0; }
 
 .apply-cta { border-top: 1px solid var(--border); padding-top: 20px; text-align: center; }
 .portal-btn {

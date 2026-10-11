@@ -60,7 +60,7 @@ form.addEventListener("submit", async (e) => {
         });
         const data = await response.json();
         if (!response.ok) {
-            throw new Error(data.detail || "Something went wrong.");
+            throw new Error(extractError(data));
         }
         localStorage.setItem(TOKEN_KEY, data.token);
         localStorage.setItem(USER_KEY, data.username);
@@ -71,6 +71,24 @@ form.addEventListener("submit", async (e) => {
         submit.textContent = mode === "login" ? "Sign in" : "Create account";
     }
 });
+
+// Turn any server error shape into a readable sentence.
+// FastAPI/Pydantic 422 errors come back as { detail: [ { msg, loc, ... } ] }; our own
+// AuthErrors come back as { detail: "a plain message" }.
+function extractError(data) {
+    const detail = data && data.detail;
+    if (!detail) return "Something went wrong. Please try again.";
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail)) {
+        const first = detail[0];
+        if (first && first.msg) {
+            // Make it friendly: which field + what's wrong.
+            const field = Array.isArray(first.loc) ? first.loc[first.loc.length - 1] : "input";
+            return `${field}: ${first.msg}`;
+        }
+    }
+    return "Please check your details and try again.";
+}
 
 function showError(msg) {
     errorEl.textContent = msg;

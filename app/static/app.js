@@ -20,8 +20,23 @@ function logout() {
     window.location.reload(); // back to anonymous mode, still usable
 }
 
+const LANG_KEY = "graminsahay_lang";
+
 // Header reflects sign-in state: a "Sign in" link when anonymous, name + "Log out" when signed in.
 document.addEventListener("DOMContentLoaded", () => {
+    // Restore the saved language, translate the whole UI, and wire the language switcher so
+    // changing it re-translates the entire interface immediately.
+    const langSelect = document.getElementById("language");
+    const savedLang = localStorage.getItem(LANG_KEY) || "en";
+    if (langSelect) {
+        langSelect.value = savedLang;
+        langSelect.addEventListener("change", () => {
+            localStorage.setItem(LANG_KEY, langSelect.value);
+            applyTranslations();
+        });
+    }
+    applyTranslations();
+
     const nameEl = document.getElementById("user-name");
     const logoutBtn = document.getElementById("logout-btn");
     const signInLink = document.getElementById("signin-link");
@@ -201,7 +216,7 @@ function buildCard(scheme) {
     node.querySelector(".scheme-card").classList.add(`s-${scheme.status}`);
 
     const badge = node.querySelector(".badge");
-    badge.textContent = STATUS_LABEL[scheme.status] || scheme.status;
+    badge.textContent = t(`status_label_${scheme.status}`);
     badge.classList.add(scheme.status);
 
     const explanation = node.querySelector(".scheme-explanation");
@@ -277,14 +292,31 @@ function openApplyModal(scheme) {
     });
     updateProgress();
 
-    // Numbered steps.
+    // Numbered steps — a complete journey: universal "general" steps (open the site, keep
+    // documents ready, register/login, find the scheme) followed by the scheme-specific steps.
     const stepsEl = document.getElementById("apply-steps");
     stepsEl.innerHTML = "";
-    (scheme.applicationSteps || []).forEach((step) => {
+
+    const addHeading = (key) => {
         const li = document.createElement("li");
-        li.textContent = step;
+        li.className = "step-heading";
+        li.textContent = t(key);
         stepsEl.appendChild(li);
-    });
+    };
+    const addStep = (text) => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        stepsEl.appendChild(li);
+    };
+
+    addHeading("apply_general_heading");
+    ["gstep_1", "gstep_2", "gstep_3", "gstep_4"].forEach((k) => addStep(t(k)));
+
+    const schemeSteps = scheme.applicationSteps || [];
+    if (schemeSteps.length) {
+        addHeading("apply_scheme_heading");
+        schemeSteps.forEach(addStep);
+    }
 
     // Official portal link.
     const portal = document.getElementById("apply-portal");
