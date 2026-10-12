@@ -67,10 +67,8 @@ SECTIONS = [
    "<b>LLMs for interpretive support in digital government.</b> A systematic review of LLMs for interpretive support in digital-government services finds the field moving from plain question answering toward service navigation and interpretive help, with the clearest gains in efficiency, responsiveness, and accessibility, provided reliability, legal boundaries, responsibility allocation, privacy, and organisational capacity are handled [1]. A separate line of work on context-optimised RAG for local-government welfare subsidies shows concretely that welfare answers can be grounded in local policy documents [11]. On accessibility, a voice-first assistant needs speech in both directions: Radford et al.&rsquo;s Whisper, trained on 680,000 hours of weakly supervised multilingual audio, delivers strong zero-shot transcription across languages and accents [13], while Kumar et al.&rsquo;s Indic-TTS builds synthesis models for major Indian languages [20], together supplying the Indic STT/TTS a rural assistant depends on. Read across these strands, no single prior work understands a situation, retrieves grounded evidence, reasons about eligibility and explains it, catches scheme conflicts, and delivers the result as multilingual voice at once&mdash;the integration gap GraminSahay sets out to fill.",
  ]),
  ("III. RESEARCH GAPS IDENTIFIED", [
-   "From the survey above, we draw out three main gaps that the current tools leave open. Each one bundles together several of the shortcomings the literature exposes, and together they define what GraminSahay must address.",
-   "<i>Multilingual, Voice-First Accessibility Gap:</i> Existing portals and most prior systems are text-first and effectively single-language, which shuts out a large share of rural users who are far more comfortable speaking in a regional language than reading formal official prose [1]. Even where multilingual components exist, retrieval can behave inconsistently across languages and translation-first pipelines lose coverage [2], [5], while robust Indic speech and shared cross-lingual representations remain under-exploited in the welfare setting [13], [17], [19]. A navigator must therefore accept spoken, regional-language input and respond in the same language, keeping query, retrieval, and response languages aligned.",
-   "<i>Explainable, Situation-First Eligibility Gap:</i> Because portals are name-indexed, a citizen who does not already know a scheme&rsquo;s name has nowhere to start, and the single generic page shown to everyone ignores occupation, family circumstances, and location [1]. A bare yes/no verdict is almost useless; what citizens need is situation-first discovery together with an explanation of <i>why</i> a decision was reached, traceable to a trusted source and faithful to the retrieved evidence [4], [9], [15]. Off-the-shelf retrievers and models also stumble on specialised government terminology and on policy text that keeps changing unless they are adapted to the domain [6], [10], [12]. Closing this gap means pairing situation understanding with grounded, multi-step eligibility reasoning that explains itself.",
-   "<i>Application-Process Guidance and Conflict-Awareness Gap:</i> Identifying a scheme is only half the task. Existing tools do little to warn that some benefits cannot be held together, leaving the citizen to discover such conflicts the hard way, and they rarely spell out which documents to gather or what the application steps actually are [11], [1]. A useful navigator has to flag mutually exclusive schemes and then carry the citizen through to application with concrete, document-level guidance.",
+   "From the survey above, we draw out three main gaps that the current tools leave open, each bundling several of the shortcomings the literature exposes:",
+   "@GAPLIST@",
  ]),
  ("IV. PROBLEM STATEMENT", [
    "The schemes are there, and RAG and LLMs now make grounded question answering practical&mdash;yet rural citizens still cannot dependably find the benefits they are owed, let alone act on them. The portals they are given are name-indexed, generic rather than personal, thin on explanation, blind to conflicts between schemes, and difficult to use for anyone outside the dominant language. What is needed, then, is a navigator that is explainable, situation-aware, multilingual, and voice-first: one that reads a citizen&rsquo;s situation, retrieves the right official information, works out eligibility, warns about conflicting schemes, and sees the person through to application&mdash;none of which should require the citizen to know a scheme&rsquo;s name in advance.",
@@ -137,6 +135,16 @@ SECTIONS = [
  ("XII. CONCLUSION", [
    "This paper surveyed the work most relevant to a situation-aware rural welfare navigator and used it to pin down the research gaps that GraminSahay is meant to close. A few things come through clearly from that survey: RAG keeps generation anchored in authoritative documents; faithfulness evaluation and retrieval-augmented reasoning together make multi-step eligibility inference trustworthy; multilingual retrieval and Indic speech open the door to voice access in regional languages; and domain adaptation is what makes any of this hold up on specialised policy text. GraminSahay stitches these together&mdash;situation understanding, RAG retrieval, eligibility reasoning, conflict detection, and multilingual voice. What we expect to end up with is an explainable, accessible assistant that helps a rural citizen find the right government support, grasp whether they qualify, see what information is still missing, and move toward applying&mdash;all without having to know a scheme&rsquo;s name to begin with. The next steps are to widen the system past the five pilot categories and the starting set of languages, and to report real, measured numbers for retrieval and eligibility performance.",
  ]),
+]
+
+# Three main research gaps as short bullet points.
+GAPS = [
+ ("Multilingual, Voice-First Accessibility Gap",
+  "text-first, single-language portals exclude rural users who prefer regional-language voice; Indic speech and cross-lingual retrieval remain under-used [1], [2], [5], [13], [17], [19]."),
+ ("Explainable, Situation-First Eligibility Gap",
+  "name-indexed, generic portals give bare yes/no verdicts; citizens need situation-first discovery with faithful, source-traceable reasons over adapted domain retrieval [1], [4], [9], [12], [15]."),
+ ("Application-Process Guidance and Conflict-Awareness Gap",
+  "existing tools rarely flag mutually exclusive schemes or spell out the documents and steps needed to actually apply [1], [11]."),
 ]
 
 REFERENCES = [
@@ -392,7 +400,14 @@ def table3():
     out.append('</table>')
     return "".join(out)
 
+def gaplist():
+    items = ''.join(
+        f'<li><b><i>{title}:</i></b> {body}</li>' for title, body in GAPS)
+    return f'<ul class="gaps">{items}</ul>'
+
 def para(txt):
+    if txt == "@GAPLIST@":
+        return gaplist()
     if txt == "@FIGURE@":
         return build_vml() + fcap("Fig. 3.&nbsp;&nbsp;Layered system flow and architecture of GraminSahay.")
     if txt == "@FIG_EXISTING@":
@@ -447,6 +462,8 @@ table.lit td { border:0.75pt solid #000; padding:2pt 3pt; vertical-align:top; }
 td.th { background:#d9d9d9; font-weight:bold; text-align:center; }
 p.ref  { margin:0 0 3pt; text-indent:-13pt; mso-text-indent-alt:-13pt;
   padding-left:13pt; font-size:8.4pt; }
+ul.gaps { margin:2pt 0 6pt; padding-left:14pt; }
+ul.gaps li { margin:0 0 4pt; text-align:justify; }
 </style></head><body><div class=Section1>''')
 
     out.append(f'<h1 class=title>{TITLE}</h1>')
@@ -514,6 +531,8 @@ HTML_FIG = {
 }
 
 def para_html(txt):
+    if txt == "@GAPLIST@":
+        return gaplist()
     if txt in HTML_FIG:
         svgfile, cap = HTML_FIG[txt]
         return _svg(svgfile) + fcap(cap)
@@ -549,8 +568,10 @@ def build_html():
     vertical-align:top; padding:3pt 6pt; }
   .aname { font-weight:bold; font-size:11pt; }
   .amail { color:#0000cc; text-decoration:underline; font-size:9.5pt; }
-  /* two-column body */
-  .cols { column-count:2; column-gap:7mm; column-rule:none; }
+  /* two-column body (vendor-prefixed so Firefox/Safari honour it too) */
+  .cols { column-count:2; -moz-column-count:2; -webkit-column-count:2;
+    column-gap:7mm; -moz-column-gap:7mm; -webkit-column-gap:7mm;
+    column-rule:none; }
   p.abs { font-weight:bold; font-style:italic; margin:0 0 5pt; text-align:justify;
     font-size:9.5pt; }
   p.body { margin:0 0 5pt; text-indent:12pt; }
@@ -563,16 +584,21 @@ def build_html():
      are capped to the column width; the tall architecture figure is height-
      capped so it never balloons to a full page. */
   .figwrap { text-align:center; margin:4pt 0 1pt; break-inside:avoid; }
-  .figwrap svg { max-width:100%; height:auto; max-height:150pt; }
-  .fullfig .figwrap svg { max-height:300pt; width:auto; max-width:100%; }
+  .figwrap svg { max-width:100%; height:auto; max-height:240pt; }
   table.lit { border-collapse:collapse; width:100%; font-size:8pt;
     margin:5pt 0 9pt; break-inside:avoid; }
   table.lit td { border:0.75pt solid #000; padding:2pt 3pt; vertical-align:top; }
   td.th { background:#d9d9d9; font-weight:bold; text-align:center; }
   p.ref  { margin:0 0 4pt; padding-left:16pt; text-indent:-16pt; font-size:9pt; }
-  /* keep the tall architecture figure in a single spanning column so it is readable */
-  .fullfig { column-span:all; -webkit-column-span:all; text-align:center; }
-  @media print { body { padding:0; } a { color:#0000cc; } }
+  ul.gaps { margin:2pt 0 6pt; padding-left:14pt; }
+  ul.gaps li { margin:0 0 4pt; text-align:justify; }
+  /* --- make the two-column layout survive Print -> PDF in every browser --- */
+  @media print {
+    body { padding:0; margin:0; }
+    a { color:#0000cc; }
+    .cols { column-count:2 !important; -moz-column-count:2 !important;
+      -webkit-column-count:2 !important; column-gap:7mm; }
+  }
 </style></head><body>''')
 
     out.append(f'<h1 class="title">{TITLE}</h1>')
@@ -597,11 +623,11 @@ def build_html():
     for head,paras in SECTIONS:
         out.append(f'<p class="sec">{head}</p>')
         for p in paras:
-            block = para_html(p)
-            # let the tall architecture figure span both columns
-            if p == "@FIGURE@":
-                block = f'<div class="fullfig">{block}</div>'
-            out.append(block)
+            # Keep every figure inside the column flow (no column-span:all,
+            # which collapses the two-column layout in Firefox/Safari when
+            # printing to PDF). The architecture figure is height-capped so
+            # it stays legible within a single column.
+            out.append(para_html(p))
 
     out.append('<p class="sec">REFERENCES</p>')
     for i,r in enumerate(REFERENCES,1):
