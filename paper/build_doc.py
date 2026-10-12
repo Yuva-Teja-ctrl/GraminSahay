@@ -417,9 +417,13 @@ def build():
  xmlns:o="urn:schemas-microsoft-com:office:office"
  xmlns:w="urn:schemas-microsoft-com:office:word"
  xmlns="http://www.w3.org/TR/REC-html40"><head>
-<meta charset="utf-8"><title>GraminSahay IEEE Paper</title>
+<meta charset="utf-8">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 15">
+<meta name=Originator content="Microsoft Word 15">
+<title>GraminSahay IEEE Paper</title>
 <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View>
-<w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+<w:Zoom>100</w:Zoom><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
 <style>
 @page Section1 { size:595.3pt 841.9pt; margin:50pt 42pt 50pt 42pt;
   mso-columns:2 even 18pt; }
@@ -467,15 +471,139 @@ p.ref  { margin:0 0 3pt; text-indent:-13pt; mso-text-indent-alt:-13pt;
     out.append('</div></body></html>')
     return "".join(out)
 
+# ---------------------------------------------------------------------------
+# 4. Browser-friendly HTML build (figures as inline SVG; print -> PDF)
+# ---------------------------------------------------------------------------
+
+import os
+
+def _svg(path):
+    """Read an SVG file and return it as a centered, width-capped inline block."""
+    try:
+        with open(path, encoding='utf-8') as f:
+            s = f.read()
+    except OSError:
+        return f'<p class=cap style="color:#b00">[missing figure: {path}]</p>'
+    # strip any XML prolog so it embeds cleanly inside HTML flow
+    s = re.sub(r'<\?xml[^>]*\?>', '', s).strip()
+    return f'<div class="figwrap">{s}</div>'
+
+HTML_FIG = {
+    "@FIG_EXISTING@": ("fig_existing.svg",
+        "Fig. 1.&nbsp;&nbsp;Existing system &mdash; manual welfare scheme lookup."),
+    "@FIG_PROPOSED@": ("fig_proposed.svg",
+        "Fig. 2.&nbsp;&nbsp;Proposed system &mdash; GraminSahay situation-first flow."),
+    "@FIGURE@": ("GraminSahay_Architecture.svg",
+        "Fig. 3.&nbsp;&nbsp;Layered system flow and architecture of GraminSahay."),
+    "@FIG_BAR@": ("fig_chart_bar.svg",
+        "Fig. 4.&nbsp;&nbsp;Expected eligibility-classification accuracy by category."),
+    "@FIG_LINE@": ("fig_chart_line.svg",
+        "Fig. 5.&nbsp;&nbsp;Expected retrieval quality vs. top-k passages retrieved."),
+}
+
+def para_html(txt):
+    if txt in HTML_FIG:
+        svgfile, cap = HTML_FIG[txt]
+        return _svg(svgfile) + fcap(cap)
+    if txt == "@TABLE2@":
+        return table2()
+    if txt == "@TABLE3@":
+        return table3()
+    if txt.startswith("~"):
+        return f'<p class=sub>{txt[1:]}</p>'
+    return f'<p class=body>{txt}</p>'
+
+def build_html():
+    out=[]
+    out.append('''<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GraminSahay IEEE Paper</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  * { box-sizing: border-box; }
+  body { font-family:"Times New Roman",Georgia,serif; font-size:9.6pt;
+    line-height:1.34; color:#000; max-width:200mm; margin:0 auto;
+    padding:14mm 12mm; text-align:justify; }
+  h1.title { font-size:17pt; font-weight:bold; text-align:center; margin:0 0 10pt; }
+  table.authtbl { width:100%; border:none; border-collapse:collapse; margin-bottom:10pt; }
+  table.authtbl td { text-align:center; font-size:9pt; border:none;
+    vertical-align:top; padding:2pt 4pt; }
+  .aname { font-weight:bold; font-size:10pt; }
+  /* two-column body */
+  .cols { column-count:2; column-gap:16pt; column-rule:none; }
+  p.abs { font-weight:bold; font-style:italic; margin:0 0 6pt; text-align:justify; }
+  p.body { margin:0 0 6pt; text-indent:10pt; }
+  p.sub  { margin:6pt 0 2pt; font-weight:bold; font-style:italic; }
+  p.sec  { text-align:center; font-weight:bold; margin:10pt 0 4pt;
+    font-variant:small-caps; font-size:10pt; break-after:avoid; }
+  p.cap  { text-align:center; font-size:8pt; font-weight:bold; margin:3pt 0 8pt; }
+  .figwrap { text-align:center; margin:4pt 0 2pt; break-inside:avoid; }
+  .figwrap svg { max-width:100%; height:auto; }
+  table.lit { border-collapse:collapse; width:100%; font-size:7.6pt;
+    margin:4pt 0 8pt; break-inside:avoid; }
+  table.lit td { border:0.75pt solid #000; padding:2pt 3pt; vertical-align:top; }
+  td.th { background:#d9d9d9; font-weight:bold; text-align:center; }
+  p.ref  { margin:0 0 3pt; padding-left:16pt; text-indent:-16pt; font-size:8.4pt; }
+  /* keep the big architecture figure in a single column so it is readable */
+  .fullfig { column-span:all; -webkit-column-span:all; text-align:center; }
+  @media print { body { padding:0; } a { color:#000; text-decoration:none; } }
+</style></head><body>''')
+
+    out.append(f'<h1 class="title">{TITLE}</h1>')
+    out.append('<table class="authtbl"><tr>')
+    for name,email,isph in AUTHORS:
+        out.append(f'<td><span class="aname">{name}</span><br>Dept. of CSE<br>'
+                   f'MLR Institute of Technology<br>Hyderabad, India<br>{email}</td>')
+    out.append('</tr></table>')
+
+    out.append('<div class="cols">')
+    out.append(f'<p class="abs"><i>Abstract&mdash;</i>{ABSTRACT}</p>')
+    out.append(f'<p class="abs"><i>Keywords&mdash;</i>{KEYWORDS}</p>')
+
+    for head,paras in SECTIONS:
+        out.append(f'<p class="sec">{head}</p>')
+        for p in paras:
+            block = para_html(p)
+            # let the tall architecture figure span both columns
+            if p == "@FIGURE@":
+                block = f'<div class="fullfig">{block}</div>'
+            out.append(block)
+
+    out.append('<p class="sec">REFERENCES</p>')
+    for i,r in enumerate(REFERENCES,1):
+        out.append(f'<p class="ref">[{i}]&nbsp;&nbsp;{r}</p>')
+    out.append('</div>')  # .cols
+
+    out.append('</body></html>')
+    return "".join(out)
+
+
 if __name__ == "__main__":
+    # ---- Word-compatible .doc (figures as native VML) ----
     doc = build()
     with open('GraminSahay_IEEE_Paper.doc','w',encoding='utf-8') as f:
         f.write(doc)
     print("Wrote GraminSahay_IEEE_Paper.doc:", len(doc), "bytes")
     leftover=re.findall(r'@[A-Z0-9_]+@', doc)
     assert not leftover, "leftover markers: %s"%leftover
-    print("VML groups:", doc.count('<v:group'))
-    print("Tables:", doc.count('<table class=lit>'))
-    print("Fig captions:", len(re.findall(r'Fig\. \d', doc)))
-    print("References:", doc.count('<p class=ref>'))
-    print("Emails ok:", all(e in doc for e in ['yuvateja976','akhilvankudoth58','praneeladiserla']))
+
+    # ---- Browser .html (figures as inline SVG; Print -> Save as PDF) ----
+    html = build_html()
+    with open('GraminSahay_IEEE_Paper.html','w',encoding='utf-8') as f:
+        f.write(html)
+    print("Wrote GraminSahay_IEEE_Paper.html:", len(html), "bytes")
+    leftover_h=re.findall(r'@[A-Z0-9_]+@', html)
+    assert not leftover_h, "leftover markers in html: %s"%leftover_h
+
+    print("--- .doc  checks ---")
+    print("  VML groups:", doc.count('<v:group'))
+    print("  Tables:", doc.count('<table class=lit>'))
+    print("  References:", doc.count('<p class=ref>'))
+    print("--- .html checks ---")
+    print("  inline SVGs:", html.count('<svg'))
+    print("  Tables:", html.count('<table class=lit>'))
+    print("  Fig captions:", len(re.findall(r'Fig\. \d', html)))
+    print("  References:", html.count('<p class="ref">'))
+    print("  Emails ok:", all(e in html for e in ['yuvateja976','akhilvankudoth58','praneeladiserla']))

@@ -6,9 +6,10 @@ Literature review / research-proposal paper for **GraminSahay: An LLM-Powered RA
 
 | File | Description |
 |------|-------------|
-| `GraminSahay_IEEE_Paper.doc` | **Main paper (Word).** Word-HTML with all 5 figures embedded as native VML and 2 tables. Open in Microsoft Word and use **File → Save As → PDF** to produce the final PDF. |
+| `GraminSahay_IEEE_Paper.html` | **Recommended for PDF.** Open in any browser → **Print → Save as PDF** (A4). All 5 figures render as inline SVG; two-column layout. |
 | `GraminSahay.tex` | **LaTeX source** (two-column `IEEEtran`). Compiles on Overleaf or any TeX install to the final two-column IEEE PDF. |
-| `build_doc.py` | Generator script (pure Python stdlib) that produces `GraminSahay_IEEE_Paper.doc`. Run `python3 build_doc.py`. |
+| `GraminSahay_IEEE_Paper.doc` | Word version (Word-HTML with figures as native VML). Opens in Microsoft Word; use **File → Save As → PDF**. If Word refuses to open it, use the `.html` above instead. |
+| `build_doc.py` | Generator script (pure Python stdlib). Run `python3 build_doc.py` to regenerate both the `.doc` and `.html`. |
 | `GraminSahay_Architecture.drawio` / `.svg` | Editable draw.io source + SVG for the system-architecture figure (Fig. 3). |
 | `fig_existing.svg` | Fig. 1 — Existing system flow. |
 | `fig_proposed.svg` | Fig. 2 — Proposed system flow. |
@@ -16,7 +17,7 @@ Literature review / research-proposal paper for **GraminSahay: An LLM-Powered RA
 | `fig_chart_line.svg` | Fig. 5 — Expected Recall@k vs. faithfulness. |
 | `figures/` | PNG/SVG/drawio sources for Figs. 1–5. |
 
-> **Generating the PDF:** no PDF is committed. Produce it either from `GraminSahay_IEEE_Paper.doc` (open in Word → Save As PDF) or by compiling `GraminSahay.tex` on Overleaf.
+> **Generating the PDF:** no PDF is committed. Easiest route — open `GraminSahay_IEEE_Paper.html` in a browser and **Print → Save as PDF** (choose A4, margins Default). Alternatives: open the `.doc` in Word → Save As PDF, or compile `GraminSahay.tex` on Overleaf.
 
 ## Section outline
 
