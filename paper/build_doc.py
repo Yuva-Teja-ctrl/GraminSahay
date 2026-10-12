@@ -49,34 +49,33 @@ KEYWORDS = ("Retrieval-Augmented Generation, Large Language Models, Multilingual
 
 # Sections: (heading, [paragraphs]).  Sub-headings are prefixed with "~".
 SECTIONS = [
- ("I. Introduction", [
+ ("1. INTRODUCTION", [
    "India runs a wide range of welfare schemes for its rural population&mdash;farming support, scholarships, health cover, housing, pensions, and more. On paper the coverage looks generous. On the ground, plenty of people who clearly qualify never see a rupee of it. The reason is usually information, not administration. Someone may not know the scheme exists at all; and even when they do, the rules are hard to parse, the document checklist is vague, and a rejection letter almost never explains what actually went wrong [1].",
    "Part of the issue is how the official portals are built. They index everything by scheme name, so a citizen has to already know what a scheme is called before the portal is of any use to them. That is backwards. People know their own circumstances; they do not carry around a mental catalogue of scheme names mapped to those circumstances. Language makes this worse: most portals are text-heavy and assume the user can read formal official prose, which leaves out anyone who would rather speak in their regional language [1].",
    "Large language models (LLMs) and Retrieval-Augmented Generation (RAG) give us a way in. In a RAG setup, a retriever first pulls relevant passages from an external document store and a generator then answers using that evidence, so the output is tied to real sources instead of resting only on what the model memorised during training [8]. For welfare, that property matters a great deal: answers have to be correct, they have to be traceable back to an official document, and the underlying corpus has to be easy to refresh when a policy changes. Layer multilingual retrieval and Indic speech on top, and the same system can take a spoken account of someone&rsquo;s situation and reply in the language they actually use.",
    "We present GraminSahay, a multilingual, voice-first welfare navigator built around this idea. A citizen simply states their situation&mdash;say, &ldquo;I am a farmer with a small landholding&rdquo; or &ldquo;my daughter is starting college&rdquo;&mdash;and the system returns the schemes they are likely eligible for, why each decision was reached, a warning if two schemes cannot be claimed together, and the steps needed to apply. This paper concentrates on the research that such a system rests on and the gaps it still has to close.",
    "This is more than a convenience problem. Welfare delivery sits squarely under two Sustainable Development Goals&mdash;Goal 1 (No Poverty) and Goal 10 (Reduced Inequalities)&mdash;and a scheme only protects a household once someone eligible actually claims it. So the hard part is rarely writing the policy; it is the last mile: finding the right scheme, understanding it, and surviving the application. That last mile is exactly where rural citizens stall, and it is where a good assistant can turn policy that already exists into benefits people genuinely receive&mdash;without changing a single scheme.",
    "GraminSahay is shaped by three commitments. The first is that the citizen should never have to name a scheme; the system takes a described situation and works out the candidate schemes itself. The second is explainability&mdash;a bare yes/no verdict is close to useless, so every eligibility decision comes with a plain-language reason tied back to an official source. The third is accessibility: voice and regional-language support are treated as the main way people interact with the system, not as optional extras, because a large part of the intended audience is far more comfortable speaking than reading official documents.",
-   "The rest of the paper proceeds as follows. Section II surveys the literature along six strands. Section III sets out the research gaps. The problem statement and motivation appear in Sections IV and V, and Section VI lists the objectives. Section VII compares the existing and proposed systems, Section VIII walks through the methodology, and Section IX gives the solution and architecture. Section X reports the expected results, Section XI looks at future work, and Section XII concludes.",
+   "The paper is laid out as follows. Section 2 walks through the related work; Section 3 pins down the gaps we found. Sections 4 and 5 give the problem statement and what motivated us, and Section 6 lists our objectives. Section 7 sets the existing approach against the one we propose, Section 8 describes the method, and Section 9 lays out the architecture. Section 10 covers the results we expect, Section 11 looks ahead, and Section 12 wraps up.",
  ]),
- ("II. Literature Review", [
-   "<b>Foundational retrieval-augmented generation.</b> RAG was introduced by Lewis et al. for knowledge-intensive NLP, pairing a pretrained sequence generator with a neural retriever over an external document index [8]. Against a purely parametric baseline it produced answers that were more specific, diverse, and factual, and it improved open-domain question answering, making clear that answer quality can only be as good as retrieval quality [8]. Their experiments ran over a general Wikipedia index, whereas a welfare navigator must retrieve from something far narrower&mdash;a curated set of official scheme guidelines and eligibility rules&mdash;so that more retrieved passages help completeness while widening the surface over which an answer must stay faithful as policy text changes.",
-   "<b>Faithfulness and automated evaluation of RAG.</b> A welfare system must never claim an eligibility that the retrieved evidence does not support, so faithfulness is central rather than optional. Filice et al. put forward Answering with Faithfulness (AwF), which checks directly whether an answer is backed by the retrieved passages and shows that stronger faithfulness checks both lift downstream performance and enable principled fallbacks [4]. RAGAs approaches the same problem with reference-free metrics that separately score retrieval relevance, faithfulness, and generation quality, assessing a pipeline without hand-written ground truth for every query [7]. Both help validate eligibility explanations, though automated metrics may not capture whether a legal or policy decision is actually correct, and a study of deployed e-government chatbots confirms that most are evaluated only on effectiveness and usability rather than the correctness and public-value guarantees high-stakes citizen services demand [14].",
-   "<b>Retrieval-augmented reasoning.</b> Deciding eligibility is multi-step inference rather than lookup, since occupation, family situation, and location must be checked against several conditions at once. Li et al. survey RAG-reasoning systems that fold multi-step reasoning into retrieval and find that pairing external retrieval with reasoning helps on knowledge-intensive, complex tasks [3], while Self-RAG lets the model decide when to retrieve and then critique both evidence and draft using reflection tokens, improving factuality and citation accuracy [9]. In the same spirit of deciding when to fetch, FLARE looks ahead to the sentence it is about to generate and triggers fresh retrieval when that draft contains low-confidence tokens [18]. Because eligibility is the application of written rules to a citizen&rsquo;s facts, LegalBench is a sobering reference point: across 162 hand-built tasks it shows LLMs handle rule-based legal reasoning unevenly, arguing for grounding every verdict in retrieved policy text rather than parametric judgement [15].",
-   "<b>Multilingual and cross-lingual retrieval.</b> Working in English, Telugu, and Hindi puts multilingual retrieval at the heart of the design. Ranaldi et al. weigh translate-the-question RAG against direct multilingual retrieval and report that going direct tends to give better coverage and efficiency, whereas translation can lose coverage [5]; where a translation step is unavoidable, Gala et al.&rsquo;s IndicTrans2 provides open, high-quality translation across all 22 scheduled Indian languages, making a translation-assisted fallback far more viable [16]. Qi et al. show that what RAG retrieves can shift from one language to another, opening cross-lingual inconsistencies [2], and Conneau et al.&rsquo;s XLM-R demonstrates that a single transformer trained on many languages delivers strong cross-lingual transfer with large gains on low-resource languages [17]&mdash;encouraging for Indic text where labelled data is scarce. The practical lesson is to keep query, retrieval, and response languages carefully aligned.",
-   "<b>Dense retrieval and domain adaptation.</b> Whether the right scheme document reaches the top of the list comes down to the retriever. The modern line begins with Karpukhin et al.&rsquo;s Dense Passage Retrieval, whose dual-encoder embeddings decisively outperform sparse BM25 baselines [12], while Contriever trains dense retrievers by unsupervised contrastive learning and extends to multilingual retrieval, though it can struggle with specialised government terminology unless tuned [10]. RAFT instead trains an LLM to lean on useful retrieved documents and ignore distractors, reliably improving in-domain performance at the cost of domain-specific training data [6], which is awkward for a policy corpus that keeps moving. For the Indic side specifically, Kakwani et al.&rsquo;s IndicNLPSuite contributes large monolingual corpora, pre-trained models, and the IndicGLUE benchmark [19], giving a concrete starting point for adapting retrievers to Telugu- and Hindi-language policy text.",
-   "<b>LLMs for interpretive support in digital government.</b> A systematic review of LLMs for interpretive support in digital-government services finds the field moving from plain question answering toward service navigation and interpretive help, with the clearest gains in efficiency, responsiveness, and accessibility, provided reliability, legal boundaries, responsibility allocation, privacy, and organisational capacity are handled [1]. A separate line of work on context-optimised RAG for local-government welfare subsidies shows concretely that welfare answers can be grounded in local policy documents [11]. On accessibility, a voice-first assistant needs speech in both directions: Radford et al.&rsquo;s Whisper, trained on 680,000 hours of weakly supervised multilingual audio, delivers strong zero-shot transcription across languages and accents [13], while Kumar et al.&rsquo;s Indic-TTS builds synthesis models for major Indian languages [20], together supplying the Indic STT/TTS a rural assistant depends on. Read across these strands, no single prior work understands a situation, retrieves grounded evidence, reasons about eligibility and explains it, catches scheme conflicts, and delivers the result as multilingual voice at once&mdash;the integration gap GraminSahay sets out to fill.",
+ ("2. LITERATURE SURVEY", [
+   "Work on using language models for welfare and public-service help has grown out of a few separate research threads, and it is worth walking through them before explaining where our system fits. The first is Retrieval-Augmented Generation itself. Lewis et al. introduced RAG for knowledge-intensive tasks by putting a neural retriever in front of a text generator, and showed that answers grounded in retrieved passages are more specific and more factual than answers a model simply recalls from training [8]. The lesson we take from it is simple: the answer is only ever as good as what the retriever finds, and for a welfare tool the retriever has to work over official scheme and eligibility documents rather than a general web index.",
+   "A second thread is about keeping those answers honest. A welfare assistant must never promise a benefit the evidence does not support, so faithfulness matters a great deal. Filice et al. propose a method that checks whether a generated answer is actually backed by the retrieved text and show it both improves results and makes safe fallbacks possible [4]. RAGAs takes a different route, scoring retrieval relevance, faithfulness, and answer quality without needing a hand-written answer key for every question [7]. Both are useful for checking eligibility explanations, though neither can fully judge whether a policy decision is legally correct&mdash;a study of government chatbots that are deployed in practice found most are tested only for usability, not for this kind of correctness [14].",
+   "A third thread treats retrieval as part of reasoning rather than a one-off lookup, which matches our problem well, since eligibility depends on several conditions at once. Li et al. survey systems that interleave retrieval with multi-step reasoning and report clear gains on complex tasks [3]. Self-RAG lets the model decide for itself when to fetch more evidence and then criticise its own draft [9], and FLARE goes further by predicting the next sentence and retrieving again whenever it looks uncertain [18]. Because deciding eligibility is really about applying written rules to a person's facts, LegalBench is a useful warning: across 162 tasks it shows that language models handle rule-based legal reasoning unevenly [15], which is exactly why we anchor every decision in retrieved policy text instead of trusting the model's memory.",
+   "The fourth thread is multilingual retrieval, which sits at the centre of our design because we work in English, Telugu, and Hindi. Ranaldi et al. compare translating the question first against retrieving directly in each language and find the direct route usually keeps more coverage [5]. When translation cannot be avoided, IndicTrans2 offers open, good-quality translation across all 22 scheduled Indian languages, which makes that fallback practical [16]. Qi et al. caution that what RAG retrieves can quietly change from one language to another [2], and XLM-R shows a single model can transfer across many languages, with the biggest wins on low-resource ones [17]&mdash;promising for Indic text, where labelled data is thin.",
+   "Finally, retrieval quality itself depends on the retriever. Dense Passage Retrieval from Karpukhin et al. set the modern template and clearly beats older keyword baselines [12], while Contriever reaches multilingual retrieval without supervision but can trip over specialised government wording unless it is tuned [10]. RAFT trains the model to lean on the useful documents and ignore distractors, at the cost of extra training data [6]. On the Indic side, IndicNLPSuite supplies corpora, models, and a benchmark that give a sensible starting point for Telugu and Hindi [19]. On the service side, a review of language models in digital government notes a shift from plain question answering toward actually guiding people through services, as long as reliability and privacy are handled [1], and context-optimised RAG has already grounded welfare answers in local policy documents [11]. For the voice side, Whisper gives robust speech-to-text across many languages [13] and Indic-TTS supplies speech synthesis for Indian languages [20]. What none of this work does, though, is pull all of it together&mdash;understanding a described situation, retrieving the right evidence, reasoning about eligibility and explaining it, catching clashes between schemes, and answering back in the user's own spoken language. That is the gap GraminSahay is built to close.",
  ]),
- ("III. Research Gaps Identified", [
-   "From the survey above, we draw out three main gaps that the current tools leave open, each bundling several of the shortcomings the literature exposes:",
+ ("3. GAPS IDENTIFIED", [
+   "Reading across the work above, three gaps stand out. Each one gathers up several of the smaller shortcomings the earlier studies point to, and together they describe what GraminSahay has to solve.",
    "@GAPLIST@",
  ]),
- ("IV. Problem Statement", [
-   "The schemes are there, and RAG and LLMs now make grounded question answering practical&mdash;yet rural citizens still cannot dependably find the benefits they are owed, let alone act on them. The portals they are given are name-indexed, generic rather than personal, thin on explanation, blind to conflicts between schemes, and difficult to use for anyone outside the dominant language. What is needed, then, is a navigator that is explainable, situation-aware, multilingual, and voice-first: one that reads a citizen&rsquo;s situation, retrieves the right official information, works out eligibility, warns about conflicting schemes, and sees the person through to application&mdash;none of which should require the citizen to know a scheme&rsquo;s name in advance.",
+ ("4. PROBLEM STATEMENT", [
+   "The schemes exist, and RAG and LLMs have made grounded question answering practical&mdash;yet rural citizens still struggle to find the benefits they are entitled to, let alone act on them. The portals they are handed are indexed by scheme name, show the same generic page to everyone, explain little, say nothing about schemes that clash, and are hard to use for anyone outside the main language. The need is for a navigator that is explainable, aware of the user's situation, multilingual, and voice-first: one that reads what a citizen says, pulls up the right official information, works out eligibility, flags conflicts, and walks the person through to applying&mdash;all without ever asking them to know a scheme's name first.",
  ]),
- ("V. Motivation", [
-   "What drives this work is a fairly blunt observation: eligible rural citizens miss out on benefits mainly because they cannot find or understand them, not because the benefits do not exist. The usual answers fall short. Manual portal search already assumes you know what you are looking for; generic pages ignore who you actually are; and text-only, single-language interfaces leave out many of the very people the schemes were meant for. Recent research offers the pieces of a better answer. RAG lets us anchor replies in official documents [8]. Retrieval-augmented reasoning handles the multi-step inference that deciding eligibility really involves [3], [9]. Faithfulness-aware generation and automated evaluation keep the answers tethered to the evidence [4], [7]. And multilingual retrieval together with Indic speech makes the whole thing usable by voice in a citizen&rsquo;s own language [2], [5]. Our aim is to bring these pieces together&mdash;situation understanding, RAG retrieval, eligibility reasoning, conflict detection, and multilingual voice&mdash;into one explainable welfare navigator that speaks to SDG 1 (No Poverty) and SDG 10 (Reduced Inequalities).",
+ ("5. MOTIVATION", [
+   "What drives this work is a plain observation: eligible rural citizens miss out mostly because they cannot find or understand the benefits, not because the benefits are missing. The usual tools do not help much. Searching a portal assumes you already know what you want; generic pages ignore who you are; and text-only, one-language interfaces leave out many of the people the schemes were written for. Recent research gives us the pieces of a better answer&mdash;RAG to anchor replies in real documents [8], retrieval with reasoning for the multi-step logic eligibility needs [3], [9], faithfulness checks to keep answers tied to the evidence [4], [7], and multilingual retrieval with Indic speech to make it work by voice in a person's own language [2], [5]. Our goal is to join these pieces into one explainable welfare navigator, something that speaks directly to SDG 1 (No Poverty) and SDG 10 (Reduced Inequalities).",
  ]),
- ("VI. Research Objectives", [
+ ("6. RESEARCH OBJECTIVES", [
    "The work is organised around six concrete objectives.",
    "<i>Objective 1:</i> Build a voice-first, multilingual front end&mdash;Indic STT/TTS in English, Telugu, and Hindi&mdash;so a citizen can simply say what their situation is.",
    "<i>Objective 2:</i> Turn that free-form description into a structured profile: occupation, family situation, location, and whatever else bears on eligibility.",
@@ -85,7 +84,7 @@ SECTIONS = [
    "<i>Objective 5:</i> Detect scheme conflicts, so the citizen is warned when two benefits cannot be claimed together.",
    "<i>Objective 6:</i> Produce step-by-step application guidance for the five pilot categories, listing the documents required and pointing to the official portal or office.",
  ]),
- ("VII. Existing System and Proposed System", [
+ ("7. EXISTING SYSTEM AND PROPOSED SYSTEM", [
    "~A. Existing System",
    "As things stand, a citizen has to hunt through government portals and documents by hand, usually needing the scheme&rsquo;s name just to begin. The relevant details are scattered across several places, eligibility and document requirements have to be worked out by reading the fine print, and nobody tailors any of it to the individual. Fig. 1 shows this flow. Its weak points are not subtle: the search is manual, there is almost no personalisation, language is a barrier, and nothing warns you when two schemes conflict.",
    "@FIG_EXISTING@",
@@ -93,7 +92,7 @@ SECTIONS = [
    "GraminSahay swaps name-based search for situation-first discovery (Fig. 2). Whatever the citizen says or types becomes a structured profile. From there a RAG layer fetches the relevant passages out of the official-document index, an LLM reasoning layer decides eligibility and explains it, a conflict-detection layer raises a flag when two benefits are mutually exclusive, and a guidance layer lays out what to do next. The answer comes back as multilingual voice in whichever language the citizen chose.",
    "@FIG_PROPOSED@",
  ]),
- ("VIII. Proposed Methodology", [
+ ("8. PROPOSED METHODOLOGY", [
    "<b>1) Citizen Interaction:</b> Input arrives either by voice (through Indic STT) or as text, with the citizen picking a language&mdash;English, Telugu, or Hindi. A typical opening line is &ldquo;I am a farmer with a small landholding.&rdquo;",
    "<b>2) Profile Understanding:</b> From that free-form sentence the system pulls out a structured profile: occupation, family situation, location, and any other detail that happens to matter.",
    "<b>3) RAG Retrieval:</b> The profile and the query are embedded together and used to fetch the top-<i>k</i> passages from a vector database built over the scheme guidelines, eligibility rules, and policy documents.",
@@ -104,11 +103,11 @@ SECTIONS = [
    "<b>8) Evaluation:</b> We will judge the pipeline on three fronts&mdash;retrieval relevance, answer faithfulness, and eligibility-classification quality&mdash;using reference-free RAG metrics [7] alongside faithfulness evaluation [4]. Concretely, retrieval is scored with Recall@k and mean reciprocal rank over labelled situation&ndash;scheme pairs; classification with per-class precision, recall, and macro-F1 across the four labels; and faithfulness as the fraction of justifications that the retrieved passages fully back up. On top of the automated numbers, a small panel of domain reviewers will rate how clear and how correct the explanations are.",
    "Two concerns run across the whole design. One is keeping the data fresh: schemes and thresholds move, so the corpus is versioned and re-indexed on a schedule, and every answer notes the document version it leaned on. The other is privacy: we keep the citizen profile deliberately thin&mdash;only the attributes eligibility actually needs&mdash;and nothing sensitive is held past the session unless the citizen opts in, which lines up with the governance conditions the digital-government literature stresses [1].",
  ]),
- ("IX. Proposed Solution and System Architecture", [
+ ("9. PROPOSED SOLUTION AND SYSTEM ARCHITECTURE", [
    "The layered architecture is drawn in Fig. 3. Work moves top to bottom&mdash;citizen interaction, profile understanding, RAG retrieval, eligibility reasoning, conflict detection, application guidance&mdash;and ends in multilingual voice output. The band at the bottom names the stack we intend to use: a Flutter / React Native front end, a FastAPI / Node.js back end, PostgreSQL for user and application data, a multilingual LLM with RAG doing the reasoning and generation, a vector database handling document retrieval, and Indic STT/TTS for the voice side.",
    "@FIGURE@",
  ]),
- ("X. Expected Results", [
+ ("10. EXPECTED RESULTS", [
    "Since this is a proposal rather than a finished build, the figures below are what we <i>expect</i> once the system is implemented and evaluated. Think of them as targets to aim at; the real numbers will replace them after the experiments are run.",
    "~A. Expected Performance (Tabular)",
    "Table I lays out the performance we anticipate across the five pilot categories, reported as retrieval Recall@5, answer faithfulness [4], [7], eligibility-classification accuracy, and macro-F1.",
@@ -122,7 +121,7 @@ SECTIONS = [
    "~C. Discussion of Expected Outcomes",
    "Taken together, Tables I and II and Figs. 4 and 5 describe how we want the system to behave. The healthcare and education numbers in Table I are kept deliberately modest: eligibility there hinges on several conditions at once&mdash;income bands, institution type, age&mdash;which is simply harder to get right than, say, a pension scheme with fairly uniform rules. Table II, meanwhile, is about the difference a citizen would actually feel: the manual process offers no situation-first discovery, no explainable eligibility, and no conflict detection, while the proposed system offers all three. Fig. 5 puts the main tension on the table&mdash;more passages mean higher recall but a smaller fraction of the answer that is strictly backed by evidence&mdash;and that is what pushes us toward k &asymp; 5. We treat these figures as acceptance thresholds rather than aspirations: a configuration passes only if it hits the tabulated accuracy and faithfulness <i>and</i> keeps end-to-end latency low enough to feel interactive over voice.",
  ]),
- ("XI. Future Enhancements", [
+ ("11. FUTURE ENHANCEMENTS", [
    "Once the prototype is working, there are several directions we would like to take it.",
    "&bull; <b>Broader coverage:</b> Push past the five pilot categories and past Telangana&mdash;to more states and to central schemes&mdash;keeping the policy corpus continuously up to date.",
    "&bull; <b>More languages:</b> Grow the Indic STT/TTS and multilingual retrieval beyond English, Telugu, and Hindi into further regional languages and dialects.",
@@ -132,19 +131,19 @@ SECTIONS = [
    "&bull; <b>Explainability and trust:</b> Attach source citations and confidence scores to every answer, and route borderline eligibility cases to a human for review.",
    "&bull; <b>Accessibility:</b> Reach citizens without smartphones by adding IVR / telephone and WhatsApp channels.",
  ]),
- ("XII. Conclusion", [
-   "This paper surveyed the work most relevant to a situation-aware rural welfare navigator and used it to pin down the research gaps that GraminSahay is meant to close. A few things come through clearly from that survey: RAG keeps generation anchored in authoritative documents; faithfulness evaluation and retrieval-augmented reasoning together make multi-step eligibility inference trustworthy; multilingual retrieval and Indic speech open the door to voice access in regional languages; and domain adaptation is what makes any of this hold up on specialised policy text. GraminSahay stitches these together&mdash;situation understanding, RAG retrieval, eligibility reasoning, conflict detection, and multilingual voice. What we expect to end up with is an explainable, accessible assistant that helps a rural citizen find the right government support, grasp whether they qualify, see what information is still missing, and move toward applying&mdash;all without having to know a scheme&rsquo;s name to begin with. The next steps are to widen the system past the five pilot categories and the starting set of languages, and to report real, measured numbers for retrieval and eligibility performance.",
+ ("12. CONCLUSION", [
+   "This paper reviewed the research closest to a situation-aware rural welfare navigator and used it to pin down the gaps GraminSahay sets out to close. A few points come through clearly. RAG keeps answers tied to authoritative documents; faithfulness checks and retrieval-with-reasoning together make multi-step eligibility decisions trustworthy; multilingual retrieval and Indic speech open the door to voice access in regional languages; and some domain adaptation is what keeps all of this working on dense policy text. GraminSahay brings these together into one flow&mdash;understanding a situation, retrieving evidence, reasoning about eligibility and explaining it, catching conflicts, and replying in multilingual voice. The result we are aiming for is an explainable, accessible assistant that helps a rural citizen find the right support, understand whether they qualify, see what is still missing, and move toward applying&mdash;without needing to know a scheme's name to start. The next steps are to extend beyond the five pilot categories and the first set of languages, and to replace the expected numbers with measured ones.",
  ]),
 ]
 
-# Three main research gaps as short bullet points.
+# Three main research gaps (numbered, bold lead-ins -- as in the sample paper).
 GAPS = [
- ("Multilingual, Voice-First Accessibility Gap",
-  "text-first, single-language portals exclude rural users who prefer regional-language voice; Indic speech and cross-lingual retrieval remain under-used [1], [2], [5], [13], [17], [19]."),
- ("Explainable, Situation-First Eligibility Gap",
-  "name-indexed, generic portals give bare yes/no verdicts; citizens need situation-first discovery with faithful, source-traceable reasons over adapted domain retrieval [1], [4], [9], [12], [15]."),
- ("Application-Process Guidance and Conflict-Awareness Gap",
-  "existing tools rarely flag mutually exclusive schemes or spell out the documents and steps needed to actually apply [1], [11]."),
+ ("Multilingual and Voice-First Access",
+  "Most portals and prior systems are text-heavy and work in one language, which leaves out rural users who would far rather speak in their own regional language. Indic speech and cross-lingual retrieval are rarely brought into the welfare setting, so people who cannot read formal official prose are effectively shut out [1], [2], [5], [13], [17], [19]."),
+ ("Explainable, Situation-First Eligibility",
+  "Because portals are indexed by scheme name, a citizen who does not already know the name has nowhere to begin, and a plain yes or no tells them very little. What is missing is discovery that starts from a described situation and an explanation of why a decision was reached, tied back to a trusted source [1], [4], [9], [12], [15]."),
+ ("Application Guidance and Conflict Awareness",
+  "Finding a scheme is only half the job. Existing tools rarely warn that two benefits cannot be claimed together, and they seldom spell out which documents to gather or what the actual application steps are [1], [11]."),
 ]
 
 REFERENCES = [
@@ -402,8 +401,8 @@ def table3():
 
 def gaplist():
     items = ''.join(
-        f'<li><b><i>{title}:</i></b> {body}</li>' for title, body in GAPS)
-    return f'<ul class="gaps">{items}</ul>'
+        f'<li><b>{title}:</b> {body}</li>' for title, body in GAPS)
+    return f'<ol class="gaps">{items}</ol>'
 
 def para(txt):
     if txt == "@GAPLIST@":
@@ -552,36 +551,38 @@ def build_html():
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GraminSahay IEEE Paper</title>
 <style>
-  /* ---- Standard IEEE conference two-column format ---- */
-  /* US Letter page, ~0.75in margins, 0.25in column gap (IEEE spec) */
+  /* ---- IEEE format matched to the supplied sample paper ---- */
   @page { size: 8.5in 11in; margin: 0.75in 0.6in; }
   * { box-sizing: border-box; }
-  body { font-family:"Times New Roman",Times,serif; font-size:10pt;
-    line-height:1.15; color:#000; max-width:7.0in; margin:0 auto;
-    padding:0.6in 0.55in; text-align:justify;
+  body { font-family:"Times New Roman",Times,serif; font-size:9.6pt;
+    line-height:1.12; color:#000; max-width:7.0in; margin:0 auto;
+    padding:0.55in 0.5in; text-align:justify;
     -webkit-hyphens:auto; -moz-hyphens:auto; hyphens:auto; }
-  /* Title: Times 24pt, centered, spans both columns (IEEE) */
-  h1.title { font-size:24pt; font-weight:normal; text-align:center;
-    margin:0 0 12pt; line-height:1.1; }
-  /* Author block: centered; 3 authors in row 1, 4th in row 2 */
+  /* Title: Times bold, centered, ~19pt (as in the sample) */
+  h1.title { font-size:19pt; font-weight:bold; text-align:center;
+    margin:0 0 10pt; line-height:1.15; }
+  /* Author block: centered, bold names, blue emails; 3 in row 1, 4th in row 2 */
   table.authtbl { width:100%; border:none; border-collapse:collapse;
-    margin:0 auto 12pt; }
-  table.authtbl td { text-align:center; font-size:10pt; border:none;
-    vertical-align:top; padding:2pt 6pt; }
-  .aname { font-weight:normal; font-size:11pt; }
-  .amail { color:#000; font-style:italic; font-size:9pt; }  /* plain, not a blue link */
+    margin:0 auto 10pt; }
+  table.authtbl td { text-align:center; font-size:9.5pt; border:none;
+    vertical-align:top; padding:1pt 6pt; }
+  .aname { font-weight:bold; font-size:10.5pt; }
+  .amail { color:#0000cc; text-decoration:underline; font-size:9pt; }
   /* two-column body, justified (vendor-prefixed for Safari/Firefox) */
   .cols { column-count:2; -moz-column-count:2; -webkit-column-count:2;
-    column-gap:0.25in; -moz-column-gap:0.25in; -webkit-column-gap:0.25in;
+    column-gap:0.3in; -moz-column-gap:0.3in; -webkit-column-gap:0.3in;
     column-rule:none; }
-  /* Abstract & keywords: 9pt boldface (IEEE) */
-  p.abs { font-weight:bold; margin:0 0 5pt; text-align:justify; font-size:9pt; }
+  /* "ABSTRACT" centered bold heading; abstract body bold-italic (as in sample) */
+  p.abshead { text-align:center; font-weight:bold; font-size:9.6pt; margin:4pt 0 3pt; }
+  p.abs { font-weight:bold; font-style:italic; margin:0 0 5pt; text-align:justify;
+    font-size:9.4pt; }
+  p.kw  { font-size:9.4pt; margin:0 0 5pt; text-align:justify; }
   p.body { margin:0 0 0; text-indent:0.2in; }
-  p.sub  { margin:4pt 0 1pt; font-style:italic; font-weight:normal; }
-  /* Section headings: Roman numeral, centered, SMALL-CAPS, 10pt (IEEE) */
-  p.sec  { text-align:center; font-weight:normal; margin:8pt 0 3pt;
-    font-variant:small-caps; font-size:10pt; break-after:avoid; }
-  p.cap  { text-align:center; font-size:9pt; font-weight:normal; margin:2pt 0 7pt; }
+  p.sub  { margin:4pt 0 1pt; font-weight:bold; }
+  /* Section headings: Arabic numeral, centered, BOLD, ALL CAPS (as in sample) */
+  p.sec  { text-align:center; font-weight:bold; margin:7pt 0 3pt;
+    font-size:9.6pt; break-after:avoid; }
+  p.cap  { text-align:center; font-size:9pt; font-weight:bold; margin:2pt 0 7pt; }
   /* Keep figures compact so the paper stays ~6-7 pages. In-column figures
      are capped to the column width; the tall architecture figure is height-
      capped so it never balloons to a full page. */
@@ -592,8 +593,8 @@ def build_html():
   table.lit td { border:0.75pt solid #000; padding:2pt 3pt; vertical-align:top; }
   td.th { background:#d9d9d9; font-weight:bold; text-align:center; }
   p.ref  { margin:0 0 2pt; padding-left:14pt; text-indent:-14pt; font-size:8pt; }
-  ul.gaps { margin:2pt 0 5pt; padding-left:14pt; }
-  ul.gaps li { margin:0 0 3pt; text-align:justify; }
+  ol.gaps { margin:2pt 0 5pt; padding-left:16pt; }
+  ol.gaps li { margin:0 0 3pt; text-align:justify; }
   /* --- make the two-column layout survive Print -> PDF in every browser --- */
   @media print {
     body { padding:0; margin:0; }
@@ -619,8 +620,9 @@ def build_html():
     out.append('</table>')
 
     out.append('<div class="cols">')
-    out.append(f'<p class="abs"><i>Abstract&mdash;</i>{ABSTRACT}</p>')
-    out.append(f'<p class="abs"><i>Index Terms&mdash;</i>{KEYWORDS}</p>')
+    out.append('<p class="abshead">ABSTRACT</p>')
+    out.append(f'<p class="abs">{ABSTRACT}</p>')
+    out.append(f'<p class="kw"><b>Keywords:</b> {KEYWORDS}</p>')
 
     for head,paras in SECTIONS:
         out.append(f'<p class="sec">{head}</p>')
@@ -631,7 +633,7 @@ def build_html():
             # it stays legible within a single column.
             out.append(para_html(p))
 
-    out.append('<p class="sec">REFERENCES</p>')
+    out.append('<p class="sec">13. REFERENCES</p>')
     for i,r in enumerate(REFERENCES,1):
         out.append(f'<p class="ref">[{i}]&nbsp;&nbsp;{r}</p>')
     out.append('</div>')  # .cols
