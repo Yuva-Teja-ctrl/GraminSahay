@@ -6,18 +6,17 @@ Literature review / research-proposal paper for **GraminSahay: An LLM-Powered RA
 
 | File | Description |
 |------|-------------|
-| `GraminSahay_IEEE_Paper.html` | **Recommended for PDF.** Open in any browser → **Print → Save as PDF** (A4). All 5 figures render as inline SVG; two-column layout. |
-| `GraminSahay.tex` | **LaTeX source** (two-column `IEEEtran`). Compiles on Overleaf or any TeX install to the final two-column IEEE PDF. |
-| `GraminSahay_IEEE_Paper.doc` | Word version (Word-HTML with figures as native VML). Opens in Microsoft Word; use **File → Save As → PDF**. If Word refuses to open it, use the `.html` above instead. |
-| `build_doc.py` | Generator script (pure Python stdlib). Run `python3 build_doc.py` to regenerate both the `.doc` and `.html`. |
-| `GraminSahay_Architecture.drawio` / `.svg` | Editable draw.io source + SVG for the system-architecture figure (Fig. 3). |
-| `fig_existing.svg` | Fig. 1 — Existing system flow. |
-| `fig_proposed.svg` | Fig. 2 — Proposed system flow. |
-| `fig_chart_bar.svg` | Fig. 4 — Expected accuracy by welfare category. |
-| `fig_chart_line.svg` | Fig. 5 — Expected Recall@k vs. faithfulness. |
-| `figures/` | PNG/SVG/drawio sources for Figs. 1–5. |
+| `GraminSahay_IEEE_Paper.pdf` | **Final paper — just download and use.** Two-column IEEE layout, 7 pages, all 5 figures, 20 references. Pre-rendered, so you do **not** need Word, Pages, Safari, or any converter. |
+| `GraminSahay_IEEE_Paper.html` | Source for the PDF. Renders two columns + all figures. To re-make the PDF: open in **Chrome or Edge** → Print → Save as PDF (A4). *Note: Safari's print engine ignores CSS columns, so use Chrome/Edge, or just use the committed `.pdf`.* |
+| `GraminSahay.tex` | **LaTeX source** (two-column `IEEEtran`). Compiles on Overleaf to a polished two-column IEEE PDF — a good option on macOS. |
+| `build_doc.py` | Generator (pure Python stdlib). `python3 build_doc.py` writes the `.html` and, if headless Chrome is present, the `.pdf`. |
+| `GraminSahay_Architecture.drawio` / `.svg` | Editable draw.io source + SVG for the architecture figure (Fig. 3). |
+| `fig_existing.svg` · `fig_proposed.svg` · `fig_chart_bar.svg` · `fig_chart_line.svg` | Legacy top-level figure SVGs. |
+| `figures/` | Clean Times New Roman figure sources (Fig. 1–5, PNG/SVG/drawio) used in the paper. |
 
-> **Generating the PDF:** no PDF is committed. Easiest route — open `GraminSahay_IEEE_Paper.html` in a browser and **Print → Save as PDF** (choose A4, margins Default). Alternatives: open the `.doc` in Word → Save As PDF, or compile `GraminSahay.tex` on Overleaf.
+> **Just need the PDF?** Download `GraminSahay_IEEE_Paper.pdf` — it is the finished two-column paper. No conversion needed.
+>
+> The HTML-based `.doc` was removed: Microsoft Word and Apple Pages reject HTML files with a `.doc` extension. Use the committed `.pdf` (or compile `GraminSahay.tex` on Overleaf) instead.
 
 ## Section outline
 

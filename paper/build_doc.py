@@ -639,15 +639,9 @@ def build_html():
 
 
 if __name__ == "__main__":
-    # ---- Word-compatible .doc (figures as native VML) ----
-    doc = build()
-    with open('GraminSahay_IEEE_Paper.doc','w',encoding='utf-8') as f:
-        f.write(doc)
-    print("Wrote GraminSahay_IEEE_Paper.doc:", len(doc), "bytes")
-    leftover=re.findall(r'@[A-Z0-9_]+@', doc)
-    assert not leftover, "leftover markers: %s"%leftover
+    import subprocess, shutil, os
 
-    # ---- Browser .html (figures as inline SVG; Print -> Save as PDF) ----
+    # ---- Browser .html (figures as inline SVG; renders two columns everywhere) ----
     html = build_html()
     with open('GraminSahay_IEEE_Paper.html','w',encoding='utf-8') as f:
         f.write(html)
@@ -655,13 +649,24 @@ if __name__ == "__main__":
     leftover_h=re.findall(r'@[A-Z0-9_]+@', html)
     assert not leftover_h, "leftover markers in html: %s"%leftover_h
 
-    print("--- .doc  checks ---")
-    print("  VML groups:", doc.count('<v:group'))
-    print("  Tables:", doc.count('<table class=lit>'))
-    print("  References:", doc.count('<p class=ref>'))
     print("--- .html checks ---")
     print("  inline SVGs:", html.count('<svg'))
     print("  Tables:", html.count('<table class=lit>'))
     print("  Fig captions:", len(re.findall(r'Fig\. \d', html)))
     print("  References:", html.count('<p class="ref">'))
     print("  Emails ok:", all(e in html for e in ['yuvateja976','akhilvankudoth58','praneeladiserla']))
+
+    # ---- Render the final two-column PDF via headless Chrome, if available ----
+    chrome = next((c for c in ("chrome","google-chrome","chromium","chromium-browser")
+                   if shutil.which(c)), None)
+    if chrome:
+        src = "file://" + os.path.abspath('GraminSahay_IEEE_Paper.html')
+        subprocess.run([chrome, "--headless", "--disable-gpu", "--no-sandbox",
+                        "--no-pdf-header-footer",
+                        "--print-to-pdf=GraminSahay_IEEE_Paper.pdf", src],
+                       check=False)
+        if os.path.exists('GraminSahay_IEEE_Paper.pdf'):
+            print("Wrote GraminSahay_IEEE_Paper.pdf:",
+                  os.path.getsize('GraminSahay_IEEE_Paper.pdf'), "bytes")
+    else:
+        print("(no headless Chrome found -- open the .html and Print -> Save as PDF)")
