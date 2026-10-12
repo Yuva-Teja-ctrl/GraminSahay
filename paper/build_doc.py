@@ -21,7 +21,7 @@ import re
 TITLE = "GraminSahay: An LLM-Powered RAG-Based Rural Welfare and Government Services Navigator"
 
 AUTHORS = [
-    ("Mr. S. Lingaiah (Guide, Asst. Professor)", "slingaiah@mlrinstitutions.ac.in", True),
+    ("Mr. S. Lingaiah", "slingaiah@mlrinstitutions.ac.in", True),
     ("Adigarla Yuva Teja", "yuvateja976@gmail.com", False),
     ("Akhil Vankudoth", "akhilvankudoth58@gmail.com", False),
     ("Adiserla Praneel", "praneeladiserla@gmail.com", False),
@@ -483,7 +483,9 @@ p.ref  { margin:0 0 3pt; text-indent:-13pt; mso-text-indent-alt:-13pt;
 import os
 
 def _svg(path):
-    """Read an SVG file and return it as a centered, width-capped inline block."""
+    """Read an SVG file and return it as a centered, size-capped inline block.
+    The fixed width/height attributes are removed so the CSS max-height/max-width
+    rules control the rendered size (keeps the paper to ~6-7 pages)."""
     try:
         with open(path, encoding='utf-8') as f:
             s = f.read()
@@ -491,6 +493,9 @@ def _svg(path):
         return f'<p class=cap style="color:#b00">[missing figure: {path}]</p>'
     # strip any XML prolog so it embeds cleanly inside HTML flow
     s = re.sub(r'<\?xml[^>]*\?>', '', s).strip()
+    # drop fixed width/height on the root <svg> so CSS caps apply (viewBox keeps aspect ratio)
+    s = re.sub(r'(<svg\b[^>]*?)\swidth="[^"]*"', r'\1', s, count=1)
+    s = re.sub(r'(<svg\b[^>]*?)\sheight="[^"]*"', r'\1', s, count=1)
     return f'<div class="figwrap">{s}</div>'
 
 # Clean, professional block-diagram figures (Times New Roman) that match the
@@ -529,11 +534,11 @@ def build_html():
 <title>GraminSahay IEEE Paper</title>
 <style>
   /* ---- Fonts & structure matched to the IEEE reference paper ---- */
-  @page { size: A4; margin: 19mm 16mm; }
+  @page { size: A4; margin: 15mm 13mm; }
   * { box-sizing: border-box; }
   body { font-family:"Times New Roman",Times,serif; font-size:10pt;
-    line-height:1.3; color:#000; max-width:195mm; margin:0 auto;
-    padding:16mm 14mm; text-align:justify; }
+    line-height:1.22; color:#000; max-width:200mm; margin:0 auto;
+    padding:13mm 12mm; text-align:justify; }
   /* Title: bold, centered, ~18pt, spans both columns */
   h1.title { font-size:18pt; font-weight:bold; text-align:center;
     margin:0 0 14pt; line-height:1.2; }
@@ -546,16 +551,20 @@ def build_html():
   .amail { color:#0000cc; text-decoration:underline; font-size:9.5pt; }
   /* two-column body */
   .cols { column-count:2; column-gap:7mm; column-rule:none; }
-  p.abs { font-weight:bold; font-style:italic; margin:0 0 7pt; text-align:justify;
+  p.abs { font-weight:bold; font-style:italic; margin:0 0 5pt; text-align:justify;
     font-size:9.5pt; }
-  p.body { margin:0 0 7pt; text-indent:12pt; }
-  p.sub  { margin:7pt 0 2pt; font-weight:bold; font-style:italic; }
+  p.body { margin:0 0 5pt; text-indent:12pt; }
+  p.sub  { margin:5pt 0 1pt; font-weight:bold; font-style:italic; }
   /* Section headings: bold, centered, ALL CAPS, Roman numerals */
-  p.sec  { text-align:center; font-weight:bold; margin:11pt 0 5pt;
+  p.sec  { text-align:center; font-weight:bold; margin:7pt 0 3pt;
     text-transform:uppercase; font-size:10pt; break-after:avoid; }
-  p.cap  { text-align:center; font-size:9pt; font-weight:normal; margin:4pt 0 9pt; }
-  .figwrap { text-align:center; margin:5pt 0 2pt; break-inside:avoid; }
-  .figwrap svg { max-width:100%; height:auto; }
+  p.cap  { text-align:center; font-size:9pt; font-weight:normal; margin:2pt 0 6pt; }
+  /* Keep figures compact so the paper stays ~6-7 pages. In-column figures
+     are capped to the column width; the tall architecture figure is height-
+     capped so it never balloons to a full page. */
+  .figwrap { text-align:center; margin:4pt 0 1pt; break-inside:avoid; }
+  .figwrap svg { max-width:100%; height:auto; max-height:150pt; }
+  .fullfig .figwrap svg { max-height:300pt; width:auto; max-width:100%; }
   table.lit { border-collapse:collapse; width:100%; font-size:8pt;
     margin:5pt 0 9pt; break-inside:avoid; }
   table.lit td { border:0.75pt solid #000; padding:2pt 3pt; vertical-align:top; }
