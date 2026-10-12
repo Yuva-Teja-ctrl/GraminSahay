@@ -428,18 +428,18 @@ def build():
 @page Section1 { size:595.3pt 841.9pt; margin:50pt 42pt 50pt 42pt;
   mso-columns:2 even 18pt; }
 div.Section1 { page:Section1; }
-body { font-family:"Times New Roman",serif; font-size:9.6pt; text-align:justify; }
-h1.title { font-size:17pt; font-weight:bold; text-align:center; margin:0 0 8pt;
+body { font-family:"Times New Roman",serif; font-size:10pt; text-align:justify; }
+h1.title { font-size:18pt; font-weight:bold; text-align:center; margin:0 0 10pt;
   mso-element:span-all; }
 table.authtbl { width:100%; mso-element:span-all; border:none; }
-table.authtbl td { text-align:center; font-size:9pt; border:none; vertical-align:top; }
-.aname { font-weight:bold; font-size:10pt; }
-.ph { color:#000000; }
-p.abs { font-weight:bold; font-style:italic; margin:0 0 6pt; text-align:justify; }
-p.body { margin:0 0 6pt; text-indent:10pt; }
+table.authtbl td { text-align:center; font-size:10pt; border:none; vertical-align:top; }
+.aname { font-weight:bold; font-size:11pt; }
+.amail { color:#0000cc; }
+p.abs { font-weight:bold; font-style:italic; margin:0 0 6pt; text-align:justify; font-size:9.5pt; }
+p.body { margin:0 0 6pt; text-indent:12pt; }
 p.sub  { margin:6pt 0 2pt; font-weight:bold; font-style:italic; }
 p.sec  { text-align:center; font-weight:bold; margin:10pt 0 4pt;
-  font-variant:small-caps; font-size:10pt; }
+  text-transform:uppercase; font-size:10pt; }
 p.cap  { }
 table.lit { border-collapse:collapse; width:100%; mso-element:span-all;
   font-size:7.6pt; margin-bottom:8pt; }
@@ -450,11 +450,16 @@ p.ref  { margin:0 0 3pt; text-indent:-13pt; mso-text-indent-alt:-13pt;
 </style></head><body><div class=Section1>''')
 
     out.append(f'<h1 class=title>{TITLE}</h1>')
-    out.append('<table class=authtbl><tr>')
-    for name,email,isph in AUTHORS:
-        out.append(f'<td><span class=aname>{name}</span><br>Dept. of CSE<br>'
-                   f'MLR Institute of Technology<br>Hyderabad, India<br>{email}</td>')
-    out.append('</tr></table><br clear=all>')
+    def _dcell(a):
+        name,email,isph = a
+        return (f'<td><span class=aname>{name}</span><br>Dept. of CSE<br>'
+                f'MLR Institute of Technology<br>Hyderabad, India<br>'
+                f'<span class=amail>{email}</span></td>')
+    out.append('<table class=authtbl>')
+    out.append('<tr>' + ''.join(_dcell(a) for a in AUTHORS[:3]) + '</tr>')
+    if len(AUTHORS) > 3:
+        out.append('<tr>' + _dcell(AUTHORS[3]) + '<td></td><td></td></tr>')
+    out.append('</table><br clear=all>')
 
     out.append(f'<p class=abs><i>Abstract&mdash;</i>{ABSTRACT}</p>')
     out.append(f'<p class=abs><i>Keywords&mdash;</i>{KEYWORDS}</p>')
@@ -488,16 +493,18 @@ def _svg(path):
     s = re.sub(r'<\?xml[^>]*\?>', '', s).strip()
     return f'<div class="figwrap">{s}</div>'
 
+# Clean, professional block-diagram figures (Times New Roman) that match the
+# original GraminSahay paper -- NOT the sketchy Comic-Sans top-level SVGs.
 HTML_FIG = {
-    "@FIG_EXISTING@": ("fig_existing.svg",
+    "@FIG_EXISTING@": ("figures/Fig1_Existing.svg",
         "Fig. 1.&nbsp;&nbsp;Existing system &mdash; manual welfare scheme lookup."),
-    "@FIG_PROPOSED@": ("fig_proposed.svg",
+    "@FIG_PROPOSED@": ("figures/Fig2_Proposed.svg",
         "Fig. 2.&nbsp;&nbsp;Proposed system &mdash; GraminSahay situation-first flow."),
-    "@FIGURE@": ("GraminSahay_Architecture.svg",
+    "@FIGURE@": ("figures/Fig3_Architecture.svg",
         "Fig. 3.&nbsp;&nbsp;Layered system flow and architecture of GraminSahay."),
-    "@FIG_BAR@": ("fig_chart_bar.svg",
+    "@FIG_BAR@": ("figures/Fig4_Accuracy.svg",
         "Fig. 4.&nbsp;&nbsp;Expected eligibility-classification accuracy by category."),
-    "@FIG_LINE@": ("fig_chart_line.svg",
+    "@FIG_LINE@": ("figures/Fig5_RetrievalQuality.svg",
         "Fig. 5.&nbsp;&nbsp;Expected retrieval quality vs. top-k passages retrieved."),
 }
 
@@ -521,42 +528,58 @@ def build_html():
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GraminSahay IEEE Paper</title>
 <style>
-  @page { size: A4; margin: 16mm 14mm; }
+  /* ---- Fonts & structure matched to the IEEE reference paper ---- */
+  @page { size: A4; margin: 19mm 16mm; }
   * { box-sizing: border-box; }
-  body { font-family:"Times New Roman",Georgia,serif; font-size:9.6pt;
-    line-height:1.34; color:#000; max-width:200mm; margin:0 auto;
-    padding:14mm 12mm; text-align:justify; }
-  h1.title { font-size:17pt; font-weight:bold; text-align:center; margin:0 0 10pt; }
-  table.authtbl { width:100%; border:none; border-collapse:collapse; margin-bottom:10pt; }
-  table.authtbl td { text-align:center; font-size:9pt; border:none;
-    vertical-align:top; padding:2pt 4pt; }
-  .aname { font-weight:bold; font-size:10pt; }
+  body { font-family:"Times New Roman",Times,serif; font-size:10pt;
+    line-height:1.3; color:#000; max-width:195mm; margin:0 auto;
+    padding:16mm 14mm; text-align:justify; }
+  /* Title: bold, centered, ~18pt, spans both columns */
+  h1.title { font-size:18pt; font-weight:bold; text-align:center;
+    margin:0 0 14pt; line-height:1.2; }
+  /* Author block: centered, Times; 3 authors in row 1, 4th in row 2 */
+  table.authtbl { width:100%; border:none; border-collapse:collapse;
+    margin:0 auto 14pt; }
+  table.authtbl td { text-align:center; font-size:10pt; border:none;
+    vertical-align:top; padding:3pt 6pt; }
+  .aname { font-weight:bold; font-size:11pt; }
+  .amail { color:#0000cc; text-decoration:underline; font-size:9.5pt; }
   /* two-column body */
-  .cols { column-count:2; column-gap:16pt; column-rule:none; }
-  p.abs { font-weight:bold; font-style:italic; margin:0 0 6pt; text-align:justify; }
-  p.body { margin:0 0 6pt; text-indent:10pt; }
-  p.sub  { margin:6pt 0 2pt; font-weight:bold; font-style:italic; }
-  p.sec  { text-align:center; font-weight:bold; margin:10pt 0 4pt;
-    font-variant:small-caps; font-size:10pt; break-after:avoid; }
-  p.cap  { text-align:center; font-size:8pt; font-weight:bold; margin:3pt 0 8pt; }
-  .figwrap { text-align:center; margin:4pt 0 2pt; break-inside:avoid; }
+  .cols { column-count:2; column-gap:7mm; column-rule:none; }
+  p.abs { font-weight:bold; font-style:italic; margin:0 0 7pt; text-align:justify;
+    font-size:9.5pt; }
+  p.body { margin:0 0 7pt; text-indent:12pt; }
+  p.sub  { margin:7pt 0 2pt; font-weight:bold; font-style:italic; }
+  /* Section headings: bold, centered, ALL CAPS, Roman numerals */
+  p.sec  { text-align:center; font-weight:bold; margin:11pt 0 5pt;
+    text-transform:uppercase; font-size:10pt; break-after:avoid; }
+  p.cap  { text-align:center; font-size:9pt; font-weight:normal; margin:4pt 0 9pt; }
+  .figwrap { text-align:center; margin:5pt 0 2pt; break-inside:avoid; }
   .figwrap svg { max-width:100%; height:auto; }
-  table.lit { border-collapse:collapse; width:100%; font-size:7.6pt;
-    margin:4pt 0 8pt; break-inside:avoid; }
+  table.lit { border-collapse:collapse; width:100%; font-size:8pt;
+    margin:5pt 0 9pt; break-inside:avoid; }
   table.lit td { border:0.75pt solid #000; padding:2pt 3pt; vertical-align:top; }
   td.th { background:#d9d9d9; font-weight:bold; text-align:center; }
-  p.ref  { margin:0 0 3pt; padding-left:16pt; text-indent:-16pt; font-size:8.4pt; }
-  /* keep the big architecture figure in a single column so it is readable */
+  p.ref  { margin:0 0 4pt; padding-left:16pt; text-indent:-16pt; font-size:9pt; }
+  /* keep the tall architecture figure in a single spanning column so it is readable */
   .fullfig { column-span:all; -webkit-column-span:all; text-align:center; }
-  @media print { body { padding:0; } a { color:#000; text-decoration:none; } }
+  @media print { body { padding:0; } a { color:#0000cc; } }
 </style></head><body>''')
 
     out.append(f'<h1 class="title">{TITLE}</h1>')
-    out.append('<table class="authtbl"><tr>')
-    for name,email,isph in AUTHORS:
-        out.append(f'<td><span class="aname">{name}</span><br>Dept. of CSE<br>'
-                   f'MLR Institute of Technology<br>Hyderabad, India<br>{email}</td>')
-    out.append('</tr></table>')
+
+    def _authcell(a):
+        name,email,isph = a
+        return (f'<td><span class="aname">{name}</span><br>Dept. of CSE<br>'
+                f'MLR Institute of Technology<br>Hyderabad, India<br>'
+                f'<span class="amail">{email}</span></td>')
+    # Row 1: first three authors; Row 2: the fourth author (centered).
+    out.append('<table class="authtbl">')
+    out.append('<tr>' + ''.join(_authcell(a) for a in AUTHORS[:3]) + '</tr>')
+    if len(AUTHORS) > 3:
+        out.append('<tr>' + _authcell(AUTHORS[3])
+                   + '<td></td><td></td></tr>')
+    out.append('</table>')
 
     out.append('<div class="cols">')
     out.append(f'<p class="abs"><i>Abstract&mdash;</i>{ABSTRACT}</p>')
