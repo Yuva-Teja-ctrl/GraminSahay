@@ -16,7 +16,6 @@
     .lbl{font-size:11px;fill:#111}.ttl{font-size:13px;font-weight:700;fill:#111}
     .yl{font-size:10px;fill:#333}.bar{stroke:#111;stroke-width:1.4;fill:#fff}
   </style>
-  <text x="230" y="20" text-anchor="middle" class="ttl">Expected Accuracy by Welfare Category (%)</text>
   <g>
     <line class="gl" x1="60" y1="255" x2="435" y2="255"/>
     <line class="gl" x1="60" y1="213" x2="435" y2="213"/><text class="yl" x="54" y="217" text-anchor="end">20</text>

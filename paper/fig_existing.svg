@@ -12,8 +12,6 @@
     .fl{stroke:#111;stroke-width:1.8;fill:none;marker-end:url(#a1);filter:url(#r1)}
     .lab{font-size:13px;font-weight:700;fill:#111}
   </style>
-  <text x="410" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#111">Existing System &#8212; Manual Welfare Scheme Lookup</text>
-
   <rect class="b" x="25"  y="55" width="120" height="50" rx="4"/>
   <text class="t" x="85"  y="85" text-anchor="middle">Citizen</text>
   <rect class="b" x="190" y="55" width="130" height="50" rx="4"/>
@@ -31,12 +29,4 @@
   <path class="fl" d="M320,80 L363,80"/>
   <path class="fl" d="M485,80 L528,80"/>
   <path class="fl" d="M660,80 L703,80"/>
-
-  <text class="lab" x="25" y="140">Limitations:</text>
-  <text class="lim" x="25"  y="162">&#8226; Must know scheme name</text>
-  <text class="lim" x="235" y="162">&#8226; No personalization</text>
-  <text class="lim" x="405" y="162">&#8226; Language barriers</text>
-  <text class="lim" x="580" y="162">&#8226; No conflict detection</text>
-  <text class="lim" x="25"  y="184">&#8226; Info scattered across sources</text>
-  <text class="lim" x="405" y="184">&#8226; Eligibility needs manual interpretation</text>
 </svg>

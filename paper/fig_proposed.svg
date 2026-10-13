@@ -12,8 +12,6 @@
     .fl{stroke:#111;stroke-width:1.8;fill:none;marker-end:url(#a2);filter:url(#r2)}
     .step{font-size:12px;font-weight:700;fill:#111}
   </style>
-  <text x="410" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#111">Proposed System &#8212; GraminSahay Situation-First Flow</text>
-
   <g>
     <rect class="b" x="25"  y="50" width="150" height="62" rx="4"/>
     <text class="step" x="100" y="70" text-anchor="middle">1. Voice / Text Input</text>

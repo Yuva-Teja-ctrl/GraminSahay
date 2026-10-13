@@ -4,7 +4,6 @@
     .lbl{font-size:10px;fill:#111}.ttl{font-size:13px;font-weight:700;fill:#111}
     .yl{font-size:10px;fill:#333}.leg{font-size:10.5px;fill:#111}
   </style>
-  <text x="230" y="20" text-anchor="middle" class="ttl">Retrieval Quality vs. Top-k Passages</text>
   <g>
     <line class="gl" x1="60" y1="250" x2="430" y2="250"/>
     <line class="gl" x1="60" y1="210" x2="430" y2="210"/><text class="yl" x="54" y="214" text-anchor="end">0.2</text>
