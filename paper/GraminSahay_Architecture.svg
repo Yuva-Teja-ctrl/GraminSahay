@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="1120" viewBox="0 0 760 1120" font-family="'Comic Sans MS','Segoe Print','Bradley Hand',cursive,sans-serif">
+  <defs>
+    <filter id="rough" x="-4%" y="-4%" width="108%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="arrow" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L11,5 L0,10" fill="none" stroke="#111" stroke-width="1.3"/>
+    </marker>
+    <marker id="arrowP" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L11,5 L0,10" fill="none" stroke="#555" stroke-width="1.2"/>
+    </marker>
+  </defs>
+  <style>
+    .band{fill:#fff;stroke:#111;stroke-width:2;filter:url(#rough)}
+    .box{fill:#fff;stroke:#111;stroke-width:1.5;filter:url(#rough)}
+    .shade{fill:#eee;stroke:#111;stroke-width:1.5;filter:url(#rough)}
+    .bt{font-size:14px;font-weight:700;fill:#111}
+    .lt{font-size:12px;fill:#111}.st{font-size:11px;fill:#111;font-style:italic}
+    .flow{stroke:#111;stroke-width:2;fill:none;marker-end:url(#arrow);filter:url(#rough)}
+    text{fill:#111}
+  </style>
+
+  <text x="380" y="30" text-anchor="middle" font-size="17" font-weight="700">Fig. 3.  GraminSahay — System Flow &amp; Architecture</text>
+
+  <!-- L1 -->
+  <rect class="band" x="40" y="48" width="680" height="112" rx="8"/>
+  <text class="bt" x="58" y="70">1 — Citizen Interaction Layer</text>
+  <rect class="box" x="60"  y="82" width="150" height="62" rx="5"/>
+  <text class="lt" x="135" y="108" text-anchor="middle">Voice Input</text>
+  <text class="lt" x="135" y="124" text-anchor="middle">(Indic STT)</text>
+  <rect class="box" x="225" y="82" width="150" height="62" rx="5"/>
+  <text class="lt" x="300" y="117" text-anchor="middle">Text Input</text>
+  <rect class="box" x="390" y="82" width="170" height="62" rx="5"/>
+  <text class="lt" x="475" y="108" text-anchor="middle">Language Select</text>
+  <text class="lt" x="475" y="124" text-anchor="middle">(Eng+Telugu+Hindi)</text>
+  <rect class="shade" x="575" y="82" width="130" height="62" rx="5"/>
+  <text class="st" x="640" y="108" text-anchor="middle">"I am a farmer</text>
+  <text class="st" x="640" y="124" text-anchor="middle">with small land."</text>
+
+  <!-- L2 -->
+  <rect class="band" x="40" y="185" width="680" height="100" rx="8"/>
+  <text class="bt" x="58" y="207">2 — Profile Understanding Layer</text>
+  <rect class="box" x="60"  y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="135" y="249" text-anchor="middle">Occupation</text>
+  <rect class="box" x="235" y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="310" y="249" text-anchor="middle">Family Situation</text>
+  <rect class="box" x="410" y="220" width="150" height="48" rx="5"/>
+  <text class="lt" x="485" y="249" text-anchor="middle">Location</text>
+  <rect class="box" x="575" y="220" width="130" height="48" rx="5"/>
+  <text class="lt" x="640" y="249" text-anchor="middle">Other Details</text>
+
+  <!-- L3 -->
+  <rect class="band" x="40" y="310" width="680" height="118" rx="8"/>
+  <text class="bt" x="58" y="332">3 — RAG Retrieval Layer</text>
+  <rect class="box" x="60" y="345" width="175" height="70" rx="5"/>
+  <text class="lt" x="147" y="373" text-anchor="middle">Scheme Guidelines</text>
+  <text class="lt" x="147" y="389" text-anchor="middle">&amp; Eligibility Rules</text>
+  <g filter="url(#rough)">
+    <path d="M270,356 a65,10 0 0 0 130,0 v58 a65,10 0 0 1 -130,0 Z" fill="#eee" stroke="#111" stroke-width="1.5"/>
+    <ellipse cx="335" cy="356" rx="65" ry="10" fill="#fff" stroke="#111" stroke-width="1.5"/>
+  </g>
+  <text class="lt" x="335" y="384" text-anchor="middle">Vector DB</text>
+  <text class="lt" x="335" y="400" text-anchor="middle">(semantic search)</text>
+  <rect class="box" x="440" y="345" width="180" height="70" rx="5"/>
+  <text class="lt" x="530" y="373" text-anchor="middle">Embedding +</text>
+  <text class="lt" x="530" y="389" text-anchor="middle">Top-k Retrieval</text>
+
+  <!-- L4 -->
+  <rect class="band" x="40" y="453" width="680" height="108" rx="8"/>
+  <text class="bt" x="58" y="475">4 — Eligibility Reasoning Layer  (LLM)</text>
+  <rect class="box" x="60"  y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="135" y="522" text-anchor="middle">Eligible</text>
+  <rect class="box" x="225" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="300" y="522" text-anchor="middle">Possibly Eligible</text>
+  <rect class="box" x="390" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="465" y="522" text-anchor="middle">Not Eligible</text>
+  <rect class="box" x="555" y="488" width="150" height="58" rx="5"/>
+  <text class="lt" x="630" y="522" text-anchor="middle">Missing Info</text>
+
+  <!-- L5 -->
+  <rect class="band" x="40" y="586" width="680" height="100" rx="8"/>
+  <text class="bt" x="58" y="608">5 — Scheme Conflict Detection Layer</text>
+  <rect class="box" x="60"  y="621" width="195" height="50" rx="5"/>
+  <text class="lt" x="157" y="650" text-anchor="middle">Identify exclusive schemes</text>
+  <rect class="box" x="285" y="621" width="195" height="50" rx="5"/>
+  <text class="lt" x="382" y="650" text-anchor="middle">Warn bad combinations</text>
+  <rect class="shade" x="510" y="621" width="195" height="50" rx="5"/>
+  <text class="st" x="607" y="643" text-anchor="middle">"A &amp; B cannot be</text>
+  <text class="st" x="607" y="659" text-anchor="middle">claimed together."</text>
+
+  <!-- L6 -->
+  <rect class="band" x="40" y="711" width="680" height="108" rx="8"/>
+  <text class="bt" x="58" y="733">6 — Application Guidance Layer</text>
+  <rect class="box" x="60"  y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="135" y="772" text-anchor="middle">Why scheme</text>
+  <text class="lt" x="135" y="788" text-anchor="middle">is relevant</text>
+  <rect class="box" x="225" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="300" y="772" text-anchor="middle">Required</text>
+  <text class="lt" x="300" y="788" text-anchor="middle">documents</text>
+  <rect class="box" x="390" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="465" y="772" text-anchor="middle">Step-by-step</text>
+  <text class="lt" x="465" y="788" text-anchor="middle">application</text>
+  <rect class="box" x="555" y="746" width="150" height="58" rx="5"/>
+  <text class="lt" x="630" y="772" text-anchor="middle">Official</text>
+  <text class="lt" x="630" y="788" text-anchor="middle">portal / office</text>
+
+  <!-- Output -->
+  <rect class="shade" x="180" y="844" width="400" height="66" rx="8"/>
+  <text class="bt" x="380" y="872" text-anchor="middle">7 — Multilingual Voice Output (Indic TTS)</text>
+  <text class="lt" x="380" y="893" text-anchor="middle">Response delivered in the selected language</text>
+
+  <!-- Tech stack -->
+  <rect x="40" y="940" width="680" height="108" rx="8" fill="#fff" stroke="#111" stroke-width="2" stroke-dasharray="7 5" filter="url(#rough)"/>
+  <text class="bt" x="58" y="962">Technology Stack</text>
+  <rect class="box" x="55"  y="975" width="122" height="56" rx="5"/>
+  <text class="lt" x="116" y="999" text-anchor="middle">Frontend</text>
+  <text class="st" x="116" y="1015" text-anchor="middle">Flutter / RN</text>
+  <rect class="box" x="187" y="975" width="122" height="56" rx="5"/>
+  <text class="lt" x="248" y="999" text-anchor="middle">Backend</text>
+  <text class="st" x="248" y="1015" text-anchor="middle">FastAPI / Node</text>
+  <rect class="box" x="319" y="975" width="112" height="56" rx="5"/>
+  <text class="lt" x="375" y="999" text-anchor="middle">Database</text>
+  <text class="st" x="375" y="1015" text-anchor="middle">PostgreSQL</text>
+  <rect class="box" x="441" y="975" width="132" height="56" rx="5"/>
+  <text class="lt" x="507" y="999" text-anchor="middle">AI / LLM</text>
+  <text class="st" x="507" y="1015" text-anchor="middle">LLM + RAG</text>
+  <rect class="box" x="583" y="975" width="130" height="56" rx="5"/>
+  <text class="lt" x="648" y="999" text-anchor="middle">Voice</text>
+  <text class="st" x="648" y="1015" text-anchor="middle">Indic STT+TTS</text>
+
+  <!-- flow arrows -->
+  <path class="flow" d="M380,160 L380,184"/>
+  <path class="flow" d="M380,285 L380,309"/>
+  <path class="flow" d="M380,428 L380,452"/>
+  <path class="flow" d="M380,561 L380,585"/>
+  <path class="flow" d="M380,686 L380,710"/>
+  <path class="flow" d="M380,819 L380,843"/>
+  <path d="M335,415 C335,432 320,436 300,452" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowP)"/>
+  <text x="238" y="440" font-size="10" fill="#555" font-style="italic">retrieved context</text>
+</svg>

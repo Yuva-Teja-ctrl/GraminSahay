@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="210" viewBox="0 0 820 210" font-family="'Times New Roman', Times, serif">
+<defs><marker id="ar" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#000" stroke-width="1.2"/></marker></defs>
+<rect x="0" y="0" width="820" height="210" fill="#fff"/>
+<text x="410" y="24" text-anchor="middle" font-size="16" font-weight="bold">Existing System &#8212; Manual Welfare Scheme Lookup</text>
+<rect x="20" y="55" width="130" height="52" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text x="85.0" y="86" text-anchor="middle" font-size="13">Citizen</text>
+<rect x="180" y="55" width="150" height="52" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text x="255.0" y="78" text-anchor="middle" font-size="13">Search Govt.</text>
+<text x="255.0" y="94" text-anchor="middle" font-size="13">Portal (by name)</text>
+<rect x="350" y="55" width="130" height="52" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text x="415.0" y="86" text-anchor="middle" font-size="13">Find Scheme</text>
+<rect x="510" y="55" width="150" height="52" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text x="585.0" y="78" text-anchor="middle" font-size="13">Check Eligibility</text>
+<text x="585.0" y="94" text-anchor="middle" font-size="13">(manual reading)</text>
+<rect x="680" y="55" width="110" height="52" fill="#fff" stroke="#000" stroke-width="1.5"/>
+<text x="735.0" y="86" text-anchor="middle" font-size="13">Apply</text>
+<path d="M150,81 L180,81" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M330,81 L350,81" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M480,81 L510,81" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M660,81 L680,81" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="20" y="150" text-anchor="start" font-size="14" font-weight="bold">Limitations:</text>
+<text x="20" y="172" text-anchor="start" font-size="13">&#8226; Must know scheme name    &#8226; No personalization    &#8226; Language barriers</text>
+<text x="20" y="192" text-anchor="start" font-size="13">&#8226; Info scattered across sources    &#8226; Manual eligibility    &#8226; No conflict detection</text>
+</svg>

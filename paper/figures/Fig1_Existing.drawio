@@ -1,0 +1,23 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="fig1" name="Fig1 Existing">
+    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1"
+      connect="1" arrows="1" fold="1" page="1" pageScale="1"
+      pageWidth="840" pageHeight="240" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n2" value="Existing System &#8212; Manual Welfare Scheme Lookup" style="text;html=1;align=center;verticalAlign=middle;fontStyle=1;fontSize=16;fontFamily=Times New Roman;fontColor=#000000;fontSize=16;" vertex="1" parent="1"><mxGeometry x="0" y="10" width="820" height="26" as="geometry"/></mxCell>
+        <mxCell id="n3" value="Citizen" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontColor=#000000;fontSize=12;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="130" height="50" as="geometry"/></mxCell>
+        <mxCell id="n4" value="Search Govt. Portal (by name)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontColor=#000000;fontSize=12;" vertex="1" parent="1"><mxGeometry x="180" y="60" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="n5" value="Find Scheme" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontColor=#000000;fontSize=12;" vertex="1" parent="1"><mxGeometry x="350" y="60" width="130" height="50" as="geometry"/></mxCell>
+        <mxCell id="n6" value="Check Eligibility (manual)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontColor=#000000;fontSize=12;" vertex="1" parent="1"><mxGeometry x="510" y="60" width="150" height="50" as="geometry"/></mxCell>
+        <mxCell id="n7" value="Apply" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontColor=#000000;fontSize=12;" vertex="1" parent="1"><mxGeometry x="680" y="60" width="110" height="50" as="geometry"/></mxCell>
+        <mxCell id="n8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=open;endFill=0;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1" source="n3" target="n4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=open;endFill=0;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1" source="n4" target="n5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=open;endFill=0;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1" source="n5" target="n6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=open;endFill=0;fontFamily=Times New Roman;fontColor=#000000;" edge="1" parent="1" source="n6" target="n7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="n12" value="Limitations:&#10;&#8226; Must know scheme name&#8195;&#8226; No personalization&#8195;&#8226; Language barriers&#10;&#8226; Info scattered across sources&#8195;&#8226; Manual eligibility interpretation&#8195;&#8226; No conflict detection" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fontFamily=Times New Roman;fontColor=#000000;fontSize=11;" vertex="1" parent="1"><mxGeometry x="20" y="150" width="780" height="70" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
