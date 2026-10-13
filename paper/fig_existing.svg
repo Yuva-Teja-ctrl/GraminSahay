@@ -4,12 +4,12 @@
       <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <marker id="a1" markerWidth="13" markerHeight="13" refX="9" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10" fill="none" stroke="#111" stroke-width="1.3"/></marker>
+    <marker id="a1" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0,0 L11,5 L0,10 z" fill="#111"/></marker>
   </defs>
   <style>
     .b{fill:#fff;stroke:#111;stroke-width:1.7;filter:url(#r1)}
     .t{font-size:13px;fill:#111}.lim{font-size:12px;fill:#333}
-    .fl{stroke:#111;stroke-width:1.8;fill:none;marker-end:url(#a1);filter:url(#r1)}
+    .fl{stroke:#111;stroke-width:1.8;fill:none;marker-end:url(#a1)}
     .lab{font-size:13px;font-weight:700;fill:#111}
   </style>
   <rect class="b" x="25"  y="55" width="120" height="50" rx="4"/>
