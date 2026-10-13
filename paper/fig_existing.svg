@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="820" height="200" viewBox="0 0 820 200" font-family="'Comic Sans MS','Segoe Print','Bradley Hand',cursive,sans-serif">
   <defs>
-    <filter id="r1" x="-6%" y="-6%" width="112%" height="112%">
+    <filter id="r1" filterUnits="userSpaceOnUse" x="0" y="0" width="820" height="200">
       <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
