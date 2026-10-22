@@ -70,7 +70,7 @@ Citizen situation + profile
 | Layer | Technology |
 |---|---|
 | Language / Framework | **Python 3.11 · FastAPI** |
-| Embeddings | **sentence-transformers** `all-MiniLM-L6-v2` — **runs locally, no API key** |
+| Embeddings | sentence-transformers `all-MiniLM-L6-v2` on **fastembed** (ONNX, no PyTorch) — **runs locally, no API key** |
 | Vector store | **PostgreSQL + pgvector** (cosine distance) via SQLAlchemy |
 | LLM | OpenAI `gpt-4o-mini` *or* Groq `llama-3.3-70b-versatile` (chat only) |
 | Validation | **Pydantic v2** |

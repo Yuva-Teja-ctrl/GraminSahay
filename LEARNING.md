@@ -167,15 +167,17 @@ unit-tested in isolation.**
 ## 7. Local embeddings (`app/vectorstore.py`) — the Python advantage
 
 ```python
-self._model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-vector = self._model.encode(text, normalize_embeddings=True)
+self._model = TextEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
+vector = next(iter(self._model.embed([text])))
 ```
 
 - This loads a small model **onto your own machine** and turns text into a 384-number vector.
 - No API, no key, no cost for retrieval. (The Java version had to call a paid embedding API.)
 - The vectors go into Postgres via `pgvector`; `cosine_distance` finds the nearest schemes.
+- `fastembed` runs the model on ONNX Runtime instead of PyTorch. The vectors are the same,
+  but the app needs far less memory, so it fits on free hosting tiers.
 
-This is why Python is the AI default — libraries like sentence-transformers are first-class.
+This is why Python is the AI default — libraries like these are first-class.
 
 ---
 

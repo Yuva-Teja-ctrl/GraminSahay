@@ -46,6 +46,7 @@ async def lifespan(app: FastAPI):
         db_url=settings.sqlalchemy_url,
         model_name=settings.embedding_model,
         dim=settings.embedding_dim,
+        cache_dir=settings.embedding_cache_dir,
     )
     vector_store.ensure_schema()
     vector_store.ingest(repository.all())

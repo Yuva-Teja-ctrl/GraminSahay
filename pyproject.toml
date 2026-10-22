@@ -16,8 +16,9 @@ dependencies = [
     "sqlalchemy>=2.0",
     "pgvector>=0.3",
     "psycopg[binary]>=3.2",
-    # Local embeddings (no API needed) — the model family you used in ResuMate
-    "sentence-transformers>=3.0",
+    # Local embeddings (no API needed) — runs the sentence-transformers model all-MiniLM-L6-v2
+    # on ONNX Runtime. No PyTorch, so the app fits in ~512 MB RAM (Render free tier).
+    "fastembed>=0.4,<1.0",
     # LLM chat client (OpenAI-compatible; also works with Groq via base_url)
     "openai>=1.40",
     # Load .env files
