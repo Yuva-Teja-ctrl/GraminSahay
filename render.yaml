@@ -6,7 +6,7 @@ services:
   - type: web
     name: graminsahay
     runtime: python
-    plan: starter            # needs ~1GB+ RAM for the sentence-transformers model
+    plan: standard           # ~2GB RAM — the sentence-transformers model (PyTorch) OOMs on the 512MB starter plan
     buildCommand: pip install -e .
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
