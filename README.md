@@ -1,4 +1,4 @@
-# GraminSahay 🌾 (Python / FastAPI)
+# GraminSahay 🌾
 
 **An LLM-Powered, RAG-Based Rural Welfare & Government Services Navigator**
 
