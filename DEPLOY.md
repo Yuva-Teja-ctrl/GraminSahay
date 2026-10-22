@@ -47,17 +47,24 @@ First boot downloads the embedding model and ingests the schemes (watch the logs
 
 ---
 
-## Option B — Render (free tier, via `render.yaml`)
+## Option B — Render + Neon (free, via `render.yaml`)
 
-1. In the Render dashboard: **New + → Blueprint →** select the `GraminSahay` repo.
-2. Render reads `render.yaml` and creates a free **web service** and a free **PostgreSQL**
-   database, with `DATABASE_URL` and `JWT_SECRET` already set. Click **Apply**.
-3. When prompted, set `OPENAI_API_KEY` to your Groq key (`gsk_...`).
-4. The app enables pgvector by itself on startup.
+Render's own free Postgres is deleted 30 days after creation, which takes the app down, so
+the database lives on [Neon](https://neon.tech) instead (free, doesn't expire, supports
+pgvector).
 
-Free-tier limits: the web service sleeps after 15 minutes idle (the next request takes about
-a minute to wake it), and the free database **expires after 30 days**. For an always-on,
-permanent setup, change the two `plan:` values in `render.yaml` to paid plans.
+1. **Database:** create a free Neon project and copy its connection string, e.g.
+   `postgresql://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require`.
+   The app enables pgvector by itself on startup.
+2. **App:** in the Render dashboard, **New + → Blueprint →** select the `GraminSahay` repo,
+   then click **Apply**. When prompted, set:
+   - `DATABASE_URL` → the Neon connection string from step 1
+   - `OPENAI_API_KEY` → your Groq key (`gsk_...`)
+
+   `JWT_SECRET` is generated for you.
+
+Free-tier limit: the web service sleeps after 15 minutes idle; the next request takes about a
+minute to wake it.
 
 ---
 
