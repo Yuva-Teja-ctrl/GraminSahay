@@ -1,4 +1,4 @@
-# GraminSahay 🌾 (Python / FastAPI)
+# GraminSahay 🌾
 
 **An LLM-Powered, RAG-Based Rural Welfare & Government Services Navigator**
 
@@ -70,7 +70,7 @@ Citizen situation + profile
 | Layer | Technology |
 |---|---|
 | Language / Framework | **Python 3.11 · FastAPI** |
-| Embeddings | **sentence-transformers** `all-MiniLM-L6-v2` — **runs locally, no API key** |
+| Embeddings | sentence-transformers `all-MiniLM-L6-v2` on **fastembed** (ONNX, no PyTorch) — **runs locally, no API key** |
 | Vector store | **PostgreSQL + pgvector** (cosine distance) via SQLAlchemy |
 | LLM | OpenAI `gpt-4o-mini` *or* Groq `llama-3.3-70b-versatile` (chat only) |
 | Validation | **Pydantic v2** |
@@ -136,7 +136,7 @@ On first startup the app downloads the embedding model (once), creates the pgvec
 embeds the Telangana schemes, and is then ready.
 
 ### 5. Use it
-- **Web UI:** open **http://localhost:8000/** — sign in / create an account, then use the app.
+- **Web UI:** open **http://localhost:8000/app.html** — sign in / create an account, then use the app.
 - **Interactive API docs** (FastAPI gives these free): **http://localhost:8000/docs**
 - **Or curl** (the API is JWT-protected — register, then use the token):
 ```bash
