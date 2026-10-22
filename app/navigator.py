@@ -46,6 +46,7 @@ class SchemeAdvice(CamelModel):
     required_documents: list[str]
     application_steps: list[str]
     official_url: str
+    benefits: str = ""
     explanation: str | None = None
 
 
@@ -136,6 +137,7 @@ class NavigatorService:
                     required_documents=r.scheme.required_documents,
                     application_steps=r.scheme.application_steps,
                     official_url=r.scheme.official_url,
+                    benefits=r.scheme.benefits,
                     explanation=explanation,
                 )
             )

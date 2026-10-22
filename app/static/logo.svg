@@ -1,15 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="GraminSahay logo" fill="none">
-  <!-- Shield: government protection / welfare -->
-  <path d="M32 4 L54 12 V30 C54 44 44 54 32 60 C20 54 10 44 10 30 V12 Z"
-        fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2"/>
-  <!-- Sprout stem: rural growth -->
-  <path d="M32 46 V26" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"/>
-  <!-- Left leaf -->
-  <path d="M32 32 C24 32 19 27 19 20 C27 20 32 25 32 32 Z" fill="#ffffff" fill-opacity="0.92"/>
-  <!-- Right leaf -->
-  <path d="M32 28 C40 28 45 23 45 16 C37 16 32 21 32 28 Z" fill="#ffffff" fill-opacity="0.75"/>
-  <!-- Base ground line -->
-  <path d="M23 48 H41" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round"/>
-  <!-- Navigator dot: location/guidance -->
-  <circle cx="32" cy="52.5" r="2.4" fill="#ffffff"/>
+  <defs>
+    <!-- Deep Forest Emerald base gradient -->
+    <linearGradient id="emeraldBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="50%" stop-color="#064e3b"/>
+      <stop offset="100%" stop-color="#022416"/>
+    </linearGradient>
+
+    <!-- Vibrant Mint & Emerald gradient for the canopy and accents -->
+    <linearGradient id="mintGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="50%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <!-- Subtle rim border -->
+    <linearGradient id="rimGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#059669" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Clean Base Rounded Squircle -->
+  <rect width="64" height="64" rx="16" fill="url(#emeraldBg)"/>
+  <rect x="1" y="1" width="62" height="62" rx="15" stroke="url(#rimGrad)" stroke-width="1.5"/>
+
+  <!-- Universal Welfare Canopy / Social Security Shelter Arc -->
+  <path d="M15 31 C15 18 22.5 12 32 12 C41.5 12 49 18 49 31"
+        stroke="url(#mintGrad)" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- 4-Point Navigator Guidance Compass Star ("Sahay") -->
+  <path d="M32 19 L34.5 25.5 L41 28 L34.5 30.5 L32 37 L29.5 30.5 L23 28 L29.5 25.5 Z"
+        fill="#ffffff"/>
+
+  <!-- Citizen Empowerment & Upliftment Arc (Education, Health, Pension, Housing, Livelihood) -->
+  <path d="M18 48 C22 42 26.5 39 32 39 C37.5 39 42 42 46 48"
+        stroke="url(#mintGrad)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Central Citizen Figure / Beacon Core -->
+  <circle cx="32" cy="46" r="2.8" fill="#ffffff"/>
 </svg>

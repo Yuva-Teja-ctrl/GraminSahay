@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: graminsahay-backend
+    runtime: python
+    plan: standard
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DATABASE_URL
+        fromDatabase:
+          name: graminsahay-db
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: "https://api.groq.com/openai/v1"
+      - key: CHAT_MODEL
+        value: "openai/gpt-oss-20b"
+      - key: JWT_SECRET
+        generateValue: true
+
+databases:
+  - name: graminsahay-db
+    plan: free
+    databaseName: graminsahay
+    user: graminsahay
