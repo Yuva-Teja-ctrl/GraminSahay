@@ -142,25 +142,11 @@ h1, h2, h3, h4, h5 {
     max-width: 1060px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     flex-wrap: wrap;
     gap: 12px;
 }
-.gov-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.84rem;
-    font-weight: 600;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 5px 14px;
-    border-radius: var(--radius-pill);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    letter-spacing: 0.2px;
-}
-.gov-badge .flag { font-size: 1.1rem; }
-
 .nav-actions {
     display: flex;
     align-items: center;
