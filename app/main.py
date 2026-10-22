@@ -7,8 +7,9 @@ Combines what Spring split across GraminSahayApplication (startup), NavigatorCon
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -104,6 +105,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def revalidate_static_files(request: Request, call_next):
+    """Make browsers check for a newer version of the web UI on every load.
+
+    Without a Cache-Control header, browsers guess how long to reuse a cached copy — Safari
+    in particular keeps showing an old design after a deploy. ``no-cache`` means "you may
+    store it, but ask the server first"; unchanged files just get a tiny 304 Not Modified.
+    """
+    response = await call_next(request)
+    if not request.url.path.startswith("/api/"):
+        response.headers.setdefault("Cache-Control", "no-cache")
+    return response
 
 
 # ---------------------------------------------------------------------------
@@ -279,6 +294,19 @@ def get_schemes() -> list[dict]:
     return [s.model_dump(by_alias=True) for s in navigator._repository.all()]
 
 
-# Serve the web UI (index.html / styles.css / app.js) from app/static at the root path.
-# Mounted last so it does not shadow the /api routes above.
+@app.get("/", include_in_schema=False)
+def home() -> FileResponse:
+    """Serve the app at the bare site URL (no /app.html in the address bar)."""
+    return FileResponse("app/static/app.html")
+
+
+@app.get("/app.html", include_in_schema=False)
+def old_app_url(request: Request) -> RedirectResponse:
+    """Send old /app.html links and bookmarks to the clean URL, keeping any query string."""
+    query = f"?{request.url.query}" if request.url.query else ""
+    return RedirectResponse(f"/{query}", status_code=301)
+
+
+# Serve the rest of the web UI (styles.css, app.js, login.html, ...) from app/static.
+# Mounted last so it does not shadow the routes above.
 app.mount("/", StaticFiles(directory="app/static", html=True), name="static")

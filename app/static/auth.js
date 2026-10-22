@@ -22,7 +22,7 @@ function apiUrl(path) {
 
 // If already logged in, skip straight to the app.
 if (localStorage.getItem(TOKEN_KEY)) {
-    window.location.href = "/app.html";
+    window.location.href = "/";
 }
 
 let mode = "login"; // or "register"
@@ -91,7 +91,7 @@ form.addEventListener("submit", async (e) => {
         }
         localStorage.setItem(TOKEN_KEY, data.token);
         localStorage.setItem(USER_KEY, data.username);
-        window.location.href = "/app.html";
+        window.location.href = "/";
     } catch (err) {
         showError(err.message);
         submit.disabled = false;
