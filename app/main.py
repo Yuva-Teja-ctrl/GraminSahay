@@ -267,6 +267,18 @@ async def transcribe(
     return TranscribeResponse(text=text)
 
 
+@app.get("/api/schemes")
+def get_schemes() -> list[dict]:
+    """Return all welfare schemes in the knowledge base for browsing."""
+    navigator: NavigatorService = state.get("navigator")  # type: ignore[assignment]
+    if not navigator:
+        # Fallback if accessed before lifespan initialization in tests/dev
+        settings = get_settings()
+        repo = SchemeRepository(settings.schemes_path)
+        return [s.model_dump(by_alias=True) for s in repo.all()]
+    return [s.model_dump(by_alias=True) for s in navigator._repository.all()]
+
+
 # Serve the web UI (index.html / styles.css / app.js) from app/static at the root path.
 # Mounted last so it does not shadow the /api routes above.
 app.mount("/", StaticFiles(directory="app/static", html=True), name="static")

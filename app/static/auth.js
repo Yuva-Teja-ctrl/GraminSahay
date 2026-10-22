@@ -4,6 +4,22 @@
 const TOKEN_KEY = "graminsahay_token";
 const USER_KEY = "graminsahay_user";
 
+// Helper to resolve API endpoint against custom backend URL (for Vercel -> Render cross-origin deployment)
+function apiUrl(path) {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const paramApi = params.get("api");
+        if (paramApi) {
+            localStorage.setItem("graminsahay_api_url", paramApi);
+        }
+    } catch (_) {}
+    const base = (window.API_BASE || localStorage.getItem("graminsahay_api_url") || "").trim().replace(/\/$/, "");
+    if (base) {
+        return `${base}${path.startsWith("/") ? "" : "/"}${path}`;
+    }
+    return path;
+}
+
 // If already logged in, skip straight to the app.
 if (localStorage.getItem(TOKEN_KEY)) {
     window.location.href = "/app.html";
@@ -64,7 +80,7 @@ form.addEventListener("submit", async (e) => {
     submit.textContent = mode === "login" ? "Signing in…" : "Creating…";
 
     try {
-        const response = await fetch(endpoint, {
+        const response = await fetch(apiUrl(endpoint), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),

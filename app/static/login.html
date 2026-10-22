@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>GraminSahay — Sign in</title>
+    <title>GraminSahay — Sign in / Register</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="styles.css"/>
 </head>
 <body class="auth-body">
 <div class="auth-shell">
     <div class="auth-brand">
-        <span class="auth-logo"><img src="logo.svg" alt="GraminSahay logo" width="42" height="42"/></span>
+        <span class="auth-logo"><img src="logo.svg" alt="GraminSahay logo" width="72" height="72"/></span>
         <h1>GraminSahay</h1>
         <p>Discover the government welfare schemes you are entitled to — in your language, by voice or text.</p>
         <ul class="auth-points">
-            <li>✅ Just describe your situation — no scheme names needed</li>
-            <li>🗣️ English, తెలుగు &amp; हिन्दी, with voice input</li>
-            <li>🧭 Clear eligibility, conflicts &amp; how to apply</li>
+            <li>✅ <strong>Zero Hallucination:</strong> Deterministic rules verify official eligibility</li>
+            <li>🗣️ <strong>Multilingual:</strong> English, తెలుగు &amp; हिन्दी, with natural voice input</li>
+            <li>🧭 <strong>End-to-End:</strong> Clear eligibility, conflict warnings &amp; direct portal guidance</li>
+            <li>🔒 <strong>Safety First:</strong> Free public service — login is strictly optional</li>
         </ul>
     </div>
 
@@ -34,12 +35,12 @@
 
             <label class="field">
                 <span>Username</span>
-                <input id="username" type="text" autocomplete="username" minlength="3" placeholder="at least 3 characters"/>
+                <input id="username" type="text" autocomplete="username" minlength="3" placeholder="At least 3 characters"/>
             </label>
 
             <label class="field">
                 <span>Password</span>
-                <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="at least 6 characters"/>
+                <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters"/>
             </label>
 
             <p id="auth-error" class="auth-error" hidden></p>
@@ -53,8 +54,8 @@
         </p>
 
         <div class="auth-skip">
-            <a href="/app.html">Continue without signing in →</a>
-            <p class="auth-skip-note">You can use GraminSahay freely. Signing in only lets you save your profile for next time.</p>
+            <a href="/app.html">← Continue as guest without signing in</a>
+            <p class="auth-skip-note">GraminSahay is free for all citizens. Signing in simply lets you save your profile for future visits.</p>
         </div>
     </div>
 </div>
