@@ -1,13 +1,18 @@
-# Render Blueprint — one-file setup for GraminSahay (web service + PostgreSQL).
+# Render Blueprint — one-file setup for GraminSahay (web service + PostgreSQL), on the FREE tier.
 # In Render: New + -> Blueprint -> pick this repo, and it provisions both services.
-# You still set the secret env vars (OPENAI_API_KEY, JWT_SECRET) in the dashboard.
+# You still set the secret OPENAI_API_KEY in the dashboard (JWT_SECRET is generated for you).
+#
+# Free-tier limits: the web service sleeps after 15 min idle (first request then takes ~1 min),
+# and the free Postgres database expires after 30 days. Change both `plan:` values to
+# `starter` / `basic-256mb` when you want it always-on and permanent.
 
 services:
   - type: web
     name: graminsahay
     runtime: python
-    plan: standard           # ~2GB RAM — the sentence-transformers model (PyTorch) OOMs on the 512MB starter plan
-    buildCommand: pip install -e .
+    plan: free               # 512 MB RAM — enough because embeddings run on ONNX (no PyTorch)
+    # Install, then pre-download the embedding model so it ships with the build.
+    buildCommand: pip install -e . && python -m app.vectorstore
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
@@ -27,5 +32,5 @@ services:
 
 databases:
   - name: graminsahay-db
-    plan: starter
+    plan: free
     postgresMajorVersion: "16"

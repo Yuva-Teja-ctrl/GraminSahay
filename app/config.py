@@ -35,8 +35,12 @@ class Settings(BaseSettings):
     # ---- Embeddings (LOCAL — no API key needed) ----
     # all-MiniLM-L6-v2 produces 384-dimensional vectors and runs on CPU. This is the big win
     # of the Python stack: retrieval works offline, you only need an API key for explanations.
+    # It runs via fastembed (ONNX Runtime, no PyTorch), so the app fits in ~512 MB RAM.
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dim: int = 384
+    # Where the downloaded model files are kept. Kept inside the project (and git-ignored) so a
+    # model downloaded during the cloud build is still there when the server starts.
+    embedding_cache_dir: str = ".cache/fastembed"
 
     # ---- Speech-to-text (voice input) ----
     # Groq serves Whisper for transcription. whisper-large-v3-turbo is fast and multilingual
