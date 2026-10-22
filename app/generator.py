@@ -41,8 +41,14 @@ class AnswerGenerator:
         self._client = OpenAI(api_key=api_key, base_url=base_url)
         self._model = model
 
-    def explain(self, result: EligibilityResult) -> str | None:
-        """Generate a grounded explanation, or return None if the LLM is unavailable.
+    # Map our language codes to the name we put in the prompt so the model answers correctly.
+    _LANG_NAMES = {"en": "English", "te": "Telugu", "hi": "Hindi"}
+
+    def explain(self, result: EligibilityResult, language: str = "en") -> str | None:
+        """Generate a grounded explanation in the citizen's language, or None if unavailable.
+
+        The response language is pinned explicitly: without this, the model sometimes replies
+        in Hindi/Telugu on its own for Indian-scheme content even when English was selected.
 
         FAIL-SAFE DESIGN: the explanation is a nice-to-have on top of the deterministic
         eligibility decision. If the LLM call fails (no credits, bad key, network, rate
@@ -50,19 +56,22 @@ class AnswerGenerator:
         eligibility results and the structured conditions/documents/steps. So we log the
         error and return None; the frontend simply shows the result without an AI blurb.
         """
+        lang_name = self._LANG_NAMES.get(language, "English")
         context = self._build_context(result)
         user_prompt = (
             f"CONTEXT:\n{context}\n\n"
             f'Explain to the citizen, in simple language, why their status for this scheme '
             f'is "{result.status.value}". Mention benefits, what to do next, and cite the '
-            f"official link."
+            f"official link.\n\n"
+            f"IMPORTANT: Write your entire response in {lang_name} only. "
+            f"Keep the scheme name and the official link exactly as given."
         )
         try:
             response = self._client.chat.completions.create(
                 model=self._model,
                 temperature=0.1,  # low temperature -> faithful, grounded answers
                 messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "system", "content": SYSTEM_PROMPT + f"\nAlways respond in {lang_name}."},
                     {"role": "user", "content": user_prompt},
                 ],
             )

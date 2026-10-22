@@ -117,14 +117,13 @@ class NavigatorService:
         conflicts = eligibility.detect_conflicts(results)
 
         # (4) Generate grounded explanations (optional — skip to save LLM calls/cost).
-        # Explanations are produced in English, then translated into the citizen's language.
+        # The explanation is generated directly in the citizen's language (the model is told
+        # which language to use), so an English request always gets an English answer.
         advice: list[SchemeAdvice] = []
         for r in results:
             explanation = None
             if with_explanations:
-                explanation_en = self._generator.explain(r)
-                if explanation_en:
-                    explanation = self._translator.from_english(explanation_en, language)
+                explanation = self._generator.explain(r, language)
             advice.append(
                 SchemeAdvice(
                     scheme_id=r.scheme.id,

@@ -321,7 +321,8 @@ function openApplyModal(scheme) {
     };
 
     addHeading("apply_general_heading");
-    ["gstep_1", "gstep_2", "gstep_3", "gstep_4"].forEach((k) => addStep(t(k)));
+    ["gstep_1", "gstep_2", "gstep_3", "gstep_4", "gstep_5",
+     "gstep_6", "gstep_7", "gstep_8", "gstep_9", "gstep_10"].forEach((k) => addStep(t(k)));
 
     const schemeSteps = scheme.applicationSteps || [];
     if (schemeSteps.length) {
