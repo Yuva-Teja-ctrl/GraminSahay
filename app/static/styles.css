@@ -1402,7 +1402,7 @@ button:disabled {
 .footer-inner {
     max-width: 1060px;
     margin: 0 auto;
-    padding: 48px 24px 20px;
+    padding: 48px 24px 40px;
     display: grid;
     grid-template-columns: 1.6fr 1fr 1.4fr;
     gap: 36px;
@@ -1433,15 +1433,6 @@ button:disabled {
     line-height: 1.65;
     color: #94a3b8;
 }
-.footer-bottom {
-    text-align: center;
-    font-size: 0.85rem;
-    color: #64748b;
-    padding: 18px 24px 30px;
-    margin: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
 /* =========================================================================
    Auth Page (login.html)
    ========================================================================= */
