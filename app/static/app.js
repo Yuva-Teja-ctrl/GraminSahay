@@ -136,6 +136,9 @@ function collectRequest() {
     };
 }
 
+// The most recent results, kept so the user can download/print them.
+let lastResults = null;
+
 function render(data) {
     const schemes = data.schemes || [];
     const conflicts = data.conflicts || [];
@@ -143,7 +146,11 @@ function render(data) {
     renderUnderstood(data.understoodProfile);
     renderConflicts(conflicts);
 
+    const actions = document.getElementById("results-actions");
+
     if (schemes.length === 0) {
+        lastResults = null;
+        if (actions) actions.hidden = true;
         showStatus("empty", "No matching schemes found. Try describing your situation differently or adding more details.");
         return;
     }
@@ -154,6 +161,10 @@ function render(data) {
         `Found ${schemes.length} relevant scheme(s)${eligibleCount ? ` — you appear eligible for ${eligibleCount}.` : "."}`);
 
     schemes.forEach((scheme) => resultsEl.appendChild(buildCard(scheme)));
+
+    // Keep the data and reveal the download button.
+    lastResults = { schemes, profile: data.understoodProfile || null };
+    if (actions) actions.hidden = false;
 }
 
 function renderConflicts(conflicts) {
@@ -359,7 +370,98 @@ function clearResults() {
     resultsEl.innerHTML = "";
     conflictsEl.hidden = true;
     conflictsList.innerHTML = "";
+    const actions = document.getElementById("results-actions");
+    if (actions) actions.hidden = true;
 }
+
+/* =========================================================================
+   Download / print results — builds a clean printable page the citizen can
+   save as PDF or print. Uses only the data already on screen (no server call).
+   ========================================================================= */
+function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str == null ? "" : String(str);
+    return div.innerHTML;
+}
+
+function profileSummary(profile) {
+    if (!profile) return "";
+    const labels = {
+        occupation: "Occupation", age: "Age", gender: "Gender",
+        land_holding_acres: "Land (acres)", annual_income: "Annual income (₹)",
+        district: "District", is_bpl: "Below Poverty Line", category: "Category",
+    };
+    const parts = Object.entries(labels)
+        .filter(([k]) => profile[k] !== null && profile[k] !== undefined)
+        .map(([k, label]) => {
+            let v = profile[k];
+            if (k === "is_bpl") v = v ? "Yes" : "No";
+            return `${label}: ${escapeHtml(v)}`;
+        });
+    return parts.join(" · ");
+}
+
+function downloadResults() {
+    if (!lastResults) return;
+    const { schemes, profile } = lastResults;
+    const lang = currentLanguage();
+    const dateStr = new Date().toLocaleDateString();
+
+    const sectionsHtml = schemes.map((s) => {
+        const statusLabel = t(`status_label_${s.status}`);
+        const docs = (s.requiredDocuments || []).map((d) => `<li>${escapeHtml(d)}</li>`).join("");
+        const steps = (s.applicationSteps || []).map((st) => `<li>${escapeHtml(st)}</li>`).join("");
+        return `
+            <div class="scheme">
+                <h3>${escapeHtml(s.schemeName)} <span class="badge">${escapeHtml(statusLabel)}</span></h3>
+                <p class="cat">${escapeHtml(s.category)}</p>
+                ${s.explanation ? `<p>${escapeHtml(s.explanation)}</p>` : ""}
+                ${docs ? `<p class="h">${t("dl_docs")}</p><ul>${docs}</ul>` : ""}
+                ${steps ? `<p class="h">${t("dl_steps")}</p><ol>${steps}</ol>` : ""}
+                ${s.officialUrl ? `<p class="h">${t("dl_official")}:</p><p><a href="${escapeHtml(s.officialUrl)}">${escapeHtml(s.officialUrl)}</a></p>` : ""}
+            </div>`;
+    }).join("");
+
+    const html = `<!DOCTYPE html>
+<html lang="${lang}"><head><meta charset="UTF-8"/>
+<title>${t("dl_title")}</title>
+<style>
+  body { font-family: system-ui, sans-serif; color: #1f2937; max-width: 720px; margin: 24px auto; padding: 0 20px; line-height: 1.55; }
+  h1 { color: #166534; font-size: 22px; margin-bottom: 2px; }
+  .meta { color: #6b7280; font-size: 13px; margin: 0 0 4px; }
+  .scheme { border: 1px solid #e5e7eb; border-left: 4px solid #1f9d55; border-radius: 10px; padding: 14px 18px; margin: 14px 0; page-break-inside: avoid; }
+  .scheme h3 { margin: 0 0 2px; font-size: 17px; }
+  .badge { font-size: 11px; background: #dcfce7; color: #166534; padding: 2px 9px; border-radius: 99px; font-weight: 700; vertical-align: middle; }
+  .cat { color: #6b7280; font-size: 12px; text-transform: uppercase; margin: 0 0 8px; }
+  .h { font-weight: 700; margin: 10px 0 2px; font-size: 13px; }
+  ul, ol { margin: 2px 0; padding-left: 22px; font-size: 14px; }
+  a { color: #166534; word-break: break-all; }
+  .disclaimer { margin-top: 20px; font-size: 12px; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 12px; }
+  @media print { body { margin: 0; } }
+</style></head>
+<body>
+  <h1>${t("dl_title")}</h1>
+  <p class="meta">${t("dl_generated")}: ${escapeHtml(dateStr)}</p>
+  ${profile ? `<p class="meta">${t("dl_profile")}: ${profileSummary(profile)}</p>` : ""}
+  ${sectionsHtml}
+  <p class="disclaimer">${t("dl_disclaimer")}</p>
+  <script>window.onload = function(){ setTimeout(function(){ window.print(); }, 300); };<\/script>
+</body></html>`;
+
+    // Open a new window with the printable document; it auto-triggers the print/save dialog.
+    const win = window.open("", "_blank");
+    if (!win) {
+        alert("Please allow pop-ups to download your results.");
+        return;
+    }
+    win.document.write(html);
+    win.document.close();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const dlBtn = document.getElementById("download-btn");
+    if (dlBtn) dlBtn.addEventListener("click", downloadResults);
+});
 
 /* =========================================================================
    Voice input (speech-to-text) and output (text-to-speech)

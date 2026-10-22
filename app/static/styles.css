@@ -181,6 +181,16 @@ button:disabled { background: #cbd5e1; color: #fff; cursor: not-allowed; box-sha
 .conflict-card ul { margin: 0; padding-left: 20px; }
 .conflict-card li { margin: 6px 0; }
 
+/* ---------- Results actions (download) ---------- */
+.results-actions { display: flex; justify-content: flex-end; }
+.download-btn {
+    background: #fff; color: var(--green-700);
+    border: 1.5px solid var(--green); border-radius: 999px;
+    padding: 10px 20px; font-size: 14px; font-weight: 700;
+    box-shadow: none;
+}
+.download-btn:hover { background: #ecfdf3; filter: none; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
 /* ---------- Results ---------- */
 .results { display: grid; gap: 16px; }
 .scheme-card {
