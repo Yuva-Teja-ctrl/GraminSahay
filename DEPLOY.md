@@ -43,7 +43,7 @@ Railway auto-detects the `Procfile` and runs:
 uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 First boot downloads the embedding model and ingests the schemes (watch the logs for
-`Ingested 8 scheme documents` then `GraminSahay is ready`). Then open the generated URL.
+`Ingested 13 scheme documents` then `GraminSahay is ready`). Then open the generated URL.
 
 ---
 
