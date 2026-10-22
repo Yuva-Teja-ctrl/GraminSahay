@@ -14,17 +14,14 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timedelta, timezone
 
+import bcrypt
 import jwt
-from passlib.context import CryptContext
 from sqlalchemy import Column, Integer, String, create_engine, select
 from sqlalchemy.orm import Session, declarative_base
 
 log = logging.getLogger("graminsahay.auth")
 
 Base = declarative_base()
-
-# bcrypt password hasher.
-_pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class User(Base):
@@ -54,13 +51,21 @@ class AuthService:
         Base.metadata.create_all(self._engine)
 
     # ---- password helpers ----
+    # We use the `bcrypt` library directly (rather than via passlib) to avoid a known
+    # passlib/bcrypt version incompatibility that crashes on some setups. bcrypt also has a
+    # 72-byte input limit, so we truncate the encoded password to stay within it.
     @staticmethod
     def _hash_password(password: str) -> str:
-        return _pwd_context.hash(password)
+        pw_bytes = password.encode("utf-8")[:72]
+        return bcrypt.hashpw(pw_bytes, bcrypt.gensalt()).decode("utf-8")
 
     @staticmethod
     def _verify_password(password: str, password_hash: str) -> bool:
-        return _pwd_context.verify(password, password_hash)
+        try:
+            pw_bytes = password.encode("utf-8")[:72]
+            return bcrypt.checkpw(pw_bytes, password_hash.encode("utf-8"))
+        except (ValueError, TypeError):
+            return False
 
     # ---- registration / login ----
     def register(self, username: str, password: str) -> str:

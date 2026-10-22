@@ -154,6 +154,9 @@ def register(request: AuthRequest) -> AuthResponse:
         token = auth.register(request.username, request.password)
     except AuthError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:  # noqa: BLE001 - never leak a bare 500; return readable JSON
+        log.exception("Registration failed")
+        raise HTTPException(status_code=500, detail=f"Registration failed: {exc}") from exc
     return AuthResponse(token=token, username=request.username.strip().lower())
 
 
@@ -165,6 +168,9 @@ def login(request: AuthRequest) -> AuthResponse:
         token = auth.login(request.username, request.password)
     except AuthError as exc:
         raise HTTPException(status_code=401, detail=str(exc)) from exc
+    except Exception as exc:  # noqa: BLE001
+        log.exception("Login failed")
+        raise HTTPException(status_code=500, detail=f"Login failed: {exc}") from exc
     return AuthResponse(token=token, username=request.username.strip().lower())
 
 
