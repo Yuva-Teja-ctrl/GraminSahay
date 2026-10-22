@@ -95,7 +95,7 @@ app/
   generator.py     # grounded LLM explanation
   navigator.py     # orchestrates the whole pipeline
   data/telangana_schemes.json
-  static/          # web UI (index.html, styles.css, app.js)
+  static/          # web UI (app.html served at /, styles.css, app.js)
 tests/
   test_eligibility.py   # pure-logic tests (no DB / LLM needed)
 ```
@@ -136,7 +136,7 @@ On first startup the app downloads the embedding model (once), creates the pgvec
 embeds the Telangana schemes, and is then ready.
 
 ### 5. Use it
-- **Web UI:** open **http://localhost:8000/app.html** — sign in / create an account, then use the app.
+- **Web UI:** open **http://localhost:8000** — sign in / create an account, then use the app.
 - **Interactive API docs** (FastAPI gives these free): **http://localhost:8000/docs**
 - **Or curl** (the API is JWT-protected — register, then use the token):
 ```bash
