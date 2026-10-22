@@ -307,6 +307,19 @@ def old_app_url(request: Request) -> RedirectResponse:
     return RedirectResponse(f"/{query}", status_code=301)
 
 
+@app.get("/login", include_in_schema=False)
+def login_page() -> FileResponse:
+    """Serve the sign-in page at /login (no .html in the address bar)."""
+    return FileResponse("app/static/login.html")
+
+
+@app.get("/login.html", include_in_schema=False)
+def old_login_url(request: Request) -> RedirectResponse:
+    """Send old /login.html links and bookmarks to /login, keeping any query string."""
+    query = f"?{request.url.query}" if request.url.query else ""
+    return RedirectResponse(f"/login{query}", status_code=301)
+
+
 # Serve the rest of the web UI (styles.css, app.js, login.html, ...) from app/static.
 # Mounted last so it does not shadow the routes above.
 app.mount("/", StaticFiles(directory="app/static", html=True), name="static")
